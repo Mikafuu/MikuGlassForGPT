@@ -1,0 +1,553 @@
+/* ==UserStyle==
+@name           Hastune Miku Glass Light Style for ChatGPT
+@namespace      github.com/Morikana/chatgpt-glass-miku
+@version        1.0.0
+@description    A glassy, transparent Miku outlook for ChatGPT with interactive UIs. 
+@author         Morikana
+
+@var checkbox GPTmarkdownHover "Enable ChatGPT message hover animation" 1
+@var checkbox userMarkdownHover "Enable User Message Bubble Animations" 1
+==/UserStyle== */
+
+@-moz-document url-prefix("https://chatgpt.com/") {
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("https://i.ibb.co/C3RYb8XY/wallhaven-yxp85l.png");
+    opacity: 0;
+    pointer-events: none;
+}
+
+body /*main background */
+{
+    background: url(https://i.ibb.co/C3RYb8XY/wallhaven-yxp85l.png) 0px fixed !important;
+    image-rendering: -webkit-optimize-contrast;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+}
+
+
+.h-full /* left sidebar lower menu (below)*/
+{
+    height: 100%;
+    background: transparent !important;
+    
+}
+.bg-\(--sidebar-mask-bg\,var\(--bg-elevated-secondary\)\) /*left sidebar upper menu (top)*/
+{
+    background-color:transparent!important;
+}
+
+.bg-token-main-surface-primary /*top menue bar & other item containers (profile settings, more...)*/
+{
+    background: rgba(255, 255, 255, 0.1) !important;
+
+    backdrop-filter: blur(2px) saturate(1.1);
+    -webkit-backdrop-filter: blur(2px) saturate(1.1);
+    
+    transition:
+        background 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.15s ease;
+}
+
+.px-2 {
+    padding-inline: calc(var(--spacing) * 2);
+    background: rgba(255, 255, 255, 0.1) !important;
+
+    backdrop-filter: blur(2px) saturate(1.1);
+    -webkit-backdrop-filter: blur(2px) saturate(1.1);
+    
+}
+.bg-token-bg-elevated-secondary /*profile bg*/
+{
+    background: transparent !important;
+}
+.btn-secondary /* upgrade button / ask chatgpt */
+{
+    background: rgba(255, 255, 255, 0.4) !important;
+    color: var(--text-primary);
+
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 14px;
+
+    padding: 8px 14px;
+    font-weight: 500;
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    box-shadow:
+        0 6px 16px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.45);
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.15s ease;
+}
+.btn-secondary:hover
+{
+    background: rgba(255, 255, 255, 0.65) !important;
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+.btn-secondary:active
+{
+    transform: scale(0.97);
+
+    box-shadow:
+        0 4px 10px rgba(0, 0, 0, 0.14),
+        inset 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.bg-\[\#F1F1FB\] /*"get plus" on center of top menu bar*/
+{
+    background-color: transparent !important;
+}
+
+.__menu-item /*menu items*/
+{ 
+    transition:
+        background 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+    --menu-item-highlighted: rgba(255, 255, 255, 0.55);
+    --menu-item-active: rgba(255, 255, 255, 0.65);
+    --menu-item-open: rgba(255, 255, 255, 0.5);
+}
+.__menu-item:hover {
+    background: var(--menu-item-highlighted) !important;
+    transform: translateY(-1px);
+    box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+.__menu-item:active {
+    background: var(--menu-item-active) !important;
+    transform: translateY(0);
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.14),
+        inset 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+.__menu-item[aria-expanded="true"],
+.__menu-item.open {
+    background: var(--menu-item-open) !important;
+    box-shadow:
+        inset 0 0 0 1px rgba(232, 232, 232, 0.25),
+        0 8px 22px rgba(0, 0, 0, 0.16);
+}
+
+
+
+
+
+
+.shadow-short /* chat textbox */
+{
+    background: rgba(255, 255, 255, 0.1) !important;
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    border-radius: 22px;
+    padding: 14px 18px;
+
+    box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+    transition:
+        background 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+}
+.shadow-short:focus-within 
+{
+    background: rgba(255, 255, 255, 0.72) !important;
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    border-color: rgba(233, 233, 233, 0.35);
+}
+.shadow-short:hover {
+    background: rgba(255, 255, 255, 0.65) !important;
+}
+.shadow-short:active {
+    transform: scale(0.97);
+}
+.shadow-short textarea,
+.shadow-short input {
+    color: rgba(230, 230, 240, 0.95) !important;
+    caret-color: rgba(233, 233, 233, 0.9);
+}
+.shadow-short textarea::placeholder {
+    color: rgba(230, 230, 240, 0.5) !important;
+}
+
+.markdown /* ChatGPT message bubble */
+{
+    --bg-alpha: calc(0.55 - (var(--GPTmarkdownHover) * 0.47));
+    --blur-val: calc(5px - (var(--GPTmarkdownHover) * 3px));
+    --shd-y: calc(12px - (var(--GPTmarkdownHover) * 4px));
+    --shd-blur: calc(28px - (var(--GPTmarkdownHover) * 6px));
+    --shd-alpha: calc(0.45 - (var(--GPTmarkdownHover) * 0.13));
+    --inset-alpha: calc(0.08 - (var(--GPTmarkdownHover) * 0.02));
+
+    background: rgba(255, 255, 255, var(--bg-alpha)) !important;
+
+    backdrop-filter: blur(var(--blur-val));
+    -webkit-backdrop-filter: blur(var(--blur-val));
+
+    box-shadow:
+        0 var(--shd-y) var(--shd-blur) rgba(0, 0, 0, var(--shd-alpha)),
+        inset 0 1px 0 rgba(255, 255, 255, var(--inset-alpha));
+
+    max-width: unset;
+    overflow-x: hidden;
+    min-width: 0 !important;
+
+    border-radius: 18px;
+    padding: 14px 18px;
+    margin: 8px 0;
+
+    transition:
+        background 0.25s ease,
+        box-shadow 0.25s ease,
+        backdrop-filter 0.25s ease,
+        transform 0.25s ease;
+}
+
+.markdown:hover
+{
+    background: rgba(255, 255, 255, 0.55) !important;
+    box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+
+    
+.markdown table {
+    padding-right: 182px;          /* extra scroll room */
+    box-sizing: content-box;      
+}
+
+.px-3 { /*edit message*/
+    padding-inline: calc(var(--spacing)*3);
+    background: rgba(233, 233, 233, 0.08) !important;
+
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35);
+
+    transition:
+        background 0.25s ease,
+        box-shadow 0.25s ease,
+        backdrop-filter 0.25s ease,
+        transform 0.25s ease;
+    
+}
+.px-3:hover { 
+    background: rgba(233, 233, 233, 0.6) !important;
+    
+    box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.btn-danger { /*delete button*/
+    background-clip: padding-box;
+    background-color: rgba(255, 0, 0, .08) !important;
+    color: var(--text-primary);
+
+    border: 1px solid rgba(166, 0, 0, .12);
+    border-radius: 14px;
+
+    padding: 8px 14px;
+    font-weight: 500;
+
+    backdrop-filter: blur(0.5px);
+    -webkit-backdrop-filter: blur(0.5px);
+
+    box-shadow:
+        0 6px 16px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 193, 193, .45);
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.15s ease;
+}
+.btn-danger:hover{
+    background: rgba(255, 96, 96, .65) !important;
+
+    box-shadow:
+        0 8px 20px rgba(255, 165, 165, .22),
+        inset 0 1px 0 rgb(255, 171, 171);
+}
+.btn-danger:active{
+    transform: scale(0.97);
+
+    box-shadow:
+        0 4px 10px rgba(255, 0, 0, .14),
+        inset 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.btn-primary,.composer-secondary-button-color { /*send button for edited message */ /*composer/voice chat button */
+    
+    background-clip: padding-box;
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    color: var(--text-primary);
+
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 14px;
+
+    padding: 8px 14px;
+    font-weight: 500;
+
+    backdrop-filter: blur(0.5px);
+    -webkit-backdrop-filter: blur(0.5px);
+
+    box-shadow:
+        0 6px 16px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.45);
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.15s ease;
+}
+.btn-primary:hover, .composer-secondary-button-color:hover {
+    background: rgba(255, 255, 255, 0.65) !important;
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+.btn-primary:active, .composer-secondary-button-color:active {
+    transform: scale(0.97);
+
+    box-shadow:
+        0 4px 10px rgba(0, 0, 0, 0.14),
+        inset 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+
+.user-message-bubble-color /*user message bubble*/
+{
+   --user-bg-alpha: calc(0.6 - (var(--userMarkdownHover) * 0.52));
+    --user-blur: calc(5px - (var(--userMarkdownHover) * 3px));
+    --user-shd-y: calc(10px - (var(--userMarkdownHover) * 4px));
+    --user-shd-blur: calc(26px - (var(--userMarkdownHover) * 8px));
+    --user-shd-alpha: calc(0.25 - (var(--userMarkdownHover) * 0.07));
+    --user-inset-alpha: calc(0.45 - (var(--userMarkdownHover) * 0.10));
+
+    background: rgba(233, 233, 233, var(--user-bg-alpha)) !important;
+
+    backdrop-filter: blur(var(--user-blur));
+    -webkit-backdrop-filter: blur(var(--user-blur));
+
+    box-shadow:
+        0 var(--user-shd-y) var(--user-shd-blur) rgba(0, 0, 0, var(--user-shd-alpha)),
+        inset 0 1px 0 rgba(255, 255, 255, var(--user-inset-alpha));
+
+    border-radius: 22px;
+    padding: 14px 18px;
+    margin: 6px 0;
+
+    transition:
+        background 0.25s ease,
+        box-shadow 0.25s ease,
+        backdrop-filter 0.25s ease,
+        transform 0.25s ease;
+}
+
+.user-message-bubble-color:hover
+{
+    background: rgba(233, 233, 233, 0.6) !important;
+
+    box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.content-fade.single-line:after /*gradient transition behind chat text input bar*/
+{
+   background:
+    linear-gradient(
+      rgba(0, 0, 0, 0)
+    ),
+    rgba(0, 0, 0, 0) !important;
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+    -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black
+  );
+}
+.bg-token-sidebar-surface-primary /*code background*/
+{
+     background: rgba(233, 233, 233, 0.55) !important;
+
+    backdrop-filter: blur(14px) saturate(1.05);
+    -webkit-backdrop-filter: blur(14px) saturate(1.05);
+
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 12px;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.7),
+        0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.bg-token-bg-primary /*sources button and chatbox*/
+{
+    background: rgba(233, 233, 233, 0.05) !important;
+
+    backdrop-filter: blur(0.5px) saturate(1.05);
+    -webkit-backdrop-filter: blur(8px) saturate(1.05);
+
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    /*border-radius: 999px;*/
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.6),
+        0 4px 12px rgba(0, 0, 0, 0.06);
+
+    transition:
+        background 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.15s ease;
+}
+.bg-token-bg-primary:hover 
+{
+    background: rgba(233, 233, 233, 0.7) !important;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+.bg-token-bg-primary:active {
+    transform: scale(0.97);
+}
+.bg-token-bg-primary svg {
+    opacity: 0.8;
+}
+.content-fade-top:after /*linear gradient behind chatbox in a project page*/
+{
+    background: transparent !important;
+    
+}
+
+
+
+
+
+
+.pb-6 {
+    padding: 14px 18px;
+    /*padding-bottom: calc(var(--spacing)*6);*/
+    background: rgba(255, 255, 255, 0.20) !important;
+    backdrop-filter: blur(4px) saturate(1.15);
+    -webkit-backdrop-filter: blur(4px) saturate(1.15);
+
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.10),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+
+    border-radius: 12px;
+    transition:
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.p-3 /*chats under project*/
+{
+    padding: calc(var(--spacing)*3);
+    
+    align-items: center;
+    justify-content: center;
+
+    background: transparent;
+    
+    cursor: pointer;
+
+    transition:
+        background 0.3s ease,
+        box-shadow 0.3s ease,
+        transform 0.2s ease;
+}
+.p-3:hover{
+    border-radius: var(--radius-lg);
+    
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px) saturate(1.1);
+    -webkit-backdrop-filter: blur(2px) saturate(1.1);
+
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.p-3:active{
+    transform: scale(0.995);
+    background: rgba(255, 255, 255, 0.35);
+
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.25),
+        inset 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.rounded-lg, .rounded-md, .end-0:dir(ltr)  { /*some other buttons*/
+    border-radius: var(--radius-lg);
+   
+    /* button base */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background: transparent;
+    
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.15s ease;
+}
+.rounded-lg:hover, .rounded-md:hover, .end-0:dir(ltr):hover{
+    border-radius: var(--radius-lg);
+    
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px) saturate(1.1);
+    -webkit-backdrop-filter: blur(2px) saturate(1.1);
+
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.rounded-lg:active, .rounded-md:active, .end-0:dir(ltr):active {
+    transform: scale(0.94);
+    background: rgba(255, 255, 255, 0.35);
+
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.25),
+        inset 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+}
