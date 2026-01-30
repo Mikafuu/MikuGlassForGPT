@@ -1,13 +1,13 @@
 # Hastune Miku Glass Light Style for ChatGPT
 A soft, glassmorphism-inspired ChatGPT theme featuring a serene **Hatsune Miku ocean aesthetic**.  
 
-## 💙 Credits
+## Credits
 
 - Background artwork: **WusubaMineko** (twitter)
 - Theme design & CSS: **Morikana** + **ChatGPT**
 
 
-## ✨ Features
+## Features
   **Frosted glass UI** with subtle blur and depth
   **Miku-inspired color palette** (cool blues, soft whites)
   Smooth, modern **glassmorphism message bubbles**
@@ -15,7 +15,7 @@ A soft, glassmorphism-inspired ChatGPT theme featuring a serene **Hatsune Miku o
   Carefully tuned shadows for readability without visual noise
 
 
-## 📦 Installation
+## Installation
 ### Requirements
   Browser: Chrome / Edge / Firefox
   Extension: **Stylus**
@@ -30,7 +30,7 @@ A soft, glassmorphism-inspired ChatGPT theme featuring a serene **Hatsune Miku o
 
 3. Visit **https://chatgpt.com/**
 
-## ⚙️ Customization
+## Customization
 
 This theme includes built-in Stylus options.
 
@@ -42,24 +42,24 @@ This theme includes built-in Stylus options.
 You can find these under:
 > Stylus → Manage → Hastune Miku Glass Light Style for ChatGPT → Settings
 
-## 🧠 Notes on Performance
+## Notes on Performance
 
 - Minor UI lag while **ChatGPT is responding** and **editing previous messages** is normal on ChatGPT.
 - The style avoids layout thrashing and heavy filters where possible.
 - If you experience visual jitter, disable hover animations
 
-## 🧩 Compatibility
+## Compatibility
 
 - only tested on chatgpt.com
 - Not tested on legacy OpenAI layouts
 - Not intended for mobile browsers
 
-## 📜 License
+## License
 
 No license
 
-## 🌸 Final Note
+## Final Note
 
 This theme is a passion project made for people who want ChatGPT to feel
-a little calmer, prettier, and more **alive**.
+a little calmer, prettier, and more alive.
 If you enjoy it, a ⭐ on the repo means a lot.
