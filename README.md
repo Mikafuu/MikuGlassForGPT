@@ -1,4 +1,7 @@
 # Hastune Miku Glass Light Style for ChatGPT
+<p align="center">
+  <img src="preview.png" width="900"/>
+</p>
 A soft, glassmorphism-inspired ChatGPT theme featuring a serene **Hatsune Miku ocean aesthetic**.  
 
 ## Credits
