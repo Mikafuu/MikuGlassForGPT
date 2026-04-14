@@ -32,8 +32,22 @@ body /*main background */
 {
     height: 100%;
     background: transparent !important;
-    
 }
+
+/*update 4.14.26*/
+.z-30 {
+    background: transparent !important;
+}
+.tall\:top-header-height {
+    background: transparent !important;
+    transition: all 0.2s ease;
+}
+.tall\:top-header-height:hover {
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+    
+
 .bg-\(--sidebar-mask-bg\,var\(--bg-elevated-secondary\)\) /*left sidebar upper menu (top)*/
 {
     background-color:transparent!important;
