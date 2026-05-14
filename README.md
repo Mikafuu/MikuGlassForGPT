@@ -5,9 +5,7 @@
 A soft, glassmorphism-inspired ChatGPT theme featuring a serene **Hatsune Miku ocean aesthetic**.  
 
 ## Credits
-
-- Background artwork: **WusubaMineko** (twitter)
-- Theme design & CSS: **Morikana** + **ChatGPT**
+Background artwork by **WusubaMineko** (twitter). Link: https://x.com/WusubaMineko/status/1795989062567764263
 
 
 ## Features
@@ -53,9 +51,7 @@ You can find these under:
 
 ## Compatibility
 
-- only tested on chatgpt.com
-- Not tested on legacy OpenAI layouts
-- Not intended for mobile browsers
+- only tested on chatgpt.com on Chrome
 
 ## License
 
