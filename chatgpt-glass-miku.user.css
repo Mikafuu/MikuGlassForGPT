@@ -457,9 +457,6 @@ body /*main background */
     background: rgba(233, 233, 233, 0.7) !important;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
-.bg-token-bg-primary:active {
-    transform: scale(0.97);
-}
 .bg-token-bg-primary svg {
     opacity: 0.8;
 }
