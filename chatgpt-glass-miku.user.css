@@ -45,8 +45,7 @@ body /*main background */
 .tall\:top-header-height:hover {
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
-}
-    
+}    
 
 .bg-\(--sidebar-mask-bg\,var\(--bg-elevated-secondary\)\) /*left sidebar upper menu (top)*/
 {
@@ -55,7 +54,7 @@ body /*main background */
 
 .bg-token-main-surface-primary /*top menue bar & other item containers (profile settings, more...)*/
 {
-    background: rgba(255, 255, 255, 0.1) !important;
+    background: rgba(255, 255, 255, 0) !important;
 
     backdrop-filter: blur(2px) saturate(1.1);
     -webkit-backdrop-filter: blur(2px) saturate(1.1);
@@ -159,21 +158,19 @@ body /*main background */
 
 
 
-
-
-
-.shadow-short /* chat textbox */
+/*message textbox */
+.group-not-data-expanded\/composer\:py-2:is(:where(.group\/composer):not([data-expanded]) *), .group-data-expanded\/composer\:\[grid-template-areas\:\'header_header_header\'_\'primary_primary_primary\'_\'leading_footer_trailing\'\]:is(:where(.group\/composer)[data-expanded] *) /* chat textbox */
 {
-    background: rgba(255, 255, 255, 0.1) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
 
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    /*backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);*/
 
-    border-radius: 22px;
+    border-radius: 12px;
     padding: 14px 18px;
 
     box-shadow:
-        0 10px 26px rgba(0, 0, 0, 0.35),
+        0 10px 26px rgba(0, 0, 0, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
     transition:
@@ -181,28 +178,41 @@ body /*main background */
         box-shadow 0.25s ease,
         transform 0.25s ease;
 }
-.shadow-short:focus-within 
+
+.group-not-data-expanded\/composer\:py-2:is(:where(.group\/composer):not([data-expanded]) *):focus-within, .group-data-expanded\/composer\:\[grid-template-areas\:\'header_header_header\'_\'primary_primary_primary\'_\'leading_footer_trailing\'\]:is(:where(.group\/composer)[data-expanded] *):focus-within
 {
-    background: rgba(255, 255, 255, 0.72) !important;
-    box-shadow:
+    background: rgba(255, 255, 255, 0.45) !important;
+    /*box-shadow:
         0 12px 30px rgba(0, 0, 0, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.85);
+        inset 0 1px 0 rgba(255, 255, 255, 0.85);*/
     border-color: rgba(233, 233, 233, 0.35);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
 }
-.shadow-short:hover {
-    background: rgba(255, 255, 255, 0.65) !important;
+.group-not-data-expanded\/composer\:py-2:is(:where(.group\/composer):not([data-expanded]) *):hover, .group-data-expanded\/composer\:\[grid-template-areas\:\'header_header_header\'_\'primary_primary_primary\'_\'leading_footer_trailing\'\]:is(:where(.group\/composer)[data-expanded] *):hover {
+    background: rgba(255, 255, 255, 0.45) !important;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08)
 }
-.shadow-short:active {
-    transform: scale(0.97);
+.group-not-data-expanded\/composer\:py-2:is(:where(.group\/composer):not([data-expanded]) *):active, .group-data-expanded\/composer\:\[grid-template-areas\:\'header_header_header\'_\'primary_primary_primary\'_\'leading_footer_trailing\'\]:is(:where(.group\/composer)[data-expanded] *):active
+{
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
-.shadow-short textarea,
-.shadow-short input {
+/*.group-not-data-expanded\/composer\:py-2:is(:where(.group\/composer):not([data-expanded]) *) textarea,
+.group-not-data-expanded\/composer\:py-2:is(:where(.group\/composer):not([data-expanded]) *) input {
     color: rgba(230, 230, 240, 0.95) !important;
     caret-color: rgba(233, 233, 233, 0.9);
 }
-.shadow-short textarea::placeholder {
+.group-not-data-expanded\/composer\:py-2:is(:where(.group\/composer):not([data-expanded]) *) textarea::placeholder {
     color: rgba(230, 230, 240, 0.5) !important;
-}
+}*/
+
+
 
 .markdown /* ChatGPT message bubble */
 {
@@ -452,9 +462,11 @@ body /*main background */
         box-shadow 0.2s ease,
         transform 0.15s ease;
 }
-.bg-token-bg-primary:hover 
+    
+
+.bg-token-bg-primary:hover /*top menu bar and message texbox*/
 {
-    background: rgba(233, 233, 233, 0.7) !important;
+    background: rgba(233, 233, 233, 0.05) !important;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 .bg-token-bg-primary svg {
