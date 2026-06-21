@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Hastune Miku Glass Light Style for ChatGPT
 @namespace      github.com/Morikana/chatgpt-glass-miku
-@version        1.0.4
+@version        1.0.5
 @description    A glassy, transparent Miku outlook for ChatGPT with interactive UIs. 
 @author         Morikana
 
@@ -31,11 +31,27 @@ body /*main background */
 #stage-slideover-sidebar{
     background: transparent !important;
 }
+#stage-slideover-sidebar .bg-token-sidebar-surface-primary {
+  background: transparent !important;
+}
+
 
 /*code background  + header */
 .border-token-border-light:has(#code-block-viewer) .bg-token-bg-elevated-secondary {
     background: transparent !important;
 }
+
+/*left sidebar top menu bar*/
+[aria-label="Chat history"] > .sticky {
+    background: transparent !important;
+}
+
+/*left sidebar bottom menu bar*/
+.stage-sidebar-pure-surface .bg-\(--sidebar-surface-primary\) {
+    background: transparent !important;
+}
+
+
 
 
 
@@ -413,20 +429,6 @@ body /*main background */
     transparent,
     black
   );
-}
-.bg-token-sidebar-surface-primary /*code background*/
-{
-     background: rgba(233, 233, 233, 0.55) !important;
-
-    backdrop-filter: blur(14px) saturate(1.05);
-    -webkit-backdrop-filter: blur(14px) saturate(1.05);
-
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    border-radius: 12px;
-
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.7),
-        0 6px 18px rgba(0, 0, 0, 0.06);
 }
 
 .bg-token-bg-primary /*sources button and chatbox*/
