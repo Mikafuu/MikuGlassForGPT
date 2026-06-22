@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Hastune Miku Glass Light Style for ChatGPT
 @namespace      github.com/Morikana/chatgpt-glass-miku
-@version        1.0.5
+@version        1.0.6
 @description    A glassy, transparent Miku outlook for ChatGPT with interactive UIs. 
 @author         Morikana
 
@@ -19,7 +19,8 @@ body::before {
     pointer-events: none;
 }
 
-body /*main background */
+/*main background */
+body
 {
     background: url(https://i.ibb.co/C3RYb8XY/wallhaven-yxp85l.png) 0px fixed !important;
     image-rendering: -webkit-optimize-contrast;
@@ -27,12 +28,15 @@ body /*main background */
     background-repeat: no-repeat !important;
 }
 
+
 /*Left sidebar background*/
 #stage-slideover-sidebar{
     background: transparent !important;
 }
 #stage-slideover-sidebar .bg-token-sidebar-surface-primary {
-  background: transparent !important;
+    background: transparent !important;
+    backdrop-filter: blur(2px) saturate(1.1);
+    -webkit-backdrop-filter: blur(2px) saturate(1.1);
 }
 
 
@@ -41,10 +45,12 @@ body /*main background */
     background: transparent !important;
 }
 
-/*left sidebar top menu bar*/
+
+/*left sidebar top menu bar/header*/
 [aria-label="Chat history"] > .sticky {
     background: transparent !important;
 }
+
 
 /*left sidebar bottom menu bar*/
 .stage-sidebar-pure-surface .bg-\(--sidebar-surface-primary\) {
@@ -52,7 +58,83 @@ body /*main background */
 }
 
 
+/*message textbox */
+[data-type="unified-composer"] .shadow-short-composer
+{
+    background: transparent !important;
 
+    border-radius: 12px;
+    padding: 14px 18px;
+
+    box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+    transition:
+        background 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+}
+[data-type="unified-composer"] .shadow-short-composer:focus-within
+{
+    background: rgba(255, 255, 255, 0.45) !important;
+    border-color: rgba(233, 233, 233, 0.35);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+[data-type="unified-composer"] .shadow-short-composer:hover {
+    background: rgba(255, 255, 255, 0.45) !important;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08)
+}
+[data-type="unified-composer"] .shadow-short-composer:active
+{
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+
+/*edit message textbox*/
+[data-conversation-screenshot-content] > .bg-token-main-surface-tertiary {
+    background: transparent !important;
+
+    border-radius: 12px;
+    padding: 14px 18px;
+
+    box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+    transition:
+        background 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+}
+[data-conversation-screenshot-content] > .bg-token-main-surface-tertiary:focus-within
+{
+    background: rgba(255, 255, 255, 0.45) !important;
+    border-color: rgba(233, 233, 233, 0.35);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+[data-conversation-screenshot-content] > .bg-token-main-surface-tertiary:hover {
+    background: rgba(255, 255, 255, 0.45) !important;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08)
+}
+[data-conversation-screenshot-content] > .bg-token-main-surface-tertiary:active
+{
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
 
 
 
@@ -157,63 +239,6 @@ body /*main background */
 
 
 
-/*message textbox */
-[data-type="unified-composer"] .shadow-short-composer /* chat textbox */
-{
-    background: rgba(255, 255, 255, 0.05) !important;
-
-    /*backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);*/
-
-    border-radius: 12px;
-    padding: 14px 18px;
-
-    box-shadow:
-        0 10px 26px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
-
-    transition:
-        background 0.25s ease,
-        box-shadow 0.25s ease,
-        transform 0.25s ease;
-}
-
-[data-type="unified-composer"] .shadow-short-composer:focus-within
-{
-    background: rgba(255, 255, 255, 0.45) !important;
-    /*box-shadow:
-        0 12px 30px rgba(0, 0, 0, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.85);*/
-    border-color: rgba(233, 233, 233, 0.35);
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-}
-[data-type="unified-composer"] .shadow-short-composer:hover {
-    background: rgba(255, 255, 255, 0.45) !important;
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-    box-shadow:
-        0 10px 26px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08)
-}
-[data-type="unified-composer"] .shadow-short-composer:active
-{
-    box-shadow:
-        0 12px 30px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-/*.group-not-data-expanded\/composer\:py-2:is(:where(.group\/composer):not([data-expanded]) *) textarea,
-.group-not-data-expanded\/composer\:py-2:is(:where(.group\/composer):not([data-expanded]) *) input {
-    color: rgba(230, 230, 240, 0.95) !important;
-    caret-color: rgba(233, 233, 233, 0.9);
-}
-.group-not-data-expanded\/composer\:py-2:is(:where(.group\/composer):not([data-expanded]) *) textarea::placeholder {
-    color: rgba(230, 230, 240, 0.5) !important;
-}*/
-
-
-
-
 
 .markdown /* ChatGPT message bubble */
 {
@@ -257,41 +282,12 @@ body /*main background */
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
 }
-
-
     
 .markdown table {
     padding-right: 182px;          /* extra scroll room */
     box-sizing: content-box;      
 }
 
-.px-3 { /*edit message*/
-    padding-inline: calc(var(--spacing)*3);
-    background: rgba(233, 233, 233, 0.08) !important;
-
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-
-    box-shadow:
-        0 6px 18px rgba(0, 0, 0, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.35);
-
-    transition:
-        background 0.25s ease,
-        box-shadow 0.25s ease,
-        backdrop-filter 0.25s ease,
-        transform 0.25s ease;
-    
-}
-.px-3:hover { 
-    background: rgba(233, 233, 233, 0.6) !important;
-    
-    box-shadow:
-        0 10px 26px rgba(0, 0, 0, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, 0.45);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-}
 
 .btn-danger { /*delete button*/
     background-clip: padding-box;
@@ -417,18 +413,7 @@ body /*main background */
 
 .content-fade.single-line:after /*gradient transition behind chat text input bar*/
 {
-   background:
-    linear-gradient(
-      rgba(0, 0, 0, 0)
-    ),
-    rgba(0, 0, 0, 0) !important;
-  backdrop-filter: blur(0px);
-  -webkit-backdrop-filter: blur(0px);
-    -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    black
-  );
+   background: transparent !important;
 }
 
 .bg-token-bg-primary /*sources button and chatbox*/
