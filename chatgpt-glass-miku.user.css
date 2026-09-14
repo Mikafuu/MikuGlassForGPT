@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Hastune Miku Glass Light Style for ChatGPT
 @namespace      github.com/Morikana/chatgpt-glass-miku
-@version        1.0.7
+@version        1.0.8
 @description    A glassy, transparent Miku outlook for ChatGPT with interactive UIs. 
 @author         Morikana
 
@@ -9,15 +9,17 @@
 @var checkbox userMarkdownHover "Enable User Message Bubble Animations" 1
 ==/UserStyle== */
 
+@layer base, components, utilities;
 @-moz-document url-prefix("https://chatgpt.com/") {
 body::before {
     content: "";
     position: fixed;
     inset: 0;
-    background-image: url("https://i.ibb.co/C3RYb8XY/wallhaven-yxp85l.png");
+    background-image: url("https://i.ibb.co/C3RYb8XY/wallhaven-yxp85l.png"); 
     opacity: 0;
     pointer-events: none;
 }
+
 
 /*main background */
 body
@@ -29,7 +31,7 @@ body
 }
 
 
-/*Left sidebar background*/
+/* left sidebar background*/
 #stage-slideover-sidebar{
     background: transparent !important;
 }
@@ -40,21 +42,18 @@ body
 }
 
 
-/*code background  + header */
-.border-token-border-light:has(#code-block-viewer) .bg-token-bg-elevated-secondary {
-    background: transparent !important;
-}
-
-
-/*left sidebar top menu bar/header*/
-[aria-label="Chat history"] > .sticky {
-    background: transparent !important;
-}
-
-
-/*left sidebar bottom menu bar*/
+/* bottom & top menu bar within left sidebar*/
 .stage-sidebar-pure-surface .bg-\(--sidebar-surface-primary\) {
     background: transparent !important;
+}
+
+
+/*sources flyout background*/
+[data-testid="stage-thread-flyout"] {
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
 }
 
 
@@ -96,6 +95,24 @@ body
         0 12px 30px rgba(0, 0, 0, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
+[data-composer-body] {
+  background-color: transparent !important;
+}
+
+
+/*disclaimer background & shadow*/
+[data-testid="thread-disclaimer"],
+[data-testid="thread-disclaimer"] * {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+  color: #fff !important; /*disclaimer text color*/
+}
+
 
 
 /*edit message textbox*/
@@ -137,7 +154,21 @@ body
 }
 
 
+/*source flyout*/
+@layer utilities {
+  [data-testid="stage-thread-flyout"] [class*="bg-token-"],
+  [data-testid="stage-thread-flyout"] [class*="bg-surface-"],
+  [data-testid="stage-thread-flyout"] [class*="bg-(--"],
+  [data-testid="bar-search-sources-header"] {
+    background-color: transparent !important;
+    background-image: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
 
+
+/*menu dropdowns background*/
 [data-radix-menu-content] {
     background: rgba(255, 255, 255, 0.45) !important;
     backdrop-filter: blur(2px) saturate(1.1);
@@ -160,30 +191,20 @@ body
 }
 
 
-
-
-/*top menue bar & other item containers (profile settings, more...)*/ /*sources page 6.12 revision*/
-.bg-token-main-surface-primary, .stage-thread-flyout-preset-default, .bg-surface-primary 
-{
-    background: rgba(255, 255, 255, 0) !important;
-
-    backdrop-filter: blur(2px) saturate(1.1);
-    -webkit-backdrop-filter: blur(2px) saturate(1.1);
-    
-    transition:
-        background 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.15s ease;
+/*bottom gradient*/
+#thread-bottom-container::after {
+  background-color: transparent !important;
+  opacity: 0 !important;
 }
 
-.px-2 {
-    padding-inline: calc(var(--spacing) * 2);
-    background: rgba(255, 255, 255, 0.1) !important;
 
-    backdrop-filter: blur(2px) saturate(1.1);
-    -webkit-backdrop-filter: blur(2px) saturate(1.1);
-    
+/* Code block surface*/
+[class*="bg-(--code-block-surface)"] {
+  background-color: transparent !important;
 }
+
+
+
 
 .btn-secondary /* upgrade button / ask chatgpt */
 {
@@ -568,4 +589,8 @@ body
         0 3px 10px rgba(0, 0, 0, 0.25),
         inset 0 2px 6px rgba(0, 0, 0, 0.12);
 }
+
+
+
+
 }
