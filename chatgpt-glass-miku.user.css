@@ -1,596 +1,1913 @@
 /* ==UserStyle==
-@name           Hastune Miku Glass Light Style for ChatGPT
+@name           Hastune Miku Glass Light Style for ChatGPT -- Full Remake
 @namespace      github.com/Morikana/chatgpt-glass-miku
-@version        1.0.8
+@version        2.0.0
 @description    A glassy, transparent Miku outlook for ChatGPT with interactive UIs. 
 @author         Morikana
 
 @var checkbox GPTmarkdownHover "Enable ChatGPT message hover animation" 1
 @var checkbox userMarkdownHover "Enable User Message Bubble Animations" 1
+
+
+@var text     bgUrl       "Wallpaper image URL"       "https://i.ibb.co/C3RYb8XY/wallhaven-yxp85l.png"
+@var text     bgSize      "Background size (cover / contain / auto)" "cover"
+@var text     bgPosition  "Background position"   "0px"
+
 ==/UserStyle== */
-
-@layer base, components, utilities;
+@layer base,
+components,
+utilities;
 @-moz-document url-prefix("https://chatgpt.com/") {
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background-image: url("https://i.ibb.co/C3RYb8XY/wallhaven-yxp85l.png"); 
-    opacity: 0;
-    pointer-events: none;
-}
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: url("https://i.ibb.co/C3RYb8XY/wallhaven-yxp85l.png");
+        opacity: 0;
+        pointer-events: none;
+    }
 
 
-/*main background */
-body
-{
-    background: url(https://i.ibb.co/C3RYb8XY/wallhaven-yxp85l.png) 0px fixed !important;
-    image-rendering: -webkit-optimize-contrast;
-    background-size: cover !important;
-    background-repeat: no-repeat !important;
-}
+    /*main background */
+    body {
+        background: url(https://i.ibb.co/C3RYb8XY/wallhaven-yxp85l.png) 0px fixed !important;
+        image-rendering: -webkit-optimize-contrast;
+        background-size: cover !important;
+        background-repeat: no-repeat !important;
+    }
 
 
-/* left sidebar background*/
-#stage-slideover-sidebar{
-    background: transparent !important;
-}
-#stage-slideover-sidebar .bg-token-sidebar-surface-primary {
-    background: transparent !important;
-    backdrop-filter: blur(2px) saturate(1.1);
-    -webkit-backdrop-filter: blur(2px) saturate(1.1);
-}
+    @layer utilities {
+
+        /*settings background*/
+        div[data-state="open"][class*="before:bg-"]::before {
+            background: rgb(0 0 0 / .06) !important;
+        }
+        /*create project panel background*/
+        dialog[class*="bg-gray-200"] {
+            background-color: transparent !important;
+            background-image: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+    }
 
 
-/* bottom & top menu bar within left sidebar*/
-.stage-sidebar-pure-surface .bg-\(--sidebar-surface-primary\) {
-    background: transparent !important;
-}
+    @layer utilities {
+        /* Settings search results dropdown */
+        .popover:has([role="listbox"][aria-label="Settings search results"]) {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        div[role="listbox"][aria-label="Settings search results"].bg-token-bg-primary {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-image: none !important;
+            border-color: rgba(255, 255, 255, 0.5) !important;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            backdrop-filter: blur(10px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
+        }
+
+        th[class*="bg-token-main-surface-primary"] {
+            background: rgb(0 0 0 / .06) !important;
+            background-image: none !important;
+        }
+    }
 
 
-/*sources flyout background*/
-[data-testid="stage-thread-flyout"] {
-  background-color: transparent !important;
-  background-image: none !important;
-  box-shadow: none !important;
-  border-color: transparent !important;
-}
+    /*settings search bar*/
+    @layer utilities {
+        input[aria-label="Search settings"] {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-image: none !important;
+
+            border-color: rgba(255, 255, 255, 0.5) !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+
+            transition: background-color 150ms ease,
+            box-shadow 150ms ease,
+            transform 150ms ease;
+        }
+
+        input[aria-label="Search settings"]:hover {
+            background-color: rgba(255, 255, 255, 0.5) !important;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            backdrop-filter: blur(4px) saturate(1.15) !important;
+            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
+            transform: translateY(-1px);
+        }
+
+        input[aria-label="Search settings"]:active {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+            transform: translateY(0) scale(0.98);
+        }
+
+        input[aria-label="Search settings"]:focus-visible {
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            0 4px 12px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+        }
+    }
 
 
-/*message textbox */
-[data-type="unified-composer"] .shadow-short-composer
-{
-    background: transparent !important;
+    /* left sidebar background*/
+    #stage-slideover-sidebar {
+        background: transparent !important;
+    }
+    #stage-slideover-sidebar .bg-token-sidebar-surface-primary {
+        background: transparent !important;
+        backdrop-filter: blur(2px) saturate(1.1);
+        -webkit-backdrop-filter: blur(2px) saturate(1.1);
+    }
 
-    border-radius: 12px;
-    padding: 14px 18px;
 
-    box-shadow:
-        0 10px 26px rgba(0, 0, 0, 0.2),
+    /*search panel*/
+    @layer utilities {
+        [data-testid="modal-global-search"] [role="search"] {
+            background-color: transparent !important;
+            background-image: none !important;
+        }
+
+        [data-testid="modal-global-search"] [class*="filterBarSticky"] {
+            background-color: rgb(0 0 0 / .07) !important;
+            background-image: none !important;
+            border-color: transparent !important;
+        }
+
+        /*clear / close search buttons*/
+        [data-testid="modal-global-search"] .interactive-button-secondary {
+            background-color: transparent !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            border-color: transparent !important;
+        }
+
+        [data-testid="modal-global-search"] .interactive-button-secondary:hover,
+        [data-testid="modal-global-search"] .interactive-button-secondary:focus,
+        [data-testid="modal-global-search"] .interactive-button-secondary:focus-visible,
+        [data-testid="modal-global-search"] .interactive-button-secondary:active {
+            background-color: rgb(0 0 0 / .05) !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            border-color: transparent !important;
+        }
+
+        /*search chat preview*/
+        [data-testid="global-search-chat-hover-preview"] {
+            background: rgba(255, 255, 255, 0.45) !important;
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+        }
+        [data-testid="global-search-chat-hover-preview"] [class*="chatHoverPreviewUserBubble"],
+        [data-testid="global-search-chat-hover-preview"] [class*="chatHoverPreviewAssistantText"] {
+            background-color: transparent !important;
+            background-image: none !important;
+            border-color: transparent !important;
+            box-shadow: none !important;
+        }
+
+        /*loading icons*/
+        .skeleton [class*="skeleton-"],
+        .skeleton-child {
+            background-color: rgb(0 0 0 / .05) !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            border-color: transparent !important;
+        }
+
+        [data-testid="modal-global-search"] [class*="loadingIcon"],
+        [data-testid="modal-global-search"] [class*="loadingTitle"],
+        [data-testid="modal-global-search"] [class*="loadingSubtitle"],
+        [data-testid="modal-global-search"] [class*="loadingImageTile"] {
+            background-color: rgb(0 0 0 / .05) !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            border-color: transparent !important;
+        }
+
+        [data-testid="modal-global-search"] [class*="Skeleton"] {
+            background-color: rgb(0 0 0 / .05) !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            border-color: transparent !important;
+        }
+    }
+
+
+    /*search -> mactched images bg*/
+    @layer utilities {
+        [data-testid="modal-global-search"] [class*="imageResultGridTile"] {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            background-image: none !important;
+            border-color: rgba(255, 255, 255, 0.5) !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+
+            transition: background-color 180ms ease,
+            box-shadow 180ms ease,
+            transform 180ms ease;
+        }
+    }
+
+
+    /*image placeholder*/
+    @layer utilities {
+        [data-testid^="artifact-card-tile-libfile_"] [class*="imagePlaceholder"] {
+            background-color: transparent !important;
+            background-image: none !important;
+        }
+        [data-testid="image-gen-card-shimmer"] {
+            background-color: rgb(0 0 0 / .05) !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            border-color: transparent !important;
+        }
+
+        [class*="imagegen-image"] {
+            background-color: rgb(0 0 0 / .05) !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            border-color: transparent !important;
+        }
+    }
+
+
+    /*claim offer button*/
+    @layer utilities {
+        #stage-slideover-sidebar button.btn.bg-token-bg-primary {
+            background: transparent !important;
+            border-color: transparent !important;
+            color: rgba(0, 204, 255) !important;
+
+            transition: background 0.25s ease,
+            box-shadow 0.2s ease;
+        }
+        #stage-slideover-sidebar button.btn.bg-token-bg-primary:hover {
+            background: rgba(99, 151, 255, 0.2) !important;
+            border-color: rgba(99, 198, 255, .6) !important;
+            backdrop-filter: saturate(1);
+            -webkit-backdrop-filter: saturate(1);
+
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        #stage-slideover-sidebar button.btn.bg-token-bg-primary:active {
+            transform: scale(0.99);
+            background: rgba(99 198 255 / .5);
+
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25),
+            inset 0 2px 6px rgba(0, 0, 0, 0.12);
+        }
+    }
+
+
+    /* bottom & top menu bar within left sidebar*/
+    .stage-sidebar-pure-surface .bg-\(--sidebar-surface-primary\) {
+        background: transparent !important;
+    }
+
+
+    /*temporary chat & free offer background disable*/
+    #page-header .translucent-surface {
+        background: transparent !important;
+        backdrop-filter: none !important;
+    }
+
+
+    /*free offer button*/
+    .button-glimmer-cta {
+        background: transparent !important;
+        border-color: transparent !important;
+        color: rgba(0, 204, 255) !important;
+
+        transition: background 0.25s ease,
+        box-shadow 0.2s ease;
+    }
+    .button-glimmer-cta:hover {
+        background: rgba(99, 151, 255, 0.2) !important;
+        border-color: rgba(99, 198, 255, .6) !important;
+        backdrop-filter: saturate(1);
+        -webkit-backdrop-filter: saturate(1);
+
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    .button-glimmer-cta:active {
+        transform: scale(0.99);
+        background: rgba(99 198 255 / .5);
+
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25),
+        inset 0 2px 6px rgba(0, 0, 0, 0.12);
+    }
+
+
+    /*chat / work switch pill*/
+    @layer utilities {
+        #page-header [role="radiogroup"] [class*="bg-token-bg-primary"][class*="absolute"] {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+            border-color: rgba(255, 255, 255, 0.5) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+        }
+    }
+    /*chat / work switch background*/
+    #page-header [role="radiogroup"] {
+        background: none !important;
+    }
+
+
+    /*message textbox */
+    [data-type="unified-composer"] .shadow-short-composer {
+        background: transparent !important;
+
+        border-radius: 12px;
+        padding: 14px 18px;
+
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
-    transition:
-        background 0.25s ease,
+        transition: background 0.25s ease,
         box-shadow 0.2s ease,
         transform 0.25s ease;
-}
-[data-type="unified-composer"] .shadow-short-composer:focus-within
-{
-    background: rgba(255, 255, 255, 0.45) !important;
-    border-color: rgba(233, 233, 233, 0.35);
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-}
-[data-type="unified-composer"] .shadow-short-composer:hover {
-    background: rgba(255, 255, 255, 0.45) !important;
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-    box-shadow:
-        0 10px 26px rgba(0, 0, 0, 0.2),
+    }
+    [data-type="unified-composer"] .shadow-short-composer:focus-within {
+        background: rgba(255, 255, 255, 0.45) !important;
+        border-color: rgba(233, 233, 233, 0.35);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+    }
+    [data-type="unified-composer"] .shadow-short-composer:hover {
+        background: rgba(255, 255, 255, 0.45) !important;
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.08)
-}
-[data-type="unified-composer"] .shadow-short-composer:active
-{
-    box-shadow:
-        0 12px 30px rgba(0, 0, 0, 0.1),
+    }
+    [data-type="unified-composer"] .shadow-short-composer:active {
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-[data-composer-body] {
-  background-color: transparent !important;
-}
+    }
+    [data-composer-body] {
+        background-color: transparent !important;
+    }
 
 
-/*disclaimer background & shadow*/
-[data-testid="thread-disclaimer"],
-[data-testid="thread-disclaimer"] * {
-  background: transparent !important;
-  background-color: transparent !important;
-  background-image: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  box-shadow: none !important;
-  border-color: transparent !important;
-  color: #fff !important; /*disclaimer text color*/
-}
+    /* Composer tool popup */
+    @layer utilities {
+        div[role="toolbar"] {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-image: none !important;
 
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
 
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
 
-/*edit message textbox*/
-[data-conversation-screenshot-content] > .bg-token-main-surface-tertiary {
-    background: transparent !important;
+            backdrop-filter: blur(10px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
+        }
+        /*link input bg*/
+        div[role="toolbar"] input[class*="bg-token-bg-primary"] {
+            background-color: transparent !important;
+            background-image: none !important;
+            border-color: transparent !important;
+            box-shadow: none !important;
+        }
+    }
 
-    border-radius: 12px;
-    padding: 14px 18px;
-
-    box-shadow:
-        0 10px 26px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
-
-    transition:
-        background 0.25s ease,
-        box-shadow 0.25s ease,
-        transform 0.25s ease;
-}
-[data-conversation-screenshot-content] > .bg-token-main-surface-tertiary:focus-within
-{
-    background: rgba(255, 255, 255, 0.45) !important;
-    border-color: rgba(233, 233, 233, 0.35);
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-}
-[data-conversation-screenshot-content] > .bg-token-main-surface-tertiary:hover {
-    background: rgba(255, 255, 255, 0.45) !important;
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-    box-shadow:
-        0 10px 26px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08)
-}
-[data-conversation-screenshot-content] > .bg-token-main-surface-tertiary:active
-{
-    box-shadow:
-        0 12px 30px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-
-/*source flyout*/
-@layer utilities {
-  [data-testid="stage-thread-flyout"] [class*="bg-token-"],
-  [data-testid="stage-thread-flyout"] [class*="bg-surface-"],
-  [data-testid="stage-thread-flyout"] [class*="bg-(--"],
-  [data-testid="bar-search-sources-header"] {
-    background-color: transparent !important;
-    background-image: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
-}
-
-
-/*menu dropdowns background*/
-[data-radix-menu-content] {
-    background: rgba(255, 255, 255, 0.45) !important;
-    backdrop-filter: blur(2px) saturate(1.1);
-    -webkit-backdrop-filter: blur(2px) saturate(1.1);
-}
-
-
-/*prompt text color*/
-#prompt-textarea {
-    color: #000 !important;
-}
-/*text selection color*/
-::selection {
-    background: rgba(99, 236, 255, .35) !important;
-    color: black !important;
-}
-/*caret color*/
-.ProseMirror {
-    caret-color: rgb(99, 151, 255) !important;
-}
-
-
-/*bottom gradient*/
-#thread-bottom-container::after {
-  background-color: transparent !important;
-  opacity: 0 !important;
-}
-
-
-/* Code block surface*/
-[class*="bg-(--code-block-surface)"] {
-  background-color: transparent !important;
-}
-
-
-
-
-.btn-secondary /* upgrade button / ask chatgpt */
-{
-    background: rgba(255, 255, 255, 0.4) !important;
-    color: var(--text-primary);
-
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    border-radius: 14px;
-
-    padding: 8px 14px;
-    font-weight: 500;
-
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-
-    box-shadow:
-        0 6px 16px rgba(0, 0, 0, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.45);
-
-    cursor: pointer;
-
-    transition:
-        background 0.2s ease,
+    /*send prompt/start voice button*/
+    [data-composer-surface="true"] .composer-submit-button-color {
+        background: transparent;
+        transition: background 0.2s ease,
         box-shadow 0.2s ease,
         transform 0.15s ease;
-}
-.btn-secondary:hover
-{
-    background: rgba(255, 255, 255, 0.65) !important;
+    }
+    [data-composer-surface="true"] .composer-submit-button-color:hover {
+        background: rgb(110 205 255 / .5);
 
-    box-shadow:
-        0 8px 20px rgba(0, 0, 0, 0.22),
-        inset 0 1px 0 rgba(255, 255, 255, 1);
-}
-.btn-secondary:active
-{
-    transform: scale(0.97);
+        backdrop-filter: saturate(1);
+        -webkit-backdrop-filter: saturate(1);
 
-    box-shadow:
-        0 4px 10px rgba(0, 0, 0, 0.14),
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    [data-composer-surface="true"] .composer-submit-button-color:active {
+        transform: scale(0.99);
+        background: rgba(110 205 255 / .5);
+
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25),
         inset 0 2px 6px rgba(0, 0, 0, 0.12);
-}
+    }
 
 
-.__menu-item /*menu items*/
-{ 
-    transition:
-        background 0.2s ease,
+    /*plugins, files, folders & skills popover background ("+"button popover)*/
+    .popover {
+        background: rgba(255, 255, 255, 0.45) !important;
+        backdrop-filter: blur(5px) saturate(1.1);
+        -webkit-backdrop-filter: blur(5px) saturate(1.1);
+    }
+
+    /*disclaimer background & shadow*/
+    [data-testid="thread-disclaimer"],
+    [data-testid="thread-disclaimer"] * {
+        background: transparent !important;
+        background-color: transparent !important;
+        background-image: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        box-shadow: none !important;
+        border-color: transparent !important;
+        color: #000 !important;
+        /*disclaimer text color*/
+    }
+
+
+    /* write or edit / search the web dropdown background under composer*/
+    @layer utilities {
+        div.absolute.start-0.z-\[-1\].top-full .bg-surface-primary,
+        div.absolute.start-0.z-\[-1\].top-full.bg-surface-primary {
+            background-color: transparent !important;
+            background-image: none !important;
+        }
+    }
+
+
+    /*edit message textbox*/
+    [data-conversation-screenshot-content] > .bg-token-main-surface-tertiary {
+        background: transparent !important;
+
+        border-radius: 12px;
+        padding: 14px 18px;
+
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+        transition: background 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+    }
+    [data-conversation-screenshot-content] > .bg-token-main-surface-tertiary:focus-within {
+        background: rgba(255, 255, 255, 0.45) !important;
+        border-color: rgba(233, 233, 233, 0.35);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+    }
+    [data-conversation-screenshot-content] > .bg-token-main-surface-tertiary:hover {
+        background: rgba(255, 255, 255, 0.45) !important;
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08)
+    }
+    [data-conversation-screenshot-content] > .bg-token-main-surface-tertiary:active {
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+
+    /*source flyout*/
+    @layer utilities {
+        [data-testid="stage-thread-flyout"] [class*="bg-token-"],
+        [data-testid="stage-thread-flyout"] [class*="bg-surface-"],
+        [data-testid="stage-thread-flyout"] [class*="bg-(--"],
+        [data-testid="bar-search-sources-header"] {
+            background-color: transparent !important;
+            background-image: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+        [data-testid="stage-thread-flyout"] {
+            background-color: transparent !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            border-color: transparent !important;
+        }
+    }
+
+
+    @layer utilities {
+        /*menu dropdowns background*/
+        [data-radix-menu-content] {
+            background: rgba(255, 255, 255, 0.45) !important;
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+        }
+
+        /*create project menu panel bg*/
+        [data-testid="modal-new-project-enhanced"][class*="bg-token-bg-primary"] {
+            background: rgba(255, 255, 255, 0.45) !important;
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+        }
+
+        /*create project tips*/
+        [data-testid="create-new-project-form"] aside[class*="bg-token-bg-tertiary"] {
+            background-color: transparent !important;
+            background-image: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+        /*project setting background*/
+        [data-testid="modal-new-project-enhanced"][class*="absolute"][class*="inset-0"] {
+            background-color: transparent !important;
+            background-image: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        /*share project tip*/
+        [data-testid="modal-share-project"] div[class*="bg-token-bg-tertiary"] {
+            background-color: transparent !important;
+            background-image: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        /*shortcut settings bg*/
+        [data-testid="keyboard-shortcuts-dialog"] {
+            background: rgba(255, 255, 255, 0.45) !important;
+            backdrop-filter: blur(6px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(6px) saturate(1.1) !important;
+        }
+        [data-testid="keyboard-shortcuts-dialog"] [class*="bg-token-bg-primary"] {
+            background-color: transparent !important;
+            background-image: none !important;
+        }
+        [data-testid="keyboard-shortcuts-dialog"] [class*="bg-inherit"] {
+            background-color: transparent !important;
+            background-image: none !important;
+        }
+    }
+
+
+    /*linear gradient background over chats under a project*/
+    .content-fade-top::after {
+        background-image: none !important;
+        backdrop-filter: blur(2px) saturate(1.1);
+        -webkit-backdrop-filter: blur(2px) saturate(1.1);
+    }
+
+
+    /*menu items*/
+    .__menu-item {
+        transition: background 0.2s ease,
         box-shadow 0.2s ease,
         transform 0.2s ease;
-    --menu-item-highlighted: rgba(255, 255, 255, 0.55);
-    --menu-item-active: rgba(255, 255, 255, 0.65);
-    --menu-item-open: rgba(255, 255, 255, 0.5);
-}
-.__menu-item:hover {
-    background: var(--menu-item-highlighted) !important;
-    transform: translateY(-1px);
-    box-shadow:
-        0 10px 26px rgba(0, 0, 0, 0.18),
+        --menu-item-highlighted: rgba(255, 255, 255, 0.55) !important;
+        --menu-item-active: rgba(255, 255, 255, 0.65) !important;
+        --menu-item-open: rgba(255, 255, 255, 0.5) !important;
+    }
+    .__menu-item:hover {
+        background: var(--menu-item-highlighted) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18),
         inset 0 1px 0 rgba(255, 255, 255, 0.85);
-}
-.__menu-item:active {
-    background: var(--menu-item-active) !important;
-    transform: translateY(0);
-    box-shadow:
-        0 4px 14px rgba(0, 0, 0, 0.14),
+    }
+    .__menu-item:active {
+        background: var(--menu-item-active) !important;
+        transform: translateY(0);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14),
         inset 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-.__menu-item[aria-expanded="true"],
-.__menu-item.open {
-    background: var(--menu-item-open) !important;
-    box-shadow:
-        inset 0 0 0 1px rgba(232, 232, 232, 0.25),
+    }
+    .__menu-item[aria-expanded="true"],
+    .__menu-item.open {
+        background: var(--menu-item-open) !important;
+        box-shadow: inset 0 0 0 1px rgba(232, 232, 232, 0.25),
         0 8px 22px rgba(0, 0, 0, 0.16);
-}
+    }
 
 
+    /*prompt text color*/
+    #prompt-textarea {
+        color: #000 !important;
+    }
+    /*text selection color*/
+    ::selection {
+        background: rgba(99, 236, 255, .35) !important;
+        color: black !important;
+    }
+    /*caret color*/
+    .ProseMirror {
+        caret-color: rgb(99, 151, 255) !important;
+    }
 
 
-.markdown /* ChatGPT message bubble */
-{
-    --bg-alpha: calc(0.55 - (var(--GPTmarkdownHover) * 0.47));
-    --blur-val: calc(5px - (var(--GPTmarkdownHover) * 3px));
-    --shd-y: calc(12px - (var(--GPTmarkdownHover) * 4px));
-    --shd-blur: calc(28px - (var(--GPTmarkdownHover) * 6px));
-    --shd-alpha: calc(0.45 - (var(--GPTmarkdownHover) * 0.13));
-    --inset-alpha: calc(0.08 - (var(--GPTmarkdownHover) * 0.02));
+    /*bottom gradient in conversation*/
+    #thread-bottom-container::after {
+        background-color: transparent !important;
+        opacity: 0 !important;
+    }
 
-    background: rgba(255, 255, 255, var(--bg-alpha)) !important;
 
-    backdrop-filter: blur(var(--blur-val));
-    -webkit-backdrop-filter: blur(var(--blur-val));
+    /* code block surface*/
+    [class*="bg-(--code-block-surface)"] {
+        background-color: transparent !important;
+    }
 
-    box-shadow:
-        0 var(--shd-y) var(--shd-blur) rgba(0, 0, 0, var(--shd-alpha)),
+
+    /* ChatGPT message bubble */
+    .markdown {
+        --bg-alpha: calc(0.55 - (var(--GPTmarkdownHover) * 0.47));
+        --blur-val: calc(5px - (var(--GPTmarkdownHover) * 3px));
+        --shd-y: calc(12px - (var(--GPTmarkdownHover) * 4px));
+        --shd-blur: calc(28px - (var(--GPTmarkdownHover) * 6px));
+        --shd-alpha: calc(0.45 - (var(--GPTmarkdownHover) * 0.13));
+        --inset-alpha: calc(0.08 - (var(--GPTmarkdownHover) * 0.02));
+
+        background: rgba(255, 255, 255, var(--bg-alpha)) !important;
+
+        backdrop-filter: blur(var(--blur-val));
+        -webkit-backdrop-filter: blur(var(--blur-val));
+
+        box-shadow: 0 var(--shd-y) var(--shd-blur) rgba(0, 0, 0, var(--shd-alpha)),
         inset 0 1px 0 rgba(255, 255, 255, var(--inset-alpha));
 
-    max-width: unset;
-    overflow-x: hidden;
-    min-width: 0 !important;
+        max-width: unset;
+        overflow-x: hidden;
+        min-width: 0 !important;
 
-    border-radius: 18px;
-    padding: 14px 18px;
-    margin: 8px 0;
+        border-radius: 18px;
+        padding: 14px 18px;
+        margin: 8px 0;
 
-    transition:
-        background 0.25s ease,
+        transition: background 0.25s ease,
         box-shadow 0.25s ease,
         backdrop-filter 0.25s ease,
         transform 0.25s ease;
-}
+    }
 
-.markdown:hover
-{
-    background: rgba(255, 255, 255, 0.55) !important;
-    box-shadow:
-        0 12px 28px rgba(0, 0, 0, 0.45),
+    .markdown:hover,
+    .markdown:focus-visible {
+        background: rgba(255, 255, 255, 0.55) !important;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45),
         inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-}
-    
-.markdown table {
-    padding-right: 182px;          /* extra scroll room */
-    box-sizing: content-box;      
-}
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+    }
 
+    [data-message-author-role="assistant"] table {
+        padding-right: 182px;
+        /* extra scroll room */
+        box-sizing: content-box;
+    }
 
-.btn-danger { /*delete button*/
-    background-clip: padding-box;
-    background-color: rgba(255, 0, 0, .08) !important;
-    color: var(--text-primary);
+    /*user message bubble in normal chats*/
+    .user-message-bubble-color {
+        --user-bg-alpha: calc(0.6 - (var(--userMarkdownHover) * 0.52));
+        --user-blur: calc(5px - (var(--userMarkdownHover) * 3px));
+        --user-shd-y: calc(10px - (var(--userMarkdownHover) * 4px));
+        --user-shd-blur: calc(26px - (var(--userMarkdownHover) * 8px));
+        --user-shd-alpha: calc(0.25 - (var(--userMarkdownHover) * 0.07));
+        --user-inset-alpha: calc(0.45 - (var(--userMarkdownHover) * 0.10));
 
-    border: 1px solid rgba(166, 0, 0, .12);
-    border-radius: 14px;
+        background: rgba(233, 233, 233, var(--user-bg-alpha)) !important;
 
-    padding: 8px 14px;
-    font-weight: 500;
+        backdrop-filter: blur(var(--user-blur));
+        -webkit-backdrop-filter: blur(var(--user-blur));
 
-    backdrop-filter: blur(0.5px);
-    -webkit-backdrop-filter: blur(0.5px);
-
-    box-shadow:
-        0 6px 16px rgba(0, 0, 0, 0.18),
-        inset 0 1px 0 rgba(255, 193, 193, .45);
-
-    cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.15s ease;
-}
-.btn-danger:hover{
-    background: rgba(255, 96, 96, .65) !important;
-
-    box-shadow:
-        0 8px 20px rgba(255, 165, 165, .22),
-        inset 0 1px 0 rgb(255, 171, 171);
-}
-.btn-danger:active{
-    transform: scale(0.97);
-
-    box-shadow:
-        0 4px 10px rgba(255, 0, 0, .14),
-        inset 0 2px 6px rgba(0, 0, 0, 0.12);
-}
-
-.btn-primary,.composer-secondary-button-color { /*send button for edited message */ /*composer/voice chat button */
-    
-    background-clip: padding-box;
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    color: var(--text-primary);
-
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    border-radius: 14px;
-
-    padding: 8px 14px;
-    font-weight: 500;
-
-    backdrop-filter: blur(0.5px);
-    -webkit-backdrop-filter: blur(0.5px);
-
-    box-shadow:
-        0 6px 16px rgba(0, 0, 0, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.45);
-
-    cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.15s ease;
-}
-.btn-primary:hover, .composer-secondary-button-color:hover {
-    background: rgba(255, 255, 255, 0.65) !important;
-
-    box-shadow:
-        0 8px 20px rgba(0, 0, 0, 0.22),
-        inset 0 1px 0 rgba(255, 255, 255, 1);
-}
-.btn-primary:active, .composer-secondary-button-color:active {
-    transform: scale(0.97);
-
-    box-shadow:
-        0 4px 10px rgba(0, 0, 0, 0.14),
-        inset 0 2px 6px rgba(0, 0, 0, 0.12);
-}
-
-
-.user-message-bubble-color /*user message bubble*/
-{
-   --user-bg-alpha: calc(0.6 - (var(--userMarkdownHover) * 0.52));
-    --user-blur: calc(5px - (var(--userMarkdownHover) * 3px));
-    --user-shd-y: calc(10px - (var(--userMarkdownHover) * 4px));
-    --user-shd-blur: calc(26px - (var(--userMarkdownHover) * 8px));
-    --user-shd-alpha: calc(0.25 - (var(--userMarkdownHover) * 0.07));
-    --user-inset-alpha: calc(0.45 - (var(--userMarkdownHover) * 0.10));
-
-    background: rgba(233, 233, 233, var(--user-bg-alpha)) !important;
-
-    backdrop-filter: blur(var(--user-blur));
-    -webkit-backdrop-filter: blur(var(--user-blur));
-
-    box-shadow:
-        0 var(--user-shd-y) var(--user-shd-blur) rgba(0, 0, 0, var(--user-shd-alpha)),
+        box-shadow: 0 var(--user-shd-y) var(--user-shd-blur) rgba(0, 0, 0, var(--user-shd-alpha)),
         inset 0 1px 0 rgba(255, 255, 255, var(--user-inset-alpha));
 
-    border-radius: 22px;
-    padding: 14px 18px;
-    margin: 6px 0;
-
-    transition:
-        background 0.25s ease,
+        transition: background 0.25s ease,
         box-shadow 0.25s ease,
         backdrop-filter 0.25s ease,
         transform 0.25s ease;
-}
+    }
 
-.user-message-bubble-color:hover
-{
-    background: rgba(233, 233, 233, 0.6) !important;
+    .user-message-bubble-color:hover,
+    .user-message-bubble-color:focus-visible {
+        background: rgba(233, 233, 233, 0.6) !important;
 
-    box-shadow:
-        0 10px 26px rgba(0, 0, 0, 0.25),
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25),
         inset 0 1px 0 rgba(255, 255, 255, 0.45);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-}
-
-.content-fade.single-line:after /*gradient transition behind chat text input bar*/
-{
-   background: transparent !important;
-}
-
-.bg-token-bg-primary /*sources button and chatbox*/
-{
-    background: rgba(233, 233, 233, 0.05) !important;
-
-    backdrop-filter: blur(0.5px) saturate(1.05);
-    -webkit-backdrop-filter: blur(8px) saturate(1.05);
-
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    /*border-radius: 999px;*/
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.6),
-        0 4px 12px rgba(0, 0, 0, 0.06);
-
-    transition:
-        background 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.15s ease;
-}
-    
-
-.bg-token-bg-primary:hover /*top menu bar and message texbox*/
-{
-    background: rgba(233, 233, 233, 0.05) !important;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-}
-.bg-token-bg-primary svg {
-    opacity: 0.8;
-}
-.content-fade-top:after /*linear gradient behind chatbox in a project page*/
-{
-    background: transparent !important;
-    
-}
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+    }
 
 
+    /*user message bubble in temporary chats (sep 13, 2026)*/
+    div.bg-token-bg-tertiary:has( > svg[aria-hidden="true"] rect[stroke-dasharray]) {
+        --user-bg-alpha: calc(0.6 - (var(--userMarkdownHover) * 0.52));
+        --user-blur: calc(5px - (var(--userMarkdownHover) * 3px));
+        --user-shd-y: calc(10px - (var(--userMarkdownHover) * 4px));
+        --user-shd-blur: calc(26px - (var(--userMarkdownHover) * 8px));
+        --user-shd-alpha: calc(0.25 - (var(--userMarkdownHover) * 0.07));
+        --user-inset-alpha: calc(0.45 - (var(--userMarkdownHover) * 0.10));
+
+        background: rgba(233, 233, 233, var(--user-bg-alpha)) !important;
+
+        backdrop-filter: blur(var(--user-blur));
+        -webkit-backdrop-filter: blur(var(--user-blur));
+
+        box-shadow: 0 var(--user-shd-y) var(--user-shd-blur) rgba(0, 0, 0, var(--user-shd-alpha)),
+        inset 0 1px 0 rgba(255, 255, 255, var(--user-inset-alpha));
+
+        transition: background 0.25s ease,
+        box-shadow 0.25s ease,
+        backdrop-filter 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    div.bg-token-bg-tertiary:has( > svg[aria-hidden="true"] rect[stroke-dasharray]):hover,
+    div.bg-token-bg-tertiary:has( > svg[aria-hidden="true"] rect[stroke-dasharray]):focus-within {
+        background: rgba(233, 233, 233, 0.6) !important;
+
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+    }
+
+
+    /*share, more buttons*/
+    @layer utilities {
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-image: none !important;
+
+            border-color: rgba(255, 255, 255, 0.5) !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+
+            transition: background-color 150ms ease,
+            box-shadow 150ms ease,
+            transform 150ms ease;
+        }
+
+        /* ---- Hover: slightly brighter, lifted ---- */
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.5) !important;
+
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+
+            backdrop-filter: blur(4px) saturate(1.15) !important;
+            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
+
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary:active {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1),
+            inset 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+
+            transform: translateY(0) scale(0.98);
+        }
+
+        .btn-secondary:focus-visible {
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            0 4px 12px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+        }
+    }
+
+
+    /*some other buttons: expand/hide sideview, search, close, temporary chat, copy message...*/
+    @layer utilities {
+        button[class*="hover:bg-token-surface-hover"],
+        button[class*="group\/footnote"] {
+            background-color: transparent !important;
+            background-image: none !important;
+
+            transition: background-color 150ms ease,
+            box-shadow 150ms ease,
+            transform 150ms ease,
+            backdrop-filter 150ms ease;
+        }
+
+        button[class*="hover:bg-token-surface-hover"]:hover,
+        button[class*="group\/footnote"]:hover {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+        }
+
+        button[class*="hover:bg-token-surface-hover"]:active,
+        button[class*="group\/footnote"]:active {
+            background-color: rgba(255, 255, 255, 0.5) !important;
+            transform: scale(0.97);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1),
+            inset 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        button[class*="hover:bg-token-surface-hover"]:focus-visible,
+        button[class*="group\/footnote"]:focus-visible {
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            0 4px 12px rgba(0, 0, 0, 0.1) !important;
+        }
+    }
+
+
+    /*think button shimmer effect*/
+    @layer utilities {
+        .__composer-pill {
+            position: relative;
+
+            background-image: linear-gradient( 115deg,
+            transparent 35%,
+            rgba(255, 255, 255, 0.7) 48%,
+            rgba(255, 255, 255, 0.95) 52%,
+            transparent 65%);
+            background-size: 250% 100%;
+            background-position: 200% 0;
+            background-repeat: no-repeat;
+
+            transition: background-position 900ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .__composer-pill:hover {
+            background-position: -100% 0;
+        }
+    }
+
+
+    /*tooltips*/
+    @layer utilities {
+        .bg-token-bg-tooltip {
+            background-color: rgba(20, 20, 22, 0.72) !important;
+            backdrop-filter: blur(10px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+    }
+
+
+    /*delete chat button*/
+    @layer utilities {
+        .btn-danger {
+            background-color: rgba(239, 68, 68, 0.18) !important;
+            color: #7f1d1d !important;
+            border-color: rgba(239, 68, 68, 0.4) !important;
+
+            backdrop-filter: blur(6px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(6px) saturate(1.2) !important;
+
+            transition: background-color 180ms ease, transform 180ms ease;
+        }
+
+        .btn-danger:hover {
+            background-color: rgba(239, 68, 68, 0.3) !important;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger:active {
+            background-color: rgba(239, 68, 68, 0.4) !important;
+            transform: scale(0.97);
+        }
+    }
+
+
+    /*send button after editing message*/
+    @layer utilities {
+        .btn-primary {
+            background-color: rgba(20, 20, 22, 0.72) !important;
+            backdrop-filter: blur(10px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+
+            transition: background-color 180ms ease, transform 180ms ease;
+        }
+
+        .btn-primary:hover {
+            background-color: rgba(20, 20, 22, 0.85) !important;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:active {
+            background-color: rgba(20, 20, 22, 0.95) !important;
+            transform: scale(0.97);
+        }
+    }
+
+
+    /*file attachment blocks*/
+    @layer utilities {
+        .group\/file-tile button.interactive-bg-secondary {
+            background-color: rgba(20, 20, 22, 0.12) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+
+            backdrop-filter: blur(10px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
+        }
+
+        .group\/file-tile button.interactive-bg-secondary:hover,
+        .group\/file-tile button.interactive-bg-secondary:active,
+        .group\/file-tile button.interactive-bg-secondary:focus,
+        .group\/file-tile button.interactive-bg-secondary:focus-visible {
+            background-color: rgba(20, 20, 22, 0.12) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+    }
+
+
+    /*library sticky toolbar top*/
+    @layer utilities {
+        [data-testid="artifacts-surface-top-controls"] {
+            background-color: transparent !important;
+            background-image: none !important;
+        }
+
+        [data-testid="page-table-toolbar-shell"] {
+            background-color: transparent !important;
+            background-image: none !important;
+
+            backdrop-filter: blur(2px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.2) !important;
+        }
+    }
+
+
+    /*library tip bg*/
+    @layer utilities {
+        .pointer-events-none.absolute.inset-x-0.top-4 [class*="bg-token-bg-primary"] {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-image: none !important;
+
+            border-color: rgba(255, 255, 255, 0.5) !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+
+            backdrop-filter: blur(10px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
+        }
+    }
+
+
+    /*library upload file popup*/
+    @layer utilities {
+        section.fixed.bottom-4 [class*="bg-token-bg-primary"] {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-image: none !important;
+
+            border-color: rgba(255, 255, 255, 0.5) !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+
+            backdrop-filter: blur(10px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
+        }
+    }
+
+
+    /*library search bar*/
+    @layer utilities {
+        input[aria-label="Search library"] {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-image: none !important;
+
+            border-color: rgba(255, 255, 255, 0.5) !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+
+            transition: background-color 150ms ease,
+            box-shadow 150ms ease,
+            transform 150ms ease;
+        }
+
+        input[aria-label="Search library"]:hover {
+            background-color: rgba(255, 255, 255, 0.5) !important;
+
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+
+            backdrop-filter: blur(4px) saturate(1.15) !important;
+            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
+
+            transform: translateY(-1px);
+        }
+
+        input[aria-label="Search library"]:active {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1),
+            inset 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+
+            transform: translateY(0) scale(0.98);
+        }
+
+        input[aria-label="Search library"]:focus-visible {
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            0 4px 12px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+        }
+
+        /*file icons in add from library*/
+        [class*="selectableRow"] div[class*="bg-token-bg-primary"][class*="rounded-lg"] {
+            background-color: transparent !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            border-color: transparent !important;
+        }
+
+        /*file icons in library*/
+        [data-library-list-row-icon="true"] {
+            background-color: transparent !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            border-color: transparent !important;
+        }
+    }
+
+
+    @layer utilities {
+        /* More actions button on library file tiles */
+        button[data-page-table-row-actions-focus-target="true"] {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-image: none !important;
+
+            border-color: rgba(255, 255, 255, 0.5) !important;
+            color: rgba(12, 74, 110, 0.9) !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+
+            backdrop-filter: blur(6px) saturate(1.15) !important;
+            -webkit-backdrop-filter: blur(6px) saturate(1.15) !important;
+
+            transition: background-color 150ms ease,
+            box-shadow 150ms ease,
+            border-color 150ms ease,
+            transform 150ms ease;
+        }
+
+        button[data-page-table-row-actions-focus-target="true"]:hover {
+            background-color: rgba(255, 255, 255, 0.7) !important;
+            border-color: rgba(255, 255, 255, 0.65) !important;
+            color: #0c4a6e !important;
+
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+
+            transform: translateY(-1px);
+        }
+
+        button[data-page-table-row-actions-focus-target="true"][data-state="open"],
+        button[data-page-table-row-actions-focus-target="true"][aria-expanded="true"] {
+            background-color: rgba(255, 255, 255, 0.75) !important;
+            color: #0c4a6e !important;
+        }
+
+        /* Keyboard focus */
+        button[data-page-table-row-actions-focus-target="true"]:focus-visible {
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            0 4px 12px rgba(0, 0, 0, 0.1) !important;
+        }
+    }
+
+
+    /*library gear button*/
+    @layer utilities {
+        button[aria-label="Settings"] svg.icon {
+            color: #000 !important;
+        }
+    }
+
+    /*library file blocks*/
+    @layer utilities {
+        [data-testid^="artifact-card-tile-libfile_"],
+        [role="button"][aria-label^="Open folder "] > [class*="bg-token-bg-primary"] {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-image: none !important;
+
+            border-color: rgba(255, 255, 255, 0.5) !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+
+            backdrop-filter: blur(10px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
+
+            transition: background-color 200ms cubic-bezier(0.22, 1, 0.36, 1),
+            box-shadow 200ms cubic-bezier(0.22, 1, 0.36, 1),
+            transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        [data-testid^="artifact-card-tile-libfile_"]:hover,
+        [role="button"][aria-label^="Open folder "] > [class*="bg-token-bg-primary"]:hover {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14),
+            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+
+            transform: translateY(-2px);
+        }
+
+        [data-testid^="artifact-card-tile-libfile_"]:focus-within,
+        [role="button"][aria-label^="Open folder "] > [class*="bg-token-bg-primary"]:focus-within {
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            0 10px 26px rgba(0, 0, 0, 0.12) !important;
+        }
+    }
+
+
+    /*library view toggle*/
+    @layer utilities {
+        [class*="refreshedHeaderViewToggle"] button,
+        [class*="popover"] button.btn-ghost[aria-pressed] {
+            background-color: transparent !important;
+            background-image: none !important;
+            border-color: transparent !important;
+            color: rgba(12, 74, 110, 0.85) !important;
+
+            transition: background-color 150ms ease,
+            box-shadow 150ms ease,
+            transform 150ms ease,
+            backdrop-filter 150ms ease;
+        }
+
+        [class*="refreshedHeaderViewToggle"] button:hover,
+        [class*="popover"] button.btn-ghost[aria-pressed]:hover {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+            color: #0c4a6e !important;
+        }
+
+        [class*="refreshedHeaderViewToggle"] button:active,
+        [class*="popover"] button.btn-ghost[aria-pressed]:active {
+            background-color: rgba(255, 255, 255, 0.5) !important;
+            transform: scale(0.97);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1),
+            inset 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        [class*="refreshedHeaderViewToggle"] button:focus-visible,
+        [class*="popover"] button.btn-ghost[aria-pressed]:focus-visible {
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            0 4px 12px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        [class*="refreshedHeaderViewToggle"] button[aria-pressed="true"],
+        [class*="popover"] button.btn-ghost[aria-pressed="true"] {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-image: none !important;
+            color: #0c4a6e !important;
+            border-color: rgba(255, 255, 255, 0.6) !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+
+            backdrop-filter: blur(4px) saturate(1.15) !important;
+            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
+        }
+
+        [class*="refreshedHeaderViewToggle"] button[aria-pressed="true"]:hover,
+        [class*="popover"] button.btn-ghost[aria-pressed="true"]:hover {
+            background-color: rgba(255, 255, 255, 0.6) !important;
+        }
+    }
+
+
+    /*library file filter*/
+    @layer utilities {
+        button[aria-label="Open filters"] {
+            background-color: transparent !important;
+            background-image: none !important;
+            color: rgba(12, 74, 110, 0.85) !important;
+
+            transition: background-color 150ms ease,
+            box-shadow 150ms ease,
+            transform 150ms ease,
+            color 150ms ease;
+        }
+
+        button[aria-label="Open filters"]:hover {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+            color: #0c4a6e !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+        }
+
+        button[aria-label="Open filters"]:focus-visible {
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            0 4px 12px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        button[aria-label="Open filters"][data-state="open"] {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+            color: #0c4a6e !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+
+            backdrop-filter: blur(4px) saturate(1.15) !important;
+            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
+        }
+    }
+
+
+    @layer utilities {
+        /* Empty trash button */
+        [class*="bg-token-bg-secondary/60"] > button {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-image: none !important;
+
+            border-color: rgba(255, 255, 255, 0.5) !important;
+            color: rgba(12, 74, 110, 0.9) !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+
+            transition: background-color 150ms ease,
+            box-shadow 150ms ease,
+            border-color 150ms ease,
+            transform 150ms ease;
+        }
+
+        [class*="bg-token-bg-secondary/60"] > button:hover {
+            background-color: rgba(255, 255, 255, 0.5) !important;
+            border-color: rgba(255, 255, 255, 0.6) !important;
+            color: #0c4a6e !important;
+
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+
+            transform: translateY(-1px);
+        }
+
+        [class*="bg-token-bg-secondary/60"] > button:active {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+            transform: scale(0.98);
+        }
+    }
+
+
+    /*add from library -> search file -> items rows*/
+    @layer utilities {
+        [class*="popover"] [class*="selectableRow"]::before,
+        [class*="popover"] [class*="selectableRow"]::after {
+            background-color: transparent !important;
+            background-image: none !important;
+            transition: none !important;
+            animation: none !important;
+        }
+
+        [class*="popover"] [class*="selectableRow"]:hover {
+            background-color: rgb(0 0 0 / .06) !important;
+            background-image: none !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+
+            transition: none !important;
+        }
+
+        [class*="popover"] [class*="selectableRow"]:hover::before {
+            background-color: rgb(0 0 0 / .06) !important;
+        }
+        [class*="popover"] [class*="selectableRow"]:hover {
+            background-color: transparent !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+        }
+    }
+
+    /*plugin search bar*/
+    @layer utilities {
+        input[aria-label="Search library"],
+        input[aria-label="Search plugins"] {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-image: none !important;
+
+            border-color: rgba(255, 255, 255, 0.5) !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+
+            transition: background-color 150ms ease,
+            box-shadow 150ms ease,
+            transform 150ms ease;
+        }
+
+        input[aria-label="Search library"]:hover,
+        input[aria-label="Search plugins"]:hover {
+            background-color: rgba(255, 255, 255, 0.5) !important;
+
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+
+            backdrop-filter: blur(4px) saturate(1.15) !important;
+            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
+
+            transform: translateY(-1px);
+        }
+
+        input[aria-label="Search library"]:active,
+        input[aria-label="Search plugins"]:active {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1),
+            inset 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+
+            transform: translateY(0) scale(0.98);
+        }
+
+        input[aria-label="Search library"]:focus-visible,
+        input[aria-label="Search plugins"]:focus-visible {
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            0 4px 12px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+        }
+    }
+
+
+    @layer utilities {
+        /* Add plugin button inside a plugin row */
+        article[class*="hover:bg-token-interactive-bg-secondary-hover"] > button[class*="hover:bg-token-bg-primary"] {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-image: none !important;
+            color: rgba(12, 74, 110, 0.9) !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+
+            transition: background-color 150ms ease,
+            box-shadow 150ms ease,
+            transform 150ms ease;
+        }
+
+        article[class*="hover:bg-token-interactive-bg-secondary-hover"] > button[class*="hover:bg-token-bg-primary"]:hover {
+            background-color: rgba(255, 255, 255, 0.5) !important;
+            color: #0c4a6e !important;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            transform: translateY(-1px);
+        }
+
+        article[class*="hover:bg-token-interactive-bg-secondary-hover"] > button[class*="hover:bg-token-bg-primary"]:active {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+            transform: scale(0.97);
+        }
+    }
+
+    @layer utilities {
+        /* Plugin page header title bar */
+        header.h-header-height[class*="bg-surface-primary"] {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-image: none !important;
+
+            backdrop-filter: blur(10px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
+        }
+    }
+
+    @layer utilities {
+        /*Plugin details page */
+        main#main:has([class*="bg-primary"][class*="flex-1"][class*="min-w-0"])::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+
+            background-color: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(10px) saturate(1.2);
+            -webkit-backdrop-filter: blur(10px) saturate(1.2);
+        }
+    }
+
+
+    /*scheduled -> status filter*/
+    @layer utilities {
+        button[aria-label="Filter tasks"] {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-image: none !important;
+            border-color: rgba(255, 255, 255, 0.5) !important;
+            color: rgba(12, 74, 110, 0.9) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+            transition: background-color 150ms ease, box-shadow 150ms ease,
+            border-color 150ms ease, transform 150ms ease;
+        }
+
+        button[aria-label="Filter tasks"]:hover {
+            background-color: rgba(255, 255, 255, 0.5) !important;
+            border-color: rgba(255, 255, 255, 0.6) !important;
+            color: #0c4a6e !important;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            transform: translateY(-1px);
+        }
+
+        button[aria-label="Filter tasks"]:active {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+            transform: scale(0.98);
+        }
+
+        button[aria-label="Filter tasks"][data-state="open"],
+        button[aria-label="Filter tasks"][aria-expanded="true"] {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+            border-color: rgba(255, 255, 255, 0.6) !important;
+            color: #0c4a6e !important;
+        }
+
+        button[aria-label="Filter tasks"]:focus-visible {
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            0 4px 12px rgba(0, 0, 0, 0.1) !important;
+        }
+    }
+
+    /*profile bg*/
+    @layer utilities {
+        header.bg-token-main-surface-primary {
+            background: rgba(255, 255, 255, 0.45) !important;
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+        }
+        main#main > .bg-token-main-surface-primary {
+            background: rgba(255, 255, 255, 0.45) !important;
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+        }
+    }
+
+
+    /*library -> new note bg*/
+    @layer utilities {
+        [role="dialog"][aria-label="Writing block editor"] {
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+        }
+
+        [role="dialog"][aria-label="Writing block editor"] [class*="bg-token-bg-"],
+        [role="dialog"][aria-label="Writing block editor"] [class*="bg-token-main-surface-"],
+        [role="dialog"][aria-label="Writing block editor"] [class*="bg-(--main-surface"] {
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+        }
+    }
+
+
+    /*library -> open file bg*/
+    @layer utilities {
+        [role="dialog"][class*="bg-(--main-surface-primary)"] {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-image: none !important;
+
+            backdrop-filter: blur(10px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
+        }
+        [role="dialog"][class*="bg-(--main-surface-primary)"] [class*="bg-token-bg-"],
+        [role="dialog"][class*="bg-(--main-surface-primary)"] [class*="bg-token-main-surface-"],
+        [role="dialog"][class*="bg-(--main-surface-primary)"] [class*="bg-(--main-surface"] {
+            background-color: transparent !important;
+            background-image: none !important;
+        }
+    }
+
+    .viewer,
+    .shell {
+        background-color: rgba(255, 255, 255, 0.25) !important;
+        background-image: none !important;
+
+        backdrop-filter: blur(10px) saturate(1.2) !important;
+        -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
+    }
 
 
 
 
-.pb-6 {
-    padding: 14px 18px;
-    /*padding-bottom: calc(var(--spacing)*6);*/
-    background: rgba(255, 255, 255, 0.20) !important;
-    backdrop-filter: blur(4px) saturate(1.15);
-    -webkit-backdrop-filter: blur(4px) saturate(1.15);
+    /*search category tabs*/
+    @layer utilities {
+        [role="tablist"][aria-label="Search result type filters"] [role="tab"] {
+            background-color: transparent !important;
+            background-image: none !important;
 
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow:
-        0 8px 24px rgba(0, 0, 0, 0.10),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            border-color: transparent !important;
 
-    border-radius: 12px;
-    transition:
-        background 0.25s ease,
-        box-shadow 0.25s ease;
-}
+            color: rgba(12, 74, 110, 0.85) !important;
 
-.p-3 /*chats under project*/
-{
-    padding: calc(var(--spacing)*3);
-    
-    align-items: center;
-    justify-content: center;
+            transition: background-color 150ms ease,
+            box-shadow 150ms ease,
+            color 150ms ease,
+            transform 150ms ease;
+        }
 
-    background: transparent;
-    
-    cursor: pointer;
+        [role="tablist"][aria-label="Search result type filters"] [role="tab"]:hover {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+            color: #0c4a6e !important;
+        }
 
-    transition:
-        background 0.3s ease,
-        box-shadow 0.3s ease,
-        transform 0.2s ease;
-}
-.p-3:hover{
-    border-radius: var(--radius-lg);
-    
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px) saturate(1.1);
-    -webkit-backdrop-filter: blur(2px) saturate(1.1);
+        [role="tablist"][aria-label="Search result type filters"] [role="tab"][aria-selected="true"],
+        [role="tablist"][aria-label="Search result type filters"] [class*="filterTabSelected"] {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+            color: #0c4a6e !important;
+            border-color: rgba(255, 255, 255, 0.6) !important;
 
-    box-shadow:
-        0 6px 18px rgba(0, 0, 0, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-.p-3:active{
-    transform: scale(0.995);
-    background: rgba(255, 255, 255, 0.35);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
 
-    box-shadow:
-        0 3px 10px rgba(0, 0, 0, 0.25),
-        inset 0 2px 6px rgba(0, 0, 0, 0.12);
-}
+            backdrop-filter: blur(4px) saturate(1.15) !important;
+            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
+        }
 
-.rounded-lg, .rounded-md, .end-0:dir(ltr)  { /*some other buttons*/
-    border-radius: var(--radius-lg);
-   
-    /* button base */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    background: transparent;
-    
-    cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.15s ease;
-}
-.rounded-lg:hover, .rounded-md:hover, .end-0:dir(ltr):hover{
-    border-radius: var(--radius-lg);
-    
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px) saturate(1.1);
-    -webkit-backdrop-filter: blur(2px) saturate(1.1);
-
-    box-shadow:
-        0 6px 18px rgba(0, 0, 0, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-.rounded-lg:active, .rounded-md:active, .end-0:dir(ltr):active {
-    transform: scale(0.99);
-    background: rgba(255, 255, 255, 0.35);
-
-    box-shadow:
-        0 3px 10px rgba(0, 0, 0, 0.25),
-        inset 0 2px 6px rgba(0, 0, 0, 0.12);
-}
+        [role="tablist"][aria-label="Search result type filters"] [role="tab"]:focus-visible {
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            0 4px 12px rgba(0, 0, 0, 0.1) !important;
+        }
+    }
 
 
+    /*no search results bg*/
+    [data-testid="artifacts-surface-library-search-empty-state"] [class*="bg-token-bg-primary"] {
+        background: transparent !important;
+        background-image: none !important;
+    }
 
 
+    /* Library category tabs */
+    @layer utilities {
+        [data-testid="artifacts-surface-top-controls"] .btn-primary-inverse,
+        [data-testid="artifacts-surface-top-controls"] .btn-ghost {
+            background-color: transparent !important;
+            background-image: none !important;
+            border-color: transparent !important;
+            color: rgba(12, 74, 110, 0.85) !important;
+
+            transition: background-color 150ms ease,
+            box-shadow 150ms ease,
+            color 150ms ease;
+        }
+
+        [data-testid="artifacts-surface-top-controls"] .btn-primary-inverse:hover,
+        [data-testid="artifacts-surface-top-controls"] .btn-ghost:hover {
+            background-color: rgba(255, 255, 255, 0.5) !important;
+            color: #0c4a6e !important;
+            border-color: rgba(255, 255, 255, 0.55) !important;
+
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+
+            backdrop-filter: blur(4px) saturate(1.15) !important;
+            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
+        }
+
+        [data-testid="artifacts-surface-top-controls"] .btn-primary-inverse[aria-current="page"],
+        [data-testid="artifacts-surface-top-controls"] .btn-ghost[aria-current="page"] {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-image: none !important;
+            color: #0c4a6e !important;
+            border-color: rgba(255, 255, 255, 0.6) !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+
+            backdrop-filter: blur(4px) saturate(1.15) !important;
+            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
+        }
+
+        [data-testid="artifacts-surface-top-controls"] .btn-primary-inverse[aria-current="page"]:hover,
+        [data-testid="artifacts-surface-top-controls"] .btn-ghost[aria-current="page"]:hover {
+            background-color: rgba(255, 255, 255, 0.6) !important;
+        }
+
+        [data-testid="artifacts-surface-top-controls"] .btn-primary-inverse:focus-visible,
+        [data-testid="artifacts-surface-top-controls"] .btn-ghost:focus-visible {
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            0 4px 12px rgba(0, 0, 0, 0.1) !important;
+        }
+    }
+
+
+    /*upload new image bg (unstable)*/
+    @layer utilities {
+        button[class*="group\/button"] > div[class*="bg-token-interactive-bg-tertiary-hover"] {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-image: none !important;
+
+            border-color: rgba(255, 255, 255, 0.5) !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+
+            backdrop-filter: blur(10px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
+
+            transition: background-color 200ms cubic-bezier(0.22, 1, 0.36, 1),
+            box-shadow 200ms cubic-bezier(0.22, 1, 0.36, 1),
+            transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        button[class*="group\/button"] > div[class*="bg-token-interactive-bg-tertiary-hover"]:hover {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14),
+            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+
+            transform: translateY(-2px);
+        }
+
+        button[class*="group\/button"] > div[class*="bg-token-interactive-bg-tertiary-hover"]:focus-within {
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            0 10px 26px rgba(0, 0, 0, 0.12) !important;
+        }
+    }
+
+
+    /*image category tab*/
+    @layer utilities {
+        [role="tablist"][aria-label="Image prompt categories"] .btn-primary-inverse,
+        [role="tablist"][aria-label="Image prompt categories"] .btn-ghost {
+            background-color: transparent !important;
+            background-image: none !important;
+            border-color: transparent !important;
+            color: rgba(12, 74, 110, 0.85) !important;
+
+            transition: background-color 150ms ease,
+            box-shadow 150ms ease,
+            color 150ms ease;
+        }
+
+        [role="tablist"][aria-label="Image prompt categories"] .btn-primary-inverse:hover,
+        [role="tablist"][aria-label="Image prompt categories"] .btn-ghost:hover {
+            background-color: rgba(255, 255, 255, 0.5) !important;
+            color: #0c4a6e !important;
+            border-color: rgba(255, 255, 255, 0.55) !important;
+
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+
+            backdrop-filter: blur(4px) saturate(1.15) !important;
+            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
+        }
+
+        [role="tablist"][aria-label="Image prompt categories"] [data-state="active"],
+        [role="tablist"][aria-label="Image prompt categories"] [aria-selected="true"] {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-image: none !important;
+            color: #0c4a6e !important;
+            border-color: rgba(255, 255, 255, 0.6) !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+
+            backdrop-filter: blur(4px) saturate(1.15) !important;
+            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
+        }
+
+        [role="tablist"][aria-label="Image prompt categories"] [data-state="active"]:hover,
+        [role="tablist"][aria-label="Image prompt categories"] [aria-selected="true"]:hover {
+            background-color: rgba(255, 255, 255, 0.6) !important;
+        }
+
+        [role="tablist"][aria-label="Image prompt categories"] [role="tab"]:focus-visible {
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            0 4px 12px rgba(0, 0, 0, 0.1) !important;
+        }
+    }
+
+
+    /*share chat bg*/
+    @layer utilities {
+        div.fixed.inset-0.z-50[data-state="open"] {
+            background-color: rgb(0 0 0 / .08) !important;
+        }
+
+        /* Chat preview inside the share popup */
+        [data-testid="sharing-post-unfurl-view"] [class*="bg-token-main-surface-primary"] {
+            background-color: transparent !important;
+            background-image: none !important;
+        }
+    }
+
+
+    /*tip popout bg*/
+    @layer utilities {
+        aside[class*="shadow-xxs"]:not(:has(textarea)) {
+            background: rgba(255, 255, 255, 0.45) !important;
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+        }
+    }
+
+
+    @layer utilities {
+        /*image editor bg*/
+        [role="dialog"][data-state="open"][class*="bg-token-main-surface-primary"]:not([class*="bg-token-bg-primary"]):not([class*="overflow-hidden"]) {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-image: none !important;
+            backdrop-filter: blur(10px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
+        }
+
+        /* Inner editor surfaces*/
+        [data-testid="lightbox-new-body-surface"],
+        [data-testid="fullscreen-shell-body"],
+        [role="dialog"][data-state="open"][class*="bg-token-main-surface-primary"]:not([class*="bg-token-bg-primary"]):not([class*="overflow-hidden"]) [class*="bg-token-bg-primary"],
+        [role="dialog"][data-state="open"][class*="bg-token-main-surface-primary"]:not([class*="bg-token-bg-primary"]):not([class*="overflow-hidden"]) [class*="bg-token-main-surface-"],
+        [data-testid="lightbox-new-body-surface"] [class*="bg-(--main-surface-primary)"] {
+            background-color: transparent !important;
+            background-image: none !important;
+        }
+
+
+        /*image tools bg*/
+        [aria-label="Image tools"] {
+            background-color: transparent !important;
+            background-image: none !important;
+        }
+
+
+
+        /* Image editor zoom button */
+        button[aria-label^="Zoom level"] {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-image: none !important;
+
+            border-color: rgba(255, 255, 255, 0.5) !important;
+            color: rgba(12, 74, 110, 0.9) !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+
+            transition: background-color 150ms ease,
+            box-shadow 150ms ease,
+            border-color 150ms ease,
+            transform 150ms ease;
+        }
+
+        button[aria-label^="Zoom level"]:hover {
+            background-color: rgba(255, 255, 255, 0.5) !important;
+            border-color: rgba(255, 255, 255, 0.6) !important;
+            color: #0c4a6e !important;
+
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+
+            transform: translateY(-1px);
+        }
+
+        button[aria-label^="Zoom level"]:active {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+            transform: scale(0.98);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1),
+            inset 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        button[aria-label^="Zoom level"][data-state="open"],
+        button[aria-label^="Zoom level"][aria-expanded="true"] {
+            background-color: rgba(255, 255, 255, 0.55) !important;
+            border-color: rgba(255, 255, 255, 0.6) !important;
+            color: #0c4a6e !important;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+        }
+
+        button[aria-label^="Zoom level"]:focus-visible {
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            0 4px 12px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        /*stroke width slide bg*/
+        .pointer-events-none.absolute.start-4.top-1\/2.z-40.h-44 [class*="bg-token-bg-elevated-primary"] {
+            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-image: none !important;
+            border-color: rgba(255, 255, 255, 0.5) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            backdrop-filter: blur(2px) saturate(1.1) !important;
+            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+        }
+
+        /* Image editor tool dropdowns (Shapes, Markup style, etc.) */
+        .popover[role="dialog"][data-state="open"][class*="bg-token-bg-elevated-primary"] {
+            background-color: rgba(255, 255, 255, 0.45) !important;
+            background-image: none !important;
+
+            border-color: rgba(255, 255, 255, 0.5) !important;
+
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+
+            backdrop-filter: blur(10px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
+        }
+
+        /* the drag knob */
+        [role="slider"] > span[class*="rounded-full"][class*="bg-white"] {
+            background-color: rgba(255, 255, 255, 0.75) !important;
+            border-color: rgba(255, 255, 255, 0.9) !important;
+
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+
+            backdrop-filter: blur(4px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(4px) saturate(1.2) !important;
+        }
+
+
+        /* Inline feedback tip */
+        [data-testid="modal-inline-feedback"] [class*="bg-token-main-surface-secondary"] {
+            background-color: transparent !important;
+            background-image: none !important;
+        }
+
+
+        /* Feedback reason options */
+        [data-testid="modal-inline-feedback"] .flex.flex-wrap.gap-3 > button {
+            background-color: transparent !important;
+            background-image: none !important;
+        }
+
+        [data-testid="modal-inline-feedback"] .flex.flex-wrap.gap-3 > button:hover {
+            background-color: rgb(0 0 0 / .06) !important;
+        }
+
+        [data-testid="modal-inline-feedback"] .flex.flex-wrap.gap-3 > button[class*="bg-token-text-primary"] {
+            background-color: rgb(0 0 0 / .1) !important;
+            color: black !important;
+        }
+
+        [data-testid="modal-inline-feedback"] .flex.flex-wrap.gap-3 > button[class*="bg-token-text-primary"]:hover {
+            background-color: rgb(0 0 0 / .12) !important;
+        }
+    }
+
+    /* Error notification bg */
+    @layer utilities {
+        [role="alert"][class*="bg-red-500"] {
+            background-color: rgba(239, 68, 68, 0.35) !important;
+            background-image: none !important;
+
+            border-color: rgba(255, 255, 255, 0.25) !important;
+            color: #ffffff !important;
+
+            box-shadow: 0 8px 22px rgba(239, 68, 68, 0.25),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+
+            backdrop-filter: blur(10px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
+        }
+    }
 }
