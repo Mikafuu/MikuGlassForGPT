@@ -1,23 +1,70 @@
 /* ==UserStyle==
-@name           Hastune Miku Glass Light Style for ChatGPT -- Full Remake
+@name           Hastune Miku Glass Light & Dark Style for ChatGPT -- Full Remake
 @namespace      github.com/Morikana/chatgpt-glass-miku
-@version        2.0.0
-@description    A glassy, transparent Miku outlook for ChatGPT with interactive UIs. 
+@version        2.1.0
+@description    A glassy Miku theme for ChatGPT with automatic light/dark colors and interactive UIs. 
 @author         Morikana
 
 @var checkbox GPTmarkdownHover "Enable ChatGPT message hover animation" 1
 @var checkbox userMarkdownHover "Enable User Message Bubble Animations" 1
-
-
-@var text     bgUrl       "Wallpaper image URL"       "https://i.ibb.co/C3RYb8XY/wallhaven-yxp85l.png"
-@var text     bgSize      "Background size (cover / contain / auto)" "cover"
-@var text     bgPosition  "Background position"   "0px"
 
 ==/UserStyle== */
 @layer base,
 components,
 utilities;
 @-moz-document url-prefix("https://chatgpt.com/") {
+
+    :root:is(.dark, [data-theme="dark"]) {
+        color-scheme: dark;
+        --miku-wallpaper-tint: rgba(8, 17, 22, 0.78);
+        --miku-text: #edf8f7;
+        --miku-text-secondary: #c1d7d8;
+        --miku-accent: #91eee2;
+        --miku-danger-text: #ffd0d0;
+        --miku-focus: #91eee2;
+        --miku-rim-strength: 0.28;
+        --miku-overlay-rgb: 210 242 240;
+        --miku-assistant-rgb: 34, 61, 67;
+        --miku-user-rgb: 28, 59, 65;
+        --miku-assistant-rest-alpha: 0.86;
+        --miku-assistant-hover-delta: 0.18;
+        --miku-user-rest-alpha: 0.88;
+        --miku-user-hover-delta: 0.20;
+
+        --miku-glass-faint: rgba(16, 29, 35, 0.35);
+        --miku-glass-soft: rgba(16, 29, 35, 0.48);
+        --miku-glass-muted: rgba(16, 29, 35, 0.58);
+        --miku-glass-control: rgba(20, 38, 44, 0.68);
+        --miku-glass-panel: rgba(16, 29, 35, 0.80);
+        --miku-glass-hover: rgba(30, 55, 61, 0.80);
+        --miku-glass-active: rgba(34, 61, 67, 0.86);
+        --miku-glass-selected: rgba(28, 59, 65, 0.88);
+        --miku-glass-pressed: rgba(37, 67, 73, 0.90);
+        --miku-glass-strong: rgba(30, 55, 61, 0.92);
+        --miku-glass-solid: rgba(28, 49, 55, 0.94);
+
+        --text-primary: var(--miku-text);
+        --text-secondary: var(--miku-text-secondary);
+        --text-tertiary: #b2cbcd;
+        --text-quaternary: #abc5c7;
+        --text-link: var(--miku-accent);
+        --text-accent: var(--miku-accent);
+        --main-surface-primary: rgba(16, 29, 35, 0.68);
+        --main-surface-secondary: var(--miku-glass-panel);
+        --main-surface-tertiary: var(--miku-glass-control);
+        --sidebar-surface-primary: var(--miku-glass-panel);
+        --sidebar-surface-secondary: var(--miku-glass-hover);
+        --sidebar-surface-tertiary: var(--miku-glass-selected);
+        --bg-primary: var(--miku-glass-panel);
+        --bg-secondary: var(--miku-glass-control);
+        --bg-tertiary: var(--miku-glass-selected);
+        --bg-elevated-primary: var(--miku-glass-panel);
+        --bg-elevated-secondary: var(--miku-glass-strong);
+        --border-light: rgba(177, 226, 222, 0.18);
+        --border-medium: rgba(177, 226, 222, 0.30);
+        --border-heavy: rgba(177, 226, 222, 0.44);
+    }
+
     body::before {
         content: "";
         position: fixed;
@@ -30,7 +77,8 @@ utilities;
 
     /*main background */
     body {
-        background: url(https://i.ibb.co/C3RYb8XY/wallhaven-yxp85l.png) 0px fixed !important;
+        background: linear-gradient(var(--miku-wallpaper-tint, transparent), var(--miku-wallpaper-tint, transparent)),
+        url(https://i.ibb.co/C3RYb8XY/wallhaven-yxp85l.png) 0px fixed !important;
         image-rendering: -webkit-optimize-contrast;
         background-size: cover !important;
         background-repeat: no-repeat !important;
@@ -41,7 +89,7 @@ utilities;
 
         /*settings background*/
         div[data-state="open"][class*="before:bg-"]::before {
-            background: rgb(0 0 0 / .06) !important;
+            background: rgb(var(--miku-overlay-rgb, 0 0 0) / .06) !important;
         }
         /*create project panel background*/
         dialog[class*="bg-gray-200"] {
@@ -61,17 +109,17 @@ utilities;
         }
 
         div[role="listbox"][aria-label="Settings search results"].bg-token-bg-primary {
-            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
             background-image: none !important;
-            border-color: rgba(255, 255, 255, 0.5) !important;
+            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
             box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
             backdrop-filter: blur(10px) saturate(1.2) !important;
             -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
         }
 
         th[class*="bg-token-main-surface-primary"] {
-            background: rgb(0 0 0 / .06) !important;
+            background: rgb(var(--miku-overlay-rgb, 0 0 0) / .06) !important;
             background-image: none !important;
         }
     }
@@ -80,13 +128,13 @@ utilities;
     /*settings search bar*/
     @layer utilities {
         input[aria-label="Search settings"] {
-            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
             background-image: none !important;
 
-            border-color: rgba(255, 255, 255, 0.5) !important;
+            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
@@ -97,24 +145,24 @@ utilities;
         }
 
         input[aria-label="Search settings"]:hover {
-            background-color: rgba(255, 255, 255, 0.5) !important;
+            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
             backdrop-filter: blur(4px) saturate(1.15) !important;
             -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
             transform: translateY(-1px);
         }
 
         input[aria-label="Search settings"]:active {
-            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
             transform: translateY(0) scale(0.98);
         }
 
         input[aria-label="Search settings"]:focus-visible {
             outline: none !important;
-            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
             0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
         }
     }
 
@@ -138,7 +186,7 @@ utilities;
         }
 
         [data-testid="modal-global-search"] [class*="filterBarSticky"] {
-            background-color: rgb(0 0 0 / .07) !important;
+            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .07) !important;
             background-image: none !important;
             border-color: transparent !important;
         }
@@ -155,7 +203,7 @@ utilities;
         [data-testid="modal-global-search"] .interactive-button-secondary:focus,
         [data-testid="modal-global-search"] .interactive-button-secondary:focus-visible,
         [data-testid="modal-global-search"] .interactive-button-secondary:active {
-            background-color: rgb(0 0 0 / .05) !important;
+            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .05) !important;
             background-image: none !important;
             box-shadow: none !important;
             border-color: transparent !important;
@@ -163,7 +211,7 @@ utilities;
 
         /*search chat preview*/
         [data-testid="global-search-chat-hover-preview"] {
-            background: rgba(255, 255, 255, 0.45) !important;
+            background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
         }
@@ -178,7 +226,7 @@ utilities;
         /*loading icons*/
         .skeleton [class*="skeleton-"],
         .skeleton-child {
-            background-color: rgb(0 0 0 / .05) !important;
+            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .05) !important;
             background-image: none !important;
             box-shadow: none !important;
             border-color: transparent !important;
@@ -188,14 +236,14 @@ utilities;
         [data-testid="modal-global-search"] [class*="loadingTitle"],
         [data-testid="modal-global-search"] [class*="loadingSubtitle"],
         [data-testid="modal-global-search"] [class*="loadingImageTile"] {
-            background-color: rgb(0 0 0 / .05) !important;
+            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .05) !important;
             background-image: none !important;
             box-shadow: none !important;
             border-color: transparent !important;
         }
 
         [data-testid="modal-global-search"] [class*="Skeleton"] {
-            background-color: rgb(0 0 0 / .05) !important;
+            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .05) !important;
             background-image: none !important;
             box-shadow: none !important;
             border-color: transparent !important;
@@ -206,12 +254,12 @@ utilities;
     /*search -> mactched images bg*/
     @layer utilities {
         [data-testid="modal-global-search"] [class*="imageResultGridTile"] {
-            background-color: rgba(255, 255, 255, 0.05) !important;
+            background-color: var(--miku-glass-faint, rgba(255, 255, 255, 0.05)) !important;
             background-image: none !important;
-            border-color: rgba(255, 255, 255, 0.5) !important;
+            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             transition: background-color 180ms ease,
             box-shadow 180ms ease,
@@ -227,14 +275,14 @@ utilities;
             background-image: none !important;
         }
         [data-testid="image-gen-card-shimmer"] {
-            background-color: rgb(0 0 0 / .05) !important;
+            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .05) !important;
             background-image: none !important;
             box-shadow: none !important;
             border-color: transparent !important;
         }
 
         [class*="imagegen-image"] {
-            background-color: rgb(0 0 0 / .05) !important;
+            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .05) !important;
             background-image: none !important;
             box-shadow: none !important;
             border-color: transparent !important;
@@ -247,7 +295,7 @@ utilities;
         #stage-slideover-sidebar button.btn.bg-token-bg-primary {
             background: transparent !important;
             border-color: transparent !important;
-            color: rgba(0, 204, 255) !important;
+            color: var(--miku-accent, rgba(0, 204, 255)) !important;
 
             transition: background 0.25s ease,
             box-shadow 0.2s ease;
@@ -259,7 +307,7 @@ utilities;
             -webkit-backdrop-filter: saturate(1);
 
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05),
-            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.2 * var(--miku-rim-strength, 1)));
         }
         #stage-slideover-sidebar button.btn.bg-token-bg-primary:active {
             transform: scale(0.99);
@@ -288,7 +336,7 @@ utilities;
     .button-glimmer-cta {
         background: transparent !important;
         border-color: transparent !important;
-        color: rgba(0, 204, 255) !important;
+        color: var(--miku-accent, rgba(0, 204, 255)) !important;
 
         transition: background 0.25s ease,
         box-shadow 0.2s ease;
@@ -300,7 +348,7 @@ utilities;
         -webkit-backdrop-filter: saturate(1);
 
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        inset 0 1px 0 rgba(255, 255, 255, calc(0.2 * var(--miku-rim-strength, 1)));
     }
     .button-glimmer-cta:active {
         transform: scale(0.99);
@@ -314,10 +362,10 @@ utilities;
     /*chat / work switch pill*/
     @layer utilities {
         #page-header [role="radiogroup"] [class*="bg-token-bg-primary"][class*="absolute"] {
-            background-color: rgba(255, 255, 255, 0.35) !important;
-            border-color: rgba(255, 255, 255, 0.5) !important;
+            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
+            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
         }
@@ -336,28 +384,28 @@ utilities;
         padding: 14px 18px;
 
         box-shadow: 0 10px 26px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        inset 0 1px 0 rgba(255, 255, 255, calc(0.08 * var(--miku-rim-strength, 1)));
 
         transition: background 0.25s ease,
         box-shadow 0.2s ease,
         transform 0.25s ease;
     }
     [data-type="unified-composer"] .shadow-short-composer:focus-within {
-        background: rgba(255, 255, 255, 0.45) !important;
-        border-color: rgba(233, 233, 233, 0.35);
+        background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
+        border-color: rgba(233, 233, 233, calc(0.35 * var(--miku-rim-strength, 1)));
         backdrop-filter: blur(2px);
         -webkit-backdrop-filter: blur(2px);
     }
     [data-type="unified-composer"] .shadow-short-composer:hover {
-        background: rgba(255, 255, 255, 0.45) !important;
+        background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
         backdrop-filter: blur(2px);
         -webkit-backdrop-filter: blur(2px);
         box-shadow: 0 10px 26px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08)
+        inset 0 1px 0 rgba(255, 255, 255, calc(0.08 * var(--miku-rim-strength, 1)))
     }
     [data-type="unified-composer"] .shadow-short-composer:active {
         box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        inset 0 1px 0 rgba(255, 255, 255, calc(0.1 * var(--miku-rim-strength, 1)));
     }
     [data-composer-body] {
         background-color: transparent !important;
@@ -367,13 +415,13 @@ utilities;
     /* Composer tool popup */
     @layer utilities {
         div[role="toolbar"] {
-            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
             background-image: none !important;
 
-            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            border: 1px solid rgba(255, 255, 255, calc(0.3 * var(--miku-rim-strength, 1))) !important;
 
             box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.4 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(10px) saturate(1.2) !important;
             -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
@@ -401,7 +449,7 @@ utilities;
         -webkit-backdrop-filter: saturate(1);
 
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        inset 0 1px 0 rgba(255, 255, 255, calc(0.2 * var(--miku-rim-strength, 1)));
     }
     [data-composer-surface="true"] .composer-submit-button-color:active {
         transform: scale(0.99);
@@ -414,7 +462,7 @@ utilities;
 
     /*plugins, files, folders & skills popover background ("+"button popover)*/
     .popover {
-        background: rgba(255, 255, 255, 0.45) !important;
+        background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
         backdrop-filter: blur(5px) saturate(1.1);
         -webkit-backdrop-filter: blur(5px) saturate(1.1);
     }
@@ -429,7 +477,7 @@ utilities;
         -webkit-backdrop-filter: none !important;
         box-shadow: none !important;
         border-color: transparent !important;
-        color: #000 !important;
+        color: var(--miku-text, #000) !important;
         /*disclaimer text color*/
     }
 
@@ -452,28 +500,28 @@ utilities;
         padding: 14px 18px;
 
         box-shadow: 0 10px 26px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        inset 0 1px 0 rgba(255, 255, 255, calc(0.08 * var(--miku-rim-strength, 1)));
 
         transition: background 0.25s ease,
         box-shadow 0.25s ease,
         transform 0.25s ease;
     }
     [data-conversation-screenshot-content] > .bg-token-main-surface-tertiary:focus-within {
-        background: rgba(255, 255, 255, 0.45) !important;
-        border-color: rgba(233, 233, 233, 0.35);
+        background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
+        border-color: rgba(233, 233, 233, calc(0.35 * var(--miku-rim-strength, 1)));
         backdrop-filter: blur(2px);
         -webkit-backdrop-filter: blur(2px);
     }
     [data-conversation-screenshot-content] > .bg-token-main-surface-tertiary:hover {
-        background: rgba(255, 255, 255, 0.45) !important;
+        background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
         backdrop-filter: blur(2px);
         -webkit-backdrop-filter: blur(2px);
         box-shadow: 0 10px 26px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08)
+        inset 0 1px 0 rgba(255, 255, 255, calc(0.08 * var(--miku-rim-strength, 1)))
     }
     [data-conversation-screenshot-content] > .bg-token-main-surface-tertiary:active {
         box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        inset 0 1px 0 rgba(255, 255, 255, calc(0.1 * var(--miku-rim-strength, 1)));
     }
 
 
@@ -500,14 +548,14 @@ utilities;
     @layer utilities {
         /*menu dropdowns background*/
         [data-radix-menu-content] {
-            background: rgba(255, 255, 255, 0.45) !important;
+            background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
         }
 
         /*create project menu panel bg*/
         [data-testid="modal-new-project-enhanced"][class*="bg-token-bg-primary"] {
-            background: rgba(255, 255, 255, 0.45) !important;
+            background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
         }
@@ -537,7 +585,7 @@ utilities;
 
         /*shortcut settings bg*/
         [data-testid="keyboard-shortcuts-dialog"] {
-            background: rgba(255, 255, 255, 0.45) !important;
+            background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
             backdrop-filter: blur(6px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(6px) saturate(1.1) !important;
         }
@@ -565,15 +613,15 @@ utilities;
         transition: background 0.2s ease,
         box-shadow 0.2s ease,
         transform 0.2s ease;
-        --menu-item-highlighted: rgba(255, 255, 255, 0.55) !important;
-        --menu-item-active: rgba(255, 255, 255, 0.65) !important;
-        --menu-item-open: rgba(255, 255, 255, 0.5) !important;
+        --menu-item-highlighted: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
+        --menu-item-active: var(--miku-glass-pressed, rgba(255, 255, 255, 0.65)) !important;
+        --menu-item-open: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
     }
     .__menu-item:hover {
         background: var(--menu-item-highlighted) !important;
         transform: translateY(-1px);
         box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.85);
+        inset 0 1px 0 rgba(255, 255, 255, calc(0.85 * var(--miku-rim-strength, 1)));
     }
     .__menu-item:active {
         background: var(--menu-item-active) !important;
@@ -584,23 +632,23 @@ utilities;
     .__menu-item[aria-expanded="true"],
     .__menu-item.open {
         background: var(--menu-item-open) !important;
-        box-shadow: inset 0 0 0 1px rgba(232, 232, 232, 0.25),
+        box-shadow: inset 0 0 0 1px rgba(232, 232, 232, calc(0.25 * var(--miku-rim-strength, 1))),
         0 8px 22px rgba(0, 0, 0, 0.16);
     }
 
 
     /*prompt text color*/
     #prompt-textarea {
-        color: #000 !important;
+        color: var(--miku-text, #000) !important;
     }
     /*text selection color*/
     ::selection {
         background: rgba(99, 236, 255, .35) !important;
-        color: black !important;
+        color: var(--miku-text, black) !important;
     }
     /*caret color*/
     .ProseMirror {
-        caret-color: rgb(99, 151, 255) !important;
+        caret-color: var(--miku-accent, rgb(99, 151, 255)) !important;
     }
 
 
@@ -619,14 +667,14 @@ utilities;
 
     /* ChatGPT message bubble */
     .markdown {
-        --bg-alpha: calc(0.55 - (var(--GPTmarkdownHover) * 0.47));
+        --bg-alpha: calc(var(--miku-assistant-rest-alpha, 0.55) - (var(--GPTmarkdownHover) * var(--miku-assistant-hover-delta, 0.47)));
         --blur-val: calc(5px - (var(--GPTmarkdownHover) * 3px));
         --shd-y: calc(12px - (var(--GPTmarkdownHover) * 4px));
         --shd-blur: calc(28px - (var(--GPTmarkdownHover) * 6px));
         --shd-alpha: calc(0.45 - (var(--GPTmarkdownHover) * 0.13));
         --inset-alpha: calc(0.08 - (var(--GPTmarkdownHover) * 0.02));
 
-        background: rgba(255, 255, 255, var(--bg-alpha)) !important;
+        background: rgba(var(--miku-assistant-rgb, 255, 255, 255), var(--bg-alpha)) !important;
 
         backdrop-filter: blur(var(--blur-val));
         -webkit-backdrop-filter: blur(var(--blur-val));
@@ -650,9 +698,9 @@ utilities;
 
     .markdown:hover,
     .markdown:focus-visible {
-        background: rgba(255, 255, 255, 0.55) !important;
+        background: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
         box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        inset 0 1px 0 rgba(255, 255, 255, calc(0.08 * var(--miku-rim-strength, 1)));
         backdrop-filter: blur(5px);
         -webkit-backdrop-filter: blur(5px);
     }
@@ -665,14 +713,14 @@ utilities;
 
     /*user message bubble in normal chats*/
     .user-message-bubble-color {
-        --user-bg-alpha: calc(0.6 - (var(--userMarkdownHover) * 0.52));
+        --user-bg-alpha: calc(var(--miku-user-rest-alpha, 0.6) - (var(--userMarkdownHover) * var(--miku-user-hover-delta, 0.52)));
         --user-blur: calc(5px - (var(--userMarkdownHover) * 3px));
         --user-shd-y: calc(10px - (var(--userMarkdownHover) * 4px));
         --user-shd-blur: calc(26px - (var(--userMarkdownHover) * 8px));
         --user-shd-alpha: calc(0.25 - (var(--userMarkdownHover) * 0.07));
         --user-inset-alpha: calc(0.45 - (var(--userMarkdownHover) * 0.10));
 
-        background: rgba(233, 233, 233, var(--user-bg-alpha)) !important;
+        background: rgba(var(--miku-user-rgb, 233, 233, 233), var(--user-bg-alpha)) !important;
 
         backdrop-filter: blur(var(--user-blur));
         -webkit-backdrop-filter: blur(var(--user-blur));
@@ -688,10 +736,10 @@ utilities;
 
     .user-message-bubble-color:hover,
     .user-message-bubble-color:focus-visible {
-        background: rgba(233, 233, 233, 0.6) !important;
+        background: var(--miku-glass-selected, rgba(233, 233, 233, 0.6)) !important;
 
         box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        inset 0 1px 0 rgba(255, 255, 255, calc(0.45 * var(--miku-rim-strength, 1)));
         backdrop-filter: blur(5px);
         -webkit-backdrop-filter: blur(5px);
     }
@@ -699,14 +747,14 @@ utilities;
 
     /*user message bubble in temporary chats (sep 13, 2026)*/
     div.bg-token-bg-tertiary:has( > svg[aria-hidden="true"] rect[stroke-dasharray]) {
-        --user-bg-alpha: calc(0.6 - (var(--userMarkdownHover) * 0.52));
+        --user-bg-alpha: calc(var(--miku-user-rest-alpha, 0.6) - (var(--userMarkdownHover) * var(--miku-user-hover-delta, 0.52)));
         --user-blur: calc(5px - (var(--userMarkdownHover) * 3px));
         --user-shd-y: calc(10px - (var(--userMarkdownHover) * 4px));
         --user-shd-blur: calc(26px - (var(--userMarkdownHover) * 8px));
         --user-shd-alpha: calc(0.25 - (var(--userMarkdownHover) * 0.07));
         --user-inset-alpha: calc(0.45 - (var(--userMarkdownHover) * 0.10));
 
-        background: rgba(233, 233, 233, var(--user-bg-alpha)) !important;
+        background: rgba(var(--miku-user-rgb, 233, 233, 233), var(--user-bg-alpha)) !important;
 
         backdrop-filter: blur(var(--user-blur));
         -webkit-backdrop-filter: blur(var(--user-blur));
@@ -722,10 +770,10 @@ utilities;
 
     div.bg-token-bg-tertiary:has( > svg[aria-hidden="true"] rect[stroke-dasharray]):hover,
     div.bg-token-bg-tertiary:has( > svg[aria-hidden="true"] rect[stroke-dasharray]):focus-within {
-        background: rgba(233, 233, 233, 0.6) !important;
+        background: var(--miku-glass-selected, rgba(233, 233, 233, 0.6)) !important;
 
         box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        inset 0 1px 0 rgba(255, 255, 255, calc(0.45 * var(--miku-rim-strength, 1)));
         backdrop-filter: blur(5px);
         -webkit-backdrop-filter: blur(5px);
     }
@@ -734,13 +782,13 @@ utilities;
     /*share, more buttons*/
     @layer utilities {
         .btn-secondary {
-            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
             background-image: none !important;
 
-            border-color: rgba(255, 255, 255, 0.5) !important;
+            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
@@ -752,10 +800,10 @@ utilities;
 
         /* ---- Hover: slightly brighter, lifted ---- */
         .btn-secondary:hover {
-            background-color: rgba(255, 255, 255, 0.5) !important;
+            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
 
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(4px) saturate(1.15) !important;
             -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
@@ -764,7 +812,7 @@ utilities;
         }
 
         .btn-secondary:active {
-            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
 
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1),
             inset 0 2px 6px rgba(0, 0, 0, 0.1) !important;
@@ -774,9 +822,9 @@ utilities;
 
         .btn-secondary:focus-visible {
             outline: none !important;
-            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
             0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
         }
     }
 
@@ -796,10 +844,10 @@ utilities;
 
         button[class*="hover:bg-token-surface-hover"]:hover,
         button[class*="group\/footnote"]:hover {
-            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
@@ -807,7 +855,7 @@ utilities;
 
         button[class*="hover:bg-token-surface-hover"]:active,
         button[class*="group\/footnote"]:active {
-            background-color: rgba(255, 255, 255, 0.5) !important;
+            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
             transform: scale(0.97);
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1),
             inset 0 2px 6px rgba(0, 0, 0, 0.1) !important;
@@ -816,7 +864,7 @@ utilities;
         button[class*="hover:bg-token-surface-hover"]:focus-visible,
         button[class*="group\/footnote"]:focus-visible {
             outline: none !important;
-            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
             0 4px 12px rgba(0, 0, 0, 0.1) !important;
         }
     }
@@ -851,7 +899,7 @@ utilities;
             background-color: rgba(20, 20, 22, 0.72) !important;
             backdrop-filter: blur(10px) saturate(1.2) !important;
             -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
-            border-color: rgba(255, 255, 255, 0.08) !important;
+            border-color: rgba(255, 255, 255, calc(0.08 * var(--miku-rim-strength, 1))) !important;
         }
     }
 
@@ -860,7 +908,7 @@ utilities;
     @layer utilities {
         .btn-danger {
             background-color: rgba(239, 68, 68, 0.18) !important;
-            color: #7f1d1d !important;
+            color: var(--miku-danger-text, #7f1d1d) !important;
             border-color: rgba(239, 68, 68, 0.4) !important;
 
             backdrop-filter: blur(6px) saturate(1.2) !important;
@@ -887,7 +935,7 @@ utilities;
             background-color: rgba(20, 20, 22, 0.72) !important;
             backdrop-filter: blur(10px) saturate(1.2) !important;
             -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
-            border-color: rgba(255, 255, 255, 0.08) !important;
+            border-color: rgba(255, 255, 255, calc(0.08 * var(--miku-rim-strength, 1))) !important;
 
             transition: background-color 180ms ease, transform 180ms ease;
         }
@@ -908,7 +956,7 @@ utilities;
     @layer utilities {
         .group\/file-tile button.interactive-bg-secondary {
             background-color: rgba(20, 20, 22, 0.12) !important;
-            border-color: rgba(255, 255, 255, 0.08) !important;
+            border-color: rgba(255, 255, 255, calc(0.08 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(10px) saturate(1.2) !important;
             -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
@@ -919,7 +967,7 @@ utilities;
         .group\/file-tile button.interactive-bg-secondary:focus,
         .group\/file-tile button.interactive-bg-secondary:focus-visible {
             background-color: rgba(20, 20, 22, 0.12) !important;
-            border-color: rgba(255, 255, 255, 0.08) !important;
+            border-color: rgba(255, 255, 255, calc(0.08 * var(--miku-rim-strength, 1))) !important;
             transform: none !important;
             box-shadow: none !important;
         }
@@ -946,13 +994,13 @@ utilities;
     /*library tip bg*/
     @layer utilities {
         .pointer-events-none.absolute.inset-x-0.top-4 [class*="bg-token-bg-primary"] {
-            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
             background-image: none !important;
 
-            border-color: rgba(255, 255, 255, 0.5) !important;
+            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(10px) saturate(1.2) !important;
             -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
@@ -963,13 +1011,13 @@ utilities;
     /*library upload file popup*/
     @layer utilities {
         section.fixed.bottom-4 [class*="bg-token-bg-primary"] {
-            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
             background-image: none !important;
 
-            border-color: rgba(255, 255, 255, 0.5) !important;
+            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(10px) saturate(1.2) !important;
             -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
@@ -980,13 +1028,13 @@ utilities;
     /*library search bar*/
     @layer utilities {
         input[aria-label="Search library"] {
-            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
             background-image: none !important;
 
-            border-color: rgba(255, 255, 255, 0.5) !important;
+            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
@@ -997,10 +1045,10 @@ utilities;
         }
 
         input[aria-label="Search library"]:hover {
-            background-color: rgba(255, 255, 255, 0.5) !important;
+            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
 
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(4px) saturate(1.15) !important;
             -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
@@ -1009,7 +1057,7 @@ utilities;
         }
 
         input[aria-label="Search library"]:active {
-            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
 
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1),
             inset 0 2px 6px rgba(0, 0, 0, 0.1) !important;
@@ -1019,9 +1067,9 @@ utilities;
 
         input[aria-label="Search library"]:focus-visible {
             outline: none !important;
-            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
             0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
         }
 
         /*file icons in add from library*/
@@ -1045,14 +1093,14 @@ utilities;
     @layer utilities {
         /* More actions button on library file tiles */
         button[data-page-table-row-actions-focus-target="true"] {
-            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
             background-image: none !important;
 
-            border-color: rgba(255, 255, 255, 0.5) !important;
-            color: rgba(12, 74, 110, 0.9) !important;
+            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
+            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.9)) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(6px) saturate(1.15) !important;
             -webkit-backdrop-filter: blur(6px) saturate(1.15) !important;
@@ -1064,26 +1112,26 @@ utilities;
         }
 
         button[data-page-table-row-actions-focus-target="true"]:hover {
-            background-color: rgba(255, 255, 255, 0.7) !important;
-            border-color: rgba(255, 255, 255, 0.65) !important;
-            color: #0c4a6e !important;
+            background-color: var(--miku-glass-strong, rgba(255, 255, 255, 0.7)) !important;
+            border-color: rgba(255, 255, 255, calc(0.65 * var(--miku-rim-strength, 1))) !important;
+            color: var(--miku-accent, #0c4a6e) !important;
 
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.8 * var(--miku-rim-strength, 1))) !important;
 
             transform: translateY(-1px);
         }
 
         button[data-page-table-row-actions-focus-target="true"][data-state="open"],
         button[data-page-table-row-actions-focus-target="true"][aria-expanded="true"] {
-            background-color: rgba(255, 255, 255, 0.75) !important;
-            color: #0c4a6e !important;
+            background-color: var(--miku-glass-solid, rgba(255, 255, 255, 0.75)) !important;
+            color: var(--miku-accent, #0c4a6e) !important;
         }
 
         /* Keyboard focus */
         button[data-page-table-row-actions-focus-target="true"]:focus-visible {
             outline: none !important;
-            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
             0 4px 12px rgba(0, 0, 0, 0.1) !important;
         }
     }
@@ -1092,7 +1140,7 @@ utilities;
     /*library gear button*/
     @layer utilities {
         button[aria-label="Settings"] svg.icon {
-            color: #000 !important;
+            color: var(--miku-text, #000) !important;
         }
     }
 
@@ -1100,13 +1148,13 @@ utilities;
     @layer utilities {
         [data-testid^="artifact-card-tile-libfile_"],
         [role="button"][aria-label^="Open folder "] > [class*="bg-token-bg-primary"] {
-            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
             background-image: none !important;
 
-            border-color: rgba(255, 255, 255, 0.5) !important;
+            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(10px) saturate(1.2) !important;
             -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
@@ -1118,10 +1166,10 @@ utilities;
 
         [data-testid^="artifact-card-tile-libfile_"]:hover,
         [role="button"][aria-label^="Open folder "] > [class*="bg-token-bg-primary"]:hover {
-            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
 
             box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14),
-            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
 
             transform: translateY(-2px);
         }
@@ -1129,7 +1177,7 @@ utilities;
         [data-testid^="artifact-card-tile-libfile_"]:focus-within,
         [role="button"][aria-label^="Open folder "] > [class*="bg-token-bg-primary"]:focus-within {
             outline: none !important;
-            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
             0 10px 26px rgba(0, 0, 0, 0.12) !important;
         }
     }
@@ -1142,7 +1190,7 @@ utilities;
             background-color: transparent !important;
             background-image: none !important;
             border-color: transparent !important;
-            color: rgba(12, 74, 110, 0.85) !important;
+            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.85)) !important;
 
             transition: background-color 150ms ease,
             box-shadow 150ms ease,
@@ -1152,17 +1200,17 @@ utilities;
 
         [class*="refreshedHeaderViewToggle"] button:hover,
         [class*="popover"] button.btn-ghost[aria-pressed]:hover {
-            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-            color: #0c4a6e !important;
+            color: var(--miku-accent, #0c4a6e) !important;
         }
 
         [class*="refreshedHeaderViewToggle"] button:active,
         [class*="popover"] button.btn-ghost[aria-pressed]:active {
-            background-color: rgba(255, 255, 255, 0.5) !important;
+            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
             transform: scale(0.97);
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1),
             inset 0 2px 6px rgba(0, 0, 0, 0.1) !important;
@@ -1171,19 +1219,19 @@ utilities;
         [class*="refreshedHeaderViewToggle"] button:focus-visible,
         [class*="popover"] button.btn-ghost[aria-pressed]:focus-visible {
             outline: none !important;
-            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
             0 4px 12px rgba(0, 0, 0, 0.1) !important;
         }
 
         [class*="refreshedHeaderViewToggle"] button[aria-pressed="true"],
         [class*="popover"] button.btn-ghost[aria-pressed="true"] {
-            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
             background-image: none !important;
-            color: #0c4a6e !important;
-            border-color: rgba(255, 255, 255, 0.6) !important;
+            color: var(--miku-accent, #0c4a6e) !important;
+            border-color: rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(4px) saturate(1.15) !important;
             -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
@@ -1191,7 +1239,7 @@ utilities;
 
         [class*="refreshedHeaderViewToggle"] button[aria-pressed="true"]:hover,
         [class*="popover"] button.btn-ghost[aria-pressed="true"]:hover {
-            background-color: rgba(255, 255, 255, 0.6) !important;
+            background-color: var(--miku-glass-selected, rgba(255, 255, 255, 0.6)) !important;
         }
     }
 
@@ -1201,7 +1249,7 @@ utilities;
         button[aria-label="Open filters"] {
             background-color: transparent !important;
             background-image: none !important;
-            color: rgba(12, 74, 110, 0.85) !important;
+            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.85)) !important;
 
             transition: background-color 150ms ease,
             box-shadow 150ms ease,
@@ -1210,11 +1258,11 @@ utilities;
         }
 
         button[aria-label="Open filters"]:hover {
-            background-color: rgba(255, 255, 255, 0.35) !important;
-            color: #0c4a6e !important;
+            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
+            color: var(--miku-accent, #0c4a6e) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
@@ -1222,16 +1270,16 @@ utilities;
 
         button[aria-label="Open filters"]:focus-visible {
             outline: none !important;
-            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
             0 4px 12px rgba(0, 0, 0, 0.1) !important;
         }
 
         button[aria-label="Open filters"][data-state="open"] {
-            background-color: rgba(255, 255, 255, 0.55) !important;
-            color: #0c4a6e !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
+            color: var(--miku-accent, #0c4a6e) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(4px) saturate(1.15) !important;
             -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
@@ -1242,14 +1290,14 @@ utilities;
     @layer utilities {
         /* Empty trash button */
         [class*="bg-token-bg-secondary/60"] > button {
-            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
             background-image: none !important;
 
-            border-color: rgba(255, 255, 255, 0.5) !important;
-            color: rgba(12, 74, 110, 0.9) !important;
+            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
+            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.9)) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
@@ -1261,18 +1309,18 @@ utilities;
         }
 
         [class*="bg-token-bg-secondary/60"] > button:hover {
-            background-color: rgba(255, 255, 255, 0.5) !important;
-            border-color: rgba(255, 255, 255, 0.6) !important;
-            color: #0c4a6e !important;
+            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
+            border-color: rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
+            color: var(--miku-accent, #0c4a6e) !important;
 
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
 
             transform: translateY(-1px);
         }
 
         [class*="bg-token-bg-secondary/60"] > button:active {
-            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
             transform: scale(0.98);
         }
     }
@@ -1289,17 +1337,17 @@ utilities;
         }
 
         [class*="popover"] [class*="selectableRow"]:hover {
-            background-color: rgb(0 0 0 / .06) !important;
+            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .06) !important;
             background-image: none !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             transition: none !important;
         }
 
         [class*="popover"] [class*="selectableRow"]:hover::before {
-            background-color: rgb(0 0 0 / .06) !important;
+            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .06) !important;
         }
         [class*="popover"] [class*="selectableRow"]:hover {
             background-color: transparent !important;
@@ -1312,13 +1360,13 @@ utilities;
     @layer utilities {
         input[aria-label="Search library"],
         input[aria-label="Search plugins"] {
-            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
             background-image: none !important;
 
-            border-color: rgba(255, 255, 255, 0.5) !important;
+            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
@@ -1330,10 +1378,10 @@ utilities;
 
         input[aria-label="Search library"]:hover,
         input[aria-label="Search plugins"]:hover {
-            background-color: rgba(255, 255, 255, 0.5) !important;
+            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
 
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(4px) saturate(1.15) !important;
             -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
@@ -1343,7 +1391,7 @@ utilities;
 
         input[aria-label="Search library"]:active,
         input[aria-label="Search plugins"]:active {
-            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
 
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1),
             inset 0 2px 6px rgba(0, 0, 0, 0.1) !important;
@@ -1354,9 +1402,9 @@ utilities;
         input[aria-label="Search library"]:focus-visible,
         input[aria-label="Search plugins"]:focus-visible {
             outline: none !important;
-            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
             0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
         }
     }
 
@@ -1364,12 +1412,12 @@ utilities;
     @layer utilities {
         /* Add plugin button inside a plugin row */
         article[class*="hover:bg-token-interactive-bg-secondary-hover"] > button[class*="hover:bg-token-bg-primary"] {
-            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
             background-image: none !important;
-            color: rgba(12, 74, 110, 0.9) !important;
+            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.9)) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
@@ -1380,15 +1428,15 @@ utilities;
         }
 
         article[class*="hover:bg-token-interactive-bg-secondary-hover"] > button[class*="hover:bg-token-bg-primary"]:hover {
-            background-color: rgba(255, 255, 255, 0.5) !important;
-            color: #0c4a6e !important;
+            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
+            color: var(--miku-accent, #0c4a6e) !important;
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
             transform: translateY(-1px);
         }
 
         article[class*="hover:bg-token-interactive-bg-secondary-hover"] > button[class*="hover:bg-token-bg-primary"]:active {
-            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
             transform: scale(0.97);
         }
     }
@@ -1396,7 +1444,7 @@ utilities;
     @layer utilities {
         /* Plugin page header title bar */
         header.h-header-height[class*="bg-surface-primary"] {
-            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
             background-image: none !important;
 
             backdrop-filter: blur(10px) saturate(1.2) !important;
@@ -1413,7 +1461,7 @@ utilities;
             z-index: -1;
             pointer-events: none;
 
-            background-color: rgba(255, 255, 255, 0.45);
+            background-color: var(--miku-glass-panel, rgba(255, 255, 255, 0.45));
             backdrop-filter: blur(10px) saturate(1.2);
             -webkit-backdrop-filter: blur(10px) saturate(1.2);
         }
@@ -1423,12 +1471,12 @@ utilities;
     /*scheduled -> status filter*/
     @layer utilities {
         button[aria-label="Filter tasks"] {
-            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
             background-image: none !important;
-            border-color: rgba(255, 255, 255, 0.5) !important;
-            color: rgba(12, 74, 110, 0.9) !important;
+            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
+            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.9)) !important;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
             transition: background-color 150ms ease, box-shadow 150ms ease,
@@ -1436,29 +1484,29 @@ utilities;
         }
 
         button[aria-label="Filter tasks"]:hover {
-            background-color: rgba(255, 255, 255, 0.5) !important;
-            border-color: rgba(255, 255, 255, 0.6) !important;
-            color: #0c4a6e !important;
+            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
+            border-color: rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
+            color: var(--miku-accent, #0c4a6e) !important;
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
             transform: translateY(-1px);
         }
 
         button[aria-label="Filter tasks"]:active {
-            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
             transform: scale(0.98);
         }
 
         button[aria-label="Filter tasks"][data-state="open"],
         button[aria-label="Filter tasks"][aria-expanded="true"] {
-            background-color: rgba(255, 255, 255, 0.55) !important;
-            border-color: rgba(255, 255, 255, 0.6) !important;
-            color: #0c4a6e !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
+            border-color: rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
+            color: var(--miku-accent, #0c4a6e) !important;
         }
 
         button[aria-label="Filter tasks"]:focus-visible {
             outline: none !important;
-            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
             0 4px 12px rgba(0, 0, 0, 0.1) !important;
         }
     }
@@ -1466,12 +1514,12 @@ utilities;
     /*profile bg*/
     @layer utilities {
         header.bg-token-main-surface-primary {
-            background: rgba(255, 255, 255, 0.45) !important;
+            background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
         }
         main#main > .bg-token-main-surface-primary {
-            background: rgba(255, 255, 255, 0.45) !important;
+            background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
         }
@@ -1481,7 +1529,7 @@ utilities;
     /*library -> new note bg*/
     @layer utilities {
         [role="dialog"][aria-label="Writing block editor"] {
-            background: rgba(255, 255, 255, 0.1) !important;
+            background: var(--miku-glass-soft, rgba(255, 255, 255, 0.1)) !important;
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
         }
@@ -1489,7 +1537,7 @@ utilities;
         [role="dialog"][aria-label="Writing block editor"] [class*="bg-token-bg-"],
         [role="dialog"][aria-label="Writing block editor"] [class*="bg-token-main-surface-"],
         [role="dialog"][aria-label="Writing block editor"] [class*="bg-(--main-surface"] {
-            background: rgba(255, 255, 255, 0.1) !important;
+            background: var(--miku-glass-soft, rgba(255, 255, 255, 0.1)) !important;
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
         }
@@ -1499,7 +1547,7 @@ utilities;
     /*library -> open file bg*/
     @layer utilities {
         [role="dialog"][class*="bg-(--main-surface-primary)"] {
-            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
             background-image: none !important;
 
             backdrop-filter: blur(10px) saturate(1.2) !important;
@@ -1515,7 +1563,7 @@ utilities;
 
     .viewer,
     .shell {
-        background-color: rgba(255, 255, 255, 0.25) !important;
+        background-color: var(--miku-glass-muted, rgba(255, 255, 255, 0.25)) !important;
         background-image: none !important;
 
         backdrop-filter: blur(10px) saturate(1.2) !important;
@@ -1533,7 +1581,7 @@ utilities;
 
             border-color: transparent !important;
 
-            color: rgba(12, 74, 110, 0.85) !important;
+            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.85)) !important;
 
             transition: background-color 150ms ease,
             box-shadow 150ms ease,
@@ -1542,22 +1590,22 @@ utilities;
         }
 
         [role="tablist"][aria-label="Search result type filters"] [role="tab"]:hover {
-            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-            color: #0c4a6e !important;
+            color: var(--miku-accent, #0c4a6e) !important;
         }
 
         [role="tablist"][aria-label="Search result type filters"] [role="tab"][aria-selected="true"],
         [role="tablist"][aria-label="Search result type filters"] [class*="filterTabSelected"] {
-            background-color: rgba(255, 255, 255, 0.55) !important;
-            color: #0c4a6e !important;
-            border-color: rgba(255, 255, 255, 0.6) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
+            color: var(--miku-accent, #0c4a6e) !important;
+            border-color: rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(4px) saturate(1.15) !important;
             -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
@@ -1565,7 +1613,7 @@ utilities;
 
         [role="tablist"][aria-label="Search result type filters"] [role="tab"]:focus-visible {
             outline: none !important;
-            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
             0 4px 12px rgba(0, 0, 0, 0.1) !important;
         }
     }
@@ -1585,7 +1633,7 @@ utilities;
             background-color: transparent !important;
             background-image: none !important;
             border-color: transparent !important;
-            color: rgba(12, 74, 110, 0.85) !important;
+            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.85)) !important;
 
             transition: background-color 150ms ease,
             box-shadow 150ms ease,
@@ -1594,12 +1642,12 @@ utilities;
 
         [data-testid="artifacts-surface-top-controls"] .btn-primary-inverse:hover,
         [data-testid="artifacts-surface-top-controls"] .btn-ghost:hover {
-            background-color: rgba(255, 255, 255, 0.5) !important;
-            color: #0c4a6e !important;
-            border-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
+            color: var(--miku-accent, #0c4a6e) !important;
+            border-color: rgba(255, 255, 255, calc(0.55 * var(--miku-rim-strength, 1))) !important;
 
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(4px) saturate(1.15) !important;
             -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
@@ -1607,13 +1655,13 @@ utilities;
 
         [data-testid="artifacts-surface-top-controls"] .btn-primary-inverse[aria-current="page"],
         [data-testid="artifacts-surface-top-controls"] .btn-ghost[aria-current="page"] {
-            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
             background-image: none !important;
-            color: #0c4a6e !important;
-            border-color: rgba(255, 255, 255, 0.6) !important;
+            color: var(--miku-accent, #0c4a6e) !important;
+            border-color: rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(4px) saturate(1.15) !important;
             -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
@@ -1621,13 +1669,13 @@ utilities;
 
         [data-testid="artifacts-surface-top-controls"] .btn-primary-inverse[aria-current="page"]:hover,
         [data-testid="artifacts-surface-top-controls"] .btn-ghost[aria-current="page"]:hover {
-            background-color: rgba(255, 255, 255, 0.6) !important;
+            background-color: var(--miku-glass-selected, rgba(255, 255, 255, 0.6)) !important;
         }
 
         [data-testid="artifacts-surface-top-controls"] .btn-primary-inverse:focus-visible,
         [data-testid="artifacts-surface-top-controls"] .btn-ghost:focus-visible {
             outline: none !important;
-            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
             0 4px 12px rgba(0, 0, 0, 0.1) !important;
         }
     }
@@ -1636,13 +1684,13 @@ utilities;
     /*upload new image bg (unstable)*/
     @layer utilities {
         button[class*="group\/button"] > div[class*="bg-token-interactive-bg-tertiary-hover"] {
-            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
             background-image: none !important;
 
-            border-color: rgba(255, 255, 255, 0.5) !important;
+            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(10px) saturate(1.2) !important;
             -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
@@ -1653,17 +1701,17 @@ utilities;
         }
 
         button[class*="group\/button"] > div[class*="bg-token-interactive-bg-tertiary-hover"]:hover {
-            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
 
             box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14),
-            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
 
             transform: translateY(-2px);
         }
 
         button[class*="group\/button"] > div[class*="bg-token-interactive-bg-tertiary-hover"]:focus-within {
             outline: none !important;
-            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
             0 10px 26px rgba(0, 0, 0, 0.12) !important;
         }
     }
@@ -1676,7 +1724,7 @@ utilities;
             background-color: transparent !important;
             background-image: none !important;
             border-color: transparent !important;
-            color: rgba(12, 74, 110, 0.85) !important;
+            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.85)) !important;
 
             transition: background-color 150ms ease,
             box-shadow 150ms ease,
@@ -1685,12 +1733,12 @@ utilities;
 
         [role="tablist"][aria-label="Image prompt categories"] .btn-primary-inverse:hover,
         [role="tablist"][aria-label="Image prompt categories"] .btn-ghost:hover {
-            background-color: rgba(255, 255, 255, 0.5) !important;
-            color: #0c4a6e !important;
-            border-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
+            color: var(--miku-accent, #0c4a6e) !important;
+            border-color: rgba(255, 255, 255, calc(0.55 * var(--miku-rim-strength, 1))) !important;
 
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(4px) saturate(1.15) !important;
             -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
@@ -1698,13 +1746,13 @@ utilities;
 
         [role="tablist"][aria-label="Image prompt categories"] [data-state="active"],
         [role="tablist"][aria-label="Image prompt categories"] [aria-selected="true"] {
-            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
             background-image: none !important;
-            color: #0c4a6e !important;
-            border-color: rgba(255, 255, 255, 0.6) !important;
+            color: var(--miku-accent, #0c4a6e) !important;
+            border-color: rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(4px) saturate(1.15) !important;
             -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
@@ -1712,12 +1760,12 @@ utilities;
 
         [role="tablist"][aria-label="Image prompt categories"] [data-state="active"]:hover,
         [role="tablist"][aria-label="Image prompt categories"] [aria-selected="true"]:hover {
-            background-color: rgba(255, 255, 255, 0.6) !important;
+            background-color: var(--miku-glass-selected, rgba(255, 255, 255, 0.6)) !important;
         }
 
         [role="tablist"][aria-label="Image prompt categories"] [role="tab"]:focus-visible {
             outline: none !important;
-            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
             0 4px 12px rgba(0, 0, 0, 0.1) !important;
         }
     }
@@ -1726,7 +1774,7 @@ utilities;
     /*share chat bg*/
     @layer utilities {
         div.fixed.inset-0.z-50[data-state="open"] {
-            background-color: rgb(0 0 0 / .08) !important;
+            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .08) !important;
         }
 
         /* Chat preview inside the share popup */
@@ -1740,7 +1788,7 @@ utilities;
     /*tip popout bg*/
     @layer utilities {
         aside[class*="shadow-xxs"]:not(:has(textarea)) {
-            background: rgba(255, 255, 255, 0.45) !important;
+            background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
         }
@@ -1750,7 +1798,7 @@ utilities;
     @layer utilities {
         /*image editor bg*/
         [role="dialog"][data-state="open"][class*="bg-token-main-surface-primary"]:not([class*="bg-token-bg-primary"]):not([class*="overflow-hidden"]) {
-            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
             background-image: none !important;
             backdrop-filter: blur(10px) saturate(1.2) !important;
             -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
@@ -1777,14 +1825,14 @@ utilities;
 
         /* Image editor zoom button */
         button[aria-label^="Zoom level"] {
-            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
             background-image: none !important;
 
-            border-color: rgba(255, 255, 255, 0.5) !important;
-            color: rgba(12, 74, 110, 0.9) !important;
+            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
+            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.9)) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
@@ -1796,18 +1844,18 @@ utilities;
         }
 
         button[aria-label^="Zoom level"]:hover {
-            background-color: rgba(255, 255, 255, 0.5) !important;
-            border-color: rgba(255, 255, 255, 0.6) !important;
-            color: #0c4a6e !important;
+            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
+            border-color: rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
+            color: var(--miku-accent, #0c4a6e) !important;
 
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
 
             transform: translateY(-1px);
         }
 
         button[aria-label^="Zoom level"]:active {
-            background-color: rgba(255, 255, 255, 0.55) !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
             transform: scale(0.98);
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1),
             inset 0 2px 6px rgba(0, 0, 0, 0.1) !important;
@@ -1815,40 +1863,40 @@ utilities;
 
         button[aria-label^="Zoom level"][data-state="open"],
         button[aria-label^="Zoom level"][aria-expanded="true"] {
-            background-color: rgba(255, 255, 255, 0.55) !important;
-            border-color: rgba(255, 255, 255, 0.6) !important;
-            color: #0c4a6e !important;
+            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
+            border-color: rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
+            color: var(--miku-accent, #0c4a6e) !important;
 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
         }
 
         button[aria-label^="Zoom level"]:focus-visible {
             outline: none !important;
-            box-shadow: 0 0 0 2px rgba(99, 151, 255, 0.55),
+            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
             0 4px 12px rgba(0, 0, 0, 0.1) !important;
         }
 
         /*stroke width slide bg*/
         .pointer-events-none.absolute.start-4.top-1\/2.z-40.h-44 [class*="bg-token-bg-elevated-primary"] {
-            background-color: rgba(255, 255, 255, 0.35) !important;
+            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
             background-image: none !important;
-            border-color: rgba(255, 255, 255, 0.5) !important;
+            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
             backdrop-filter: blur(2px) saturate(1.1) !important;
             -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
         }
 
         /* Image editor tool dropdowns (Shapes, Markup style, etc.) */
         .popover[role="dialog"][data-state="open"][class*="bg-token-bg-elevated-primary"] {
-            background-color: rgba(255, 255, 255, 0.45) !important;
+            background-color: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
             background-image: none !important;
 
-            border-color: rgba(255, 255, 255, 0.5) !important;
+            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
 
             box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(10px) saturate(1.2) !important;
             -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
@@ -1856,11 +1904,11 @@ utilities;
 
         /* the drag knob */
         [role="slider"] > span[class*="rounded-full"][class*="bg-white"] {
-            background-color: rgba(255, 255, 255, 0.75) !important;
-            border-color: rgba(255, 255, 255, 0.9) !important;
+            background-color: var(--miku-glass-solid, rgba(255, 255, 255, 0.75)) !important;
+            border-color: rgba(255, 255, 255, calc(0.9 * var(--miku-rim-strength, 1))) !important;
 
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15),
-            inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(1 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(4px) saturate(1.2) !important;
             -webkit-backdrop-filter: blur(4px) saturate(1.2) !important;
@@ -1881,16 +1929,16 @@ utilities;
         }
 
         [data-testid="modal-inline-feedback"] .flex.flex-wrap.gap-3 > button:hover {
-            background-color: rgb(0 0 0 / .06) !important;
+            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .06) !important;
         }
 
         [data-testid="modal-inline-feedback"] .flex.flex-wrap.gap-3 > button[class*="bg-token-text-primary"] {
-            background-color: rgb(0 0 0 / .1) !important;
-            color: black !important;
+            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .1) !important;
+            color: var(--miku-text, black) !important;
         }
 
         [data-testid="modal-inline-feedback"] .flex.flex-wrap.gap-3 > button[class*="bg-token-text-primary"]:hover {
-            background-color: rgb(0 0 0 / .12) !important;
+            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .12) !important;
         }
     }
 
@@ -1900,14 +1948,106 @@ utilities;
             background-color: rgba(239, 68, 68, 0.35) !important;
             background-image: none !important;
 
-            border-color: rgba(255, 255, 255, 0.25) !important;
+            border-color: rgba(255, 255, 255, calc(0.25 * var(--miku-rim-strength, 1))) !important;
             color: #ffffff !important;
 
             box-shadow: 0 8px 22px rgba(239, 68, 68, 0.25),
-            inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+            inset 0 1px 0 rgba(255, 255, 255, calc(0.2 * var(--miku-rim-strength, 1))) !important;
 
             backdrop-filter: blur(10px) saturate(1.2) !important;
             -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
+        }
+    }
+
+    /* Dark-only exceptions for transparent inputs and native inverse controls.
+       Keep these in utilities to match the existing !important layer priority. */
+    @layer utilities {
+        :root:is(.dark, [data-theme="dark"]) body {
+            color: var(--miku-text);
+            background-color: #081116 !important;
+        }
+
+        :root:is(.dark, [data-theme="dark"]) :is(
+            [data-type="unified-composer"] .shadow-short-composer,
+            [data-conversation-screenshot-content] > .bg-token-main-surface-tertiary
+        ) {
+            background: var(--miku-glass-control) !important;
+            color: var(--miku-text);
+            backdrop-filter: blur(10px) saturate(1.1);
+            -webkit-backdrop-filter: blur(10px) saturate(1.1);
+        }
+
+        :root:is(.dark, [data-theme="dark"]) :is(
+            [data-type="unified-composer"] .shadow-short-composer,
+            [data-conversation-screenshot-content] > .bg-token-main-surface-tertiary
+        ):is(:hover, :focus-within) {
+            background: var(--miku-glass-hover) !important;
+        }
+
+        :root:is(.dark, [data-theme="dark"]) :is(input, textarea, [contenteditable="true"]) {
+            color: var(--miku-text);
+            caret-color: var(--miku-accent);
+        }
+
+        :root:is(.dark, [data-theme="dark"]) :is(input, textarea)::placeholder {
+            color: var(--miku-text-secondary);
+            opacity: 1;
+        }
+
+        :root:is(.dark, [data-theme="dark"]) .ProseMirror [data-placeholder]::before {
+            color: var(--miku-text-secondary);
+            opacity: 1;
+        }
+
+        :root:is(.dark, [data-theme="dark"]) :is(.btn-primary, .bg-token-bg-tooltip) {
+            color: var(--miku-text) !important;
+        }
+
+        :root:is(.dark, [data-theme="dark"]) [data-composer-surface="true"] .composer-submit-button-color {
+            background: var(--miku-glass-selected);
+            color: var(--miku-text);
+        }
+
+        :root:is(.dark, [data-theme="dark"]) [data-composer-surface="true"] .composer-submit-button-color:hover {
+            background: var(--miku-glass-pressed);
+        }
+
+        :root:is(.dark, [data-theme="dark"]) .markdown {
+            color: var(--miku-text);
+            --tw-prose-body: var(--miku-text);
+            --tw-prose-headings: var(--miku-text);
+            --tw-prose-bold: var(--miku-text);
+            --tw-prose-links: var(--miku-accent);
+            --tw-prose-code: var(--miku-text);
+            --tw-prose-quotes: var(--miku-text-secondary);
+            --tw-prose-counters: var(--miku-text-secondary);
+            --tw-prose-bullets: var(--miku-text-secondary);
+        }
+
+        :root:is(.dark, [data-theme="dark"]) .markdown a {
+            color: var(--miku-accent);
+            text-decoration: underline;
+            text-underline-offset: 0.15em;
+        }
+
+        :root:is(.dark, [data-theme="dark"]) ::selection {
+            background: #276b70 !important;
+            color: #f3ffff !important;
+        }
+
+        :root:is(.dark, [data-theme="dark"]) .__composer-pill {
+            background-image: linear-gradient(115deg, transparent 35%,
+                rgba(145, 238, 226, 0.10) 48%, rgba(145, 238, 226, 0.18) 52%, transparent 65%);
+        }
+
+        :root:is(.dark, [data-theme="dark"]) [role="slider"] > span[class*="rounded-full"][class*="bg-white"] {
+            background-color: var(--miku-accent) !important;
+        }
+
+        /* Modal scrims stay dark; row hover overlays use the pale overlay token. */
+        :root:is(.dark, [data-theme="dark"]) div.fixed.inset-0.z-50[data-state="open"],
+        :root:is(.dark, [data-theme="dark"]) div[data-state="open"][class*="before:bg-"]::before {
+            background-color: rgba(0, 8, 12, 0.48) !important;
         }
     }
 }
