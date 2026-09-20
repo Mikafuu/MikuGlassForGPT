@@ -30,7 +30,7 @@
 ### 安装步骤
 
 1. 安装 **Stylus** 扩展：
-   - [Chrome / Edge](https://chromewebstore.google.com/detail/stylus)
+   - [Chrome / Edge]([https://chromewebstore.google.com/detail/stylus](https://chromewebstore.google.com/detail/clngdbkpkpeebahjckkjfobafhncgmne?utm_source=item-share-cb))
    - [Firefox](https://addons.mozilla.org/firefox/addon/styl-us/)
 2. [打开主题安装链接](https://github.com/Mikafuu/MikuGlassForGPT/raw/main/chatgpt-glass-miku.user.css)，Stylus 会提示安装。
 3. 访问 [ChatGPT](https://chatgpt.com/)，即可使用主题。
