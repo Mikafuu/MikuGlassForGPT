@@ -1,4 +1,7 @@
 # Hastune Miku Glass Light Style for ChatGPT
+
+English | [简体中文](README.zh-CN.md)
+
 <p align="center">
   <img src="preview.png" width="900"/>
 </p>
