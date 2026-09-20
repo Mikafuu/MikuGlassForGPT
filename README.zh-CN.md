@@ -1,24 +1,14 @@
-# 初音未来 ChatGPT 浅色玻璃主题
+# Miku ChatGPT 浅色玻璃主题
 
 [English](README.md) | 简体中文
 
 <p align="center">
-  <img src="preview.png" width="900" alt="初音未来 ChatGPT 玻璃主题预览"/>
+  <img src="preview.png" width="900" alt="Miku ChatGPT 玻璃主题预览"/>
 </p>
 
-一款柔和的 ChatGPT 玻璃质感主题，以宁静的**初音未来与海洋意境**为灵感。
-
-## 致谢
+## 背景画师 & Link
 
 背景插画作者：**WusubaMineko**（Twitter）。[查看原作](https://x.com/WusubaMineko/status/1795989062567764263)。
-
-## 功能特色
-
-- **毛玻璃界面**：通过轻微模糊与层次感营造通透效果。
-- **初音未来风格配色**：清冷的蓝色搭配柔和的白色。
-- 流畅、现代的**玻璃质感消息气泡**。
-- 可单独开关 ChatGPT 和用户消息气泡的**悬停动画**。
-- 精心调整的阴影，在保持文字清晰的同时减少视觉干扰。
 
 ## 安装
 
@@ -37,7 +27,7 @@
 
 ## 自定义设置
 
-本主题提供内置的 Stylus 设置选项。
+通过 Stylus 内置的设置选项调整。
 
 ### 可用开关
 
@@ -48,7 +38,7 @@ ChatGPT 和用户消息气泡分别提供悬停动画开关：
 
 设置入口：
 
-> Stylus → 管理 → Hastune Miku Glass Light Style for ChatGPT → 设置
+> Stylus → Hastune Miku Glass Light Style for ChatGPT 旁的齿轮图标
 
 ## 性能说明
 
@@ -65,7 +55,5 @@ ChatGPT 和用户消息气泡分别提供悬停动画开关：
 暂未指定许可证。
 
 ## 写在最后
-
-这是一个出于热爱而制作的主题，希望让 ChatGPT 的界面更宁静、更美观，也更有生气。
 
 如果你喜欢这个主题，欢迎为仓库点一颗 ⭐，这对我来说是很大的鼓励。
