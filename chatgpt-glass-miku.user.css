@@ -1,20 +1,57 @@
 /* ==UserStyle==
 @name           Hastune Miku Glass Light & Dark Style for ChatGPT -- Full Remake
 @namespace      github.com/Morikana/chatgpt-glass-miku
-@version        2.1.0
-@description    A glassy Miku theme for ChatGPT with automatic light/dark colors and interactive UIs. 
+@version        3.0.0
+@description    Miku glass for the October 2026 ChatGPT UI. Semantic selectors, transparent surfaces, automatic light/dark colors.
 @author         Morikana
 
 @var checkbox GPTmarkdownHover "Enable ChatGPT message hover animation" 1
 @var checkbox userMarkdownHover "Enable User Message Bubble Animations" 1
 
 ==/UserStyle== */
-@layer base,
-components,
-utilities;
+/* Selector migration: 2026-10-24.
+   Use this as a REPLACEMENT, not an add-on to the 2.x style.
+   Stable hooks first: data attributes, roles, native elements; no generated IDs,
+   CSS-module hashes, translated labels, nth-child chains or SVG path matching.
+   "No opaque backgrounds" means UI surfaces, including pseudo-elements.
+   Wallpaper, actual pictures, SVG artwork, video and embedded documents remain
+   content. CSS cannot theme cross-origin iframe interiors or closed shadow roots.
+   All glass alpha values are < 1. A transparent fallback catches unnamed UI.
+   The existing base layer makes important overrides precede component/utility
+   layers; keep the reset and role rules together so specificity is predictable. */
 @-moz-document url-prefix("https://chatgpt.com/") {
-
-    :root:is(.dark, [data-theme="dark"]) {
+  @layer base {
+    :root, [data-theme="light"] {
+        --miku-wallpaper-tint: rgba(255, 255, 255, 0);
+        --miku-text: #163742;
+        --miku-text-secondary: #325664;
+        --miku-accent: #0c4a6e;
+        --miku-danger-text: #7f1d1d;
+        --miku-focus: #287b9f;
+        --miku-rim-strength: 1;
+        --miku-overlay-rgb: 0 0 0;
+        --miku-assistant-rgb: 255, 255, 255;
+        --miku-user-rgb: 233, 233, 233;
+        --miku-assistant-rest-alpha: .55;
+        --miku-assistant-hover-delta: .47;
+        --miku-user-rest-alpha: .60;
+        --miku-user-hover-delta: .52;
+        --miku-glass-faint: rgba(255, 255, 255, .05);
+        --miku-glass-soft: rgba(255, 255, 255, .10);
+        --miku-glass-muted: rgba(255, 255, 255, .25);
+        --miku-glass-control: rgba(255, 255, 255, .35);
+        --miku-glass-panel: rgba(255, 255, 255, .45);
+        --miku-glass-hover: rgba(255, 255, 255, .50);
+        --miku-glass-active: rgba(255, 255, 255, .55);
+        --miku-glass-selected: rgba(233, 233, 233, .60);
+        --miku-glass-pressed: rgba(255, 255, 255, .65);
+        --miku-glass-strong: rgba(255, 255, 255, .70);
+        --miku-glass-solid: rgba(255, 255, 255, .75);
+        --miku-scrim: rgba(0, 0, 0, .08);
+        --miku-tooltip: rgba(20, 20, 22, .72);
+        --miku-tooltip-text: #f3ffff;
+    }
+    :is(:root.dark, [data-theme="dark"]) {
         color-scheme: dark;
         --miku-wallpaper-tint: rgba(8, 17, 22, 0.78);
         --miku-text: #edf8f7;
@@ -43,2011 +80,981 @@ utilities;
         --miku-glass-strong: rgba(30, 55, 61, 0.92);
         --miku-glass-solid: rgba(28, 49, 55, 0.94);
 
-        --text-primary: var(--miku-text);
-        --text-secondary: var(--miku-text-secondary);
-        --text-tertiary: #b2cbcd;
-        --text-quaternary: #abc5c7;
-        --text-link: var(--miku-accent);
-        --text-accent: var(--miku-accent);
-        --main-surface-primary: rgba(16, 29, 35, 0.68);
-        --main-surface-secondary: var(--miku-glass-panel);
-        --main-surface-tertiary: var(--miku-glass-control);
-        --sidebar-surface-primary: var(--miku-glass-panel);
-        --sidebar-surface-secondary: var(--miku-glass-hover);
-        --sidebar-surface-tertiary: var(--miku-glass-selected);
-        --bg-primary: var(--miku-glass-panel);
-        --bg-secondary: var(--miku-glass-control);
-        --bg-tertiary: var(--miku-glass-selected);
-        --bg-elevated-primary: var(--miku-glass-panel);
-        --bg-elevated-secondary: var(--miku-glass-strong);
-        --border-light: rgba(177, 226, 222, 0.18);
-        --border-medium: rgba(177, 226, 222, 0.30);
-        --border-heavy: rgba(177, 226, 222, 0.44);
     }
 
-    body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        background-image: url("https://i.ibb.co/C3RYb8XY/wallhaven-yxp85l.png");
-        opacity: 0;
-        pointer-events: none;
+    :is(:root.dark, [data-theme="dark"]) {
+        --miku-scrim: rgba(0, 8, 12, .48);
+        --miku-tooltip: rgba(16, 29, 35, .88);
     }
 
+    /* Shared material: original control/panel rim and shadows. */
+    :root, [data-theme] {
+        --miku-rim: rgba(255, 255, 255, calc(.5 * var(--miku-rim-strength)));
+        --miku-shadow-control: 0 4px 12px rgba(0,0,0,.08),
+            inset 0 1px 0 rgba(255,255,255,calc(.6 * var(--miku-rim-strength)));
+        --miku-shadow-hover: 0 6px 18px rgba(0,0,0,.12),
+            inset 0 1px 0 rgba(255,255,255,calc(.75 * var(--miku-rim-strength)));
+        --miku-shadow-panel: 0 8px 22px rgba(0,0,0,.12),
+            inset 0 1px 0 rgba(255,255,255,calc(.6 * var(--miku-rim-strength)));
+        /* Native text and palette tokens are intentionally untouched.
+           Only painted surface alpha is changed below. */
+    }
 
-    /*main background */
+    /* Native color adapter. Reset the local variables on each element so a
+       colored parent cannot accidentally tint its labels or icon wrappers.
+       These public utility names describe colors, not component implementation.
+       Preserve native hue and foreground; multiply surface alpha by .85. */
+    :where(body *) {
+        --miku-native-fill: initial;
+        --miku-native-hover-fill: initial;
+    }
+    .bg-token-interactive-bg-secondary-selected { --miku-native-fill: var(--interactive-bg-secondary-selected); }
+    .bg-token-theme-blue-text { --miku-native-fill: var(--theme-blue-text); }
+    .bg-accent-action { --miku-native-fill: var(--color-background-accent-action); }
+    .bg-activity-control { --miku-native-fill: var(--color-background-activity-control); }
+    .bg-activity-input { --miku-native-fill: var(--color-background-activity-input); }
+    .bg-amber-100\/90 { --miku-native-fill: color-mix(in oklab, var(--color-amber-100) 90%, transparent); }
+    .bg-amber-100\/95 { --miku-native-fill: color-mix(in oklab, var(--color-amber-100) 95%, transparent); }
+    .bg-artifact-photo-paper { --miku-native-fill: var(--color-artifact-photo-paper); }
+    .bg-artifact-powerpoint-surface { --miku-native-fill: var(--color-artifact-powerpoint-surface); }
+    .bg-avatar-blue { --miku-native-fill: var(--color-avatar-blue); }
+    .bg-avatar-gray { --miku-native-fill: var(--color-avatar-gray); }
+    .bg-avatar-green { --miku-native-fill: var(--color-avatar-green); }
+    .bg-avatar-purple { --miku-native-fill: var(--color-avatar-purple); }
+    .bg-avatar-red { --miku-native-fill: var(--color-avatar-red); }
+    .bg-avatar-yellow { --miku-native-fill: var(--color-avatar-yellow); }
+    .bg-background-artifact-preview { --miku-native-fill: var(--color-background-artifact-preview); }
+    .bg-background-caution-solid\/15 { --miku-native-fill: color-mix(in oklab, var(--color-background-caution-solid) 15%, transparent); }
+    .bg-background-composer-action-bar { --miku-native-fill: var(--color-background-composer-action-bar); }
+    .bg-background-danger-solid { --miku-native-fill: var(--color-background-danger-solid); }
+    .bg-background-danger-surface\/20 { --miku-native-fill: color-mix(in oklab, var(--color-background-danger-surface) 20%, transparent); }
+    .bg-background-mode-toggle-selected { --miku-native-fill: var(--color-background-mode-toggle-selected); }
+    .bg-background-mode-toggle-track { --miku-native-fill: var(--color-background-mode-toggle-track); }
+    .bg-background-primary-ghost-hover\/50 { --miku-native-fill: color-mix(in oklab, var(--color-background-primary-ghost-hover) 50%, transparent); }
+    .bg-background-primary-ghost-hover\/60 { --miku-native-fill: color-mix(in oklab, var(--color-background-primary-ghost-hover) 60%, transparent); }
+    .bg-background-primary-soft-active { --miku-native-fill: var(--color-background-primary-soft-active); }
+    .bg-background-primary-soft\/75 { --miku-native-fill: color-mix(in oklab, var(--color-background-primary-soft) 75%, transparent); }
+    .bg-background-primary-soft\/90 { --miku-native-fill: color-mix(in oklab, var(--color-background-primary-soft) 90%, transparent); }
+    .bg-background-secondary-soft { --miku-native-fill: var(--color-background-secondary-soft); }
+    .bg-background-secondary-soft-alpha { --miku-native-fill: var(--color-background-secondary-soft-alpha); }
+    .bg-background-secondary-soft-alpha\/20 { --miku-native-fill: color-mix(in oklab, var(--color-background-secondary-soft-alpha) 20%, transparent); }
+    .bg-background-segmented-form-selected { --miku-native-fill: var(--color-background-segmented-form-selected); }
+    .bg-background-segmented-form-track { --miku-native-fill: var(--color-background-segmented-form-track); }
+    .bg-background-success-surface { --miku-native-fill: var(--color-background-success-surface); }
+    .bg-background-text-selection { --miku-native-fill: var(--color-background-text-selection); }
+    .bg-background-viewer-control { --miku-native-fill: var(--color-background-viewer-control); }
+    .bg-background-warning-surface\/15 { --miku-native-fill: color-mix(in oklab, var(--color-background-warning-surface) 15%, transparent); }
+    .bg-background-warning-surface\/30 { --miku-native-fill: color-mix(in oklab, var(--color-background-warning-surface) 30%, transparent); }
+    .bg-black { --miku-native-fill: var(--color-black); }
+    .bg-black\/5 { --miku-native-fill: color-mix(in oklab, var(--color-black) 5%, transparent); }
+    .bg-black\/7 { --miku-native-fill: color-mix(in oklab, var(--color-black) 7%, transparent); }
+    .bg-black\/10 { --miku-native-fill: color-mix(in oklab, var(--color-black) 10%, transparent); }
+    .bg-black\/20 { --miku-native-fill: color-mix(in oklab, var(--color-black) 20%, transparent); }
+    .bg-black\/35 { --miku-native-fill: color-mix(in oklab, var(--color-black) 35%, transparent); }
+    .bg-black\/45 { --miku-native-fill: color-mix(in oklab, var(--color-black) 45%, transparent); }
+    .bg-black\/80 { --miku-native-fill: color-mix(in oklab, var(--color-black) 80%, transparent); }
+    .bg-black\/90 { --miku-native-fill: color-mix(in oklab, var(--color-black) 90%, transparent); }
+    .bg-blue { --miku-native-fill: var(--color-blue); }
+    .bg-blue-50 { --miku-native-fill: var(--color-blue-50); }
+    .bg-blue-100 { --miku-native-fill: var(--color-blue-100); }
+    .bg-blue-500\/10 { --miku-native-fill: color-mix(in oklab, var(--color-blue-500) 10%, transparent); }
+    .bg-blue\/10 { --miku-native-fill: color-mix(in oklab, var(--color-blue) 10%, transparent); }
+    .bg-blue\/15 { --miku-native-fill: color-mix(in oklab, var(--color-blue) 15%, transparent); }
+    .bg-border { --miku-native-fill: var(--color-border); }
+    .bg-border-strong { --miku-native-fill: var(--color-border-strong); }
+    .bg-border-subtle { --miku-native-fill: var(--color-border-subtle); }
+    .bg-border\/45 { --miku-native-fill: color-mix(in oklab, var(--color-border) 45%, transparent); }
+    .bg-border\/60 { --miku-native-fill: color-mix(in oklab, var(--color-border) 60%, transparent); }
+    .bg-border\/70 { --miku-native-fill: color-mix(in oklab, var(--color-border) 70%, transparent); }
+    .bg-brand-logo-background { --miku-native-fill: var(--color-brand-logo-background); }
+    .bg-callout-surface { --miku-native-fill: var(--color-background-callout-surface); }
+    .bg-chart-blue\/10 { --miku-native-fill: color-mix(in oklab, var(--color-chart-blue) 10%, transparent); }
+    .bg-chart-blue\/15 { --miku-native-fill: color-mix(in oklab, var(--color-chart-blue) 15%, transparent); }
+    .bg-chart-blue\/25 { --miku-native-fill: color-mix(in oklab, var(--color-chart-blue) 25%, transparent); }
+    .bg-chart-blue\/70 { --miku-native-fill: color-mix(in oklab, var(--color-chart-blue) 70%, transparent); }
+    .bg-chart-green\/10 { --miku-native-fill: color-mix(in oklab, var(--color-chart-green) 10%, transparent); }
+    .bg-chart-green\/15 { --miku-native-fill: color-mix(in oklab, var(--color-chart-green) 15%, transparent); }
+    .bg-chart-green\/20 { --miku-native-fill: color-mix(in oklab, var(--color-chart-green) 20%, transparent); }
+    .bg-chart-orange { --miku-native-fill: var(--color-chart-orange); }
+    .bg-chart-purple\/10 { --miku-native-fill: color-mix(in oklab, var(--color-chart-purple) 10%, transparent); }
+    .bg-chart-red\/5 { --miku-native-fill: color-mix(in oklab, var(--color-chart-red) 5%, transparent); }
+    .bg-chart-red\/10 { --miku-native-fill: color-mix(in oklab, var(--color-chart-red) 10%, transparent); }
+    .bg-chart-red\/70 { --miku-native-fill: color-mix(in oklab, var(--color-chart-red) 70%, transparent); }
+    .bg-chart-yellow\/15 { --miku-native-fill: color-mix(in oklab, var(--color-chart-yellow) 15%, transparent); }
+    .bg-coachmark { --miku-native-fill: var(--color-background-coachmark); }
+    .bg-codex-application-menu { --miku-native-fill: var(--color-codex-application-menu); }
+    .bg-codex-description\/20 { --miku-native-fill: color-mix(in oklab, var(--color-codex-description) 20%, transparent); }
+    .bg-codex-drop-overlay\/60 { --miku-native-fill: color-mix(in oklab, var(--color-codex-drop-overlay) 60%, transparent); }
+    .bg-codex-drop-overlay\/80 { --miku-native-fill: color-mix(in oklab, var(--color-codex-drop-overlay) 80%, transparent); }
+    .bg-codex-drop-prompt { --miku-native-fill: var(--color-codex-drop-prompt); }
+    .bg-codex-icon { --miku-native-fill: var(--color-codex-icon); }
+    .bg-composer-primary { --miku-native-fill: var(--color-background-composer-primary); }
+    .bg-content-blue\/15 { --miku-native-fill: color-mix(in oklab, var(--color-content-blue) 15%, transparent); }
+    .bg-content-green\/15 { --miku-native-fill: color-mix(in oklab, var(--color-content-green) 15%, transparent); }
+    .bg-content-purple\/15 { --miku-native-fill: color-mix(in oklab, var(--color-content-purple) 15%, transparent); }
+    .bg-content-red\/15 { --miku-native-fill: color-mix(in oklab, var(--color-content-red) 15%, transparent); }
+    .bg-content-yellow\/15 { --miku-native-fill: color-mix(in oklab, var(--color-content-yellow) 15%, transparent); }
+    .bg-control-thumb-on-accent { --miku-native-fill: var(--color-control-thumb-on-accent); }
+    .bg-current\/10 { --miku-native-fill: currentColor; }
+    .bg-current\/15 { --miku-native-fill: currentColor; }
+    .bg-current\/20 { --miku-native-fill: currentColor; }
+    .bg-danger-soft { --miku-native-fill: var(--color-background-danger-soft); }
+    .bg-danger-solid { --miku-native-fill: var(--color-background-danger-solid); }
+    .bg-danger-surface { --miku-native-fill: var(--color-background-danger-surface); }
+    .bg-device-handle { --miku-native-fill: var(--color-device-handle); }
+    .bg-device-handle-detail { --miku-native-fill: var(--color-device-handle-detail); }
+    .bg-device-stage { --miku-native-fill: var(--color-device-stage); }
+    .bg-discovery-soft { --miku-native-fill: var(--color-background-discovery-soft); }
+    .bg-execution-output { --miku-native-fill: var(--color-background-execution-output); }
+    .bg-execution-traceback { --miku-native-fill: var(--color-background-execution-traceback); }
+    .bg-gray-50 { --miku-native-fill: var(--color-gray-50); }
+    .bg-gray-100 { --miku-native-fill: var(--color-gray-100); }
+    .bg-gray-200 { --miku-native-fill: var(--color-gray-200); }
+    .bg-gray-300 { --miku-native-fill: var(--color-gray-300); }
+    .bg-gray-800 { --miku-native-fill: var(--color-gray-800); }
+    .bg-green { --miku-native-fill: var(--color-green); }
+    .bg-green-500\/20 { --miku-native-fill: color-mix(in oklab, var(--color-green-500) 20%, transparent); }
+    .bg-green-500\/30 { --miku-native-fill: color-mix(in oklab, var(--color-green-500) 30%, transparent); }
+    .bg-green-600 { --miku-native-fill: var(--color-green-600); }
+    .bg-green\/10 { --miku-native-fill: color-mix(in oklab, var(--color-green) 10%, transparent); }
+    .bg-green\/20 { --miku-native-fill: color-mix(in oklab, var(--color-green) 20%, transparent); }
+    .bg-info-soft { --miku-native-fill: var(--color-background-info-soft); }
+    .bg-info-solid { --miku-native-fill: var(--color-background-info-solid); }
+    .bg-info-surface { --miku-native-fill: var(--color-background-info-surface); }
+    .bg-media-background\/5 { --miku-native-fill: color-mix(in oklab, var(--color-media-background) 5%, transparent); }
+    .bg-media-background\/15 { --miku-native-fill: color-mix(in oklab, var(--color-media-background) 15%, transparent); }
+    .bg-media-background\/20 { --miku-native-fill: color-mix(in oklab, var(--color-media-background) 20%, transparent); }
+    .bg-media-background\/45 { --miku-native-fill: color-mix(in oklab, var(--color-media-background) 45%, transparent); }
+    .bg-media-background\/50 { --miku-native-fill: color-mix(in oklab, var(--color-media-background) 50%, transparent); }
+    .bg-media-background\/60 { --miku-native-fill: color-mix(in oklab, var(--color-media-background) 60%, transparent); }
+    .bg-media-background\/80 { --miku-native-fill: color-mix(in oklab, var(--color-media-background) 80%, transparent); }
+    .bg-media-control-background { --miku-native-fill: var(--color-media-control-background); }
+    .bg-media-foreground\/20 { --miku-native-fill: color-mix(in oklab, var(--color-media-foreground) 20%, transparent); }
+    .bg-media-foreground\/60 { --miku-native-fill: color-mix(in oklab, var(--color-media-foreground) 60%, transparent); }
+    .bg-media-scrim\/40 { --miku-native-fill: color-mix(in oklab, var(--color-media-scrim) 40%, transparent); }
+    .bg-orange { --miku-native-fill: var(--color-orange); }
+    .bg-orange-300 { --miku-native-fill: var(--color-orange-300); }
+    .bg-page-search { --miku-native-fill: var(--color-background-page-search); }
+    .bg-primary-soft { --miku-native-fill: var(--color-background-primary-soft); }
+    .bg-primary-solid { --miku-native-fill: var(--color-background-primary-solid); }
+    .bg-purple\/20 { --miku-native-fill: color-mix(in oklab, var(--color-purple) 20%, transparent); }
+    .bg-red { --miku-native-fill: var(--color-red); }
+    .bg-red-500\/10 { --miku-native-fill: color-mix(in oklab, var(--color-red-500) 10%, transparent); }
+    .bg-secondary-soft { --miku-native-fill: var(--color-background-secondary-soft); }
+    .bg-segmented-selected { --miku-native-fill: var(--color-background-segmented-selected); }
+    .bg-slate-100 { --miku-native-fill: var(--color-slate-100); }
+    .bg-slate-950 { --miku-native-fill: var(--color-slate-950); }
+    .bg-success-soft { --miku-native-fill: var(--color-background-success-soft); }
+    .bg-success-solid { --miku-native-fill: var(--color-background-success-solid); }
+    .bg-surface { --miku-native-fill: var(--color-surface); }
+    .bg-surface-canvas { --miku-native-fill: var(--color-surface-canvas); }
+    .bg-surface-card\/80 { --miku-native-fill: color-mix(in oklab, var(--color-surface-card) 80%, transparent); }
+    .bg-surface-elevated { --miku-native-fill: var(--color-surface-elevated); }
+    .bg-surface-elevated-secondary\/50 { --miku-native-fill: color-mix(in oklab, var(--color-surface-elevated-secondary) 50%, transparent); }
+    .bg-surface-elevated-secondary\/70 { --miku-native-fill: color-mix(in oklab, var(--color-surface-elevated-secondary) 70%, transparent); }
+    .bg-surface-elevated-secondary\/90 { --miku-native-fill: color-mix(in oklab, var(--color-surface-elevated-secondary) 90%, transparent); }
+    .bg-surface-elevated-secondary\/95 { --miku-native-fill: color-mix(in oklab, var(--color-surface-elevated-secondary) 95%, transparent); }
+    .bg-surface-elevated\/60 { --miku-native-fill: color-mix(in oklab, var(--color-surface-elevated) 60%, transparent); }
+    .bg-surface-recovery { --miku-native-fill: var(--color-surface-recovery); }
+    .bg-surface-secondary\/15 { --miku-native-fill: color-mix(in oklab, var(--color-surface-secondary) 15%, transparent); }
+    .bg-surface-secondary\/20 { --miku-native-fill: color-mix(in oklab, var(--color-surface-secondary) 20%, transparent); }
+    .bg-surface-secondary\/40 { --miku-native-fill: color-mix(in oklab, var(--color-surface-secondary) 40%, transparent); }
+    .bg-surface-secondary\/50 { --miku-native-fill: color-mix(in oklab, var(--color-surface-secondary) 50%, transparent); }
+    .bg-surface-secondary\/60 { --miku-native-fill: color-mix(in oklab, var(--color-surface-secondary) 60%, transparent); }
+    .bg-surface-secondary\/70 { --miku-native-fill: color-mix(in oklab, var(--color-surface-secondary) 70%, transparent); }
+    .bg-surface-secondary\/85 { --miku-native-fill: color-mix(in oklab, var(--color-surface-secondary) 85%, transparent); }
+    .bg-surface-secondary\/90 { --miku-native-fill: color-mix(in oklab, var(--color-surface-secondary) 90%, transparent); }
+    .bg-surface-secondary\/92 { --miku-native-fill: color-mix(in oklab, var(--color-surface-secondary) 92%, transparent); }
+    .bg-surface-tertiary\/50 { --miku-native-fill: color-mix(in oklab, var(--color-surface-tertiary) 50%, transparent); }
+    .bg-surface-tertiary\/70 { --miku-native-fill: color-mix(in oklab, var(--color-surface-tertiary) 70%, transparent); }
+    .bg-surface-tertiary\/95 { --miku-native-fill: color-mix(in oklab, var(--color-surface-tertiary) 95%, transparent); }
+    .bg-surface\/20 { --miku-native-fill: color-mix(in oklab, var(--color-surface) 20%, transparent); }
+    .bg-surface\/40 { --miku-native-fill: color-mix(in oklab, var(--color-surface) 40%, transparent); }
+    .bg-surface\/50 { --miku-native-fill: color-mix(in oklab, var(--color-surface) 50%, transparent); }
+    .bg-surface\/60 { --miku-native-fill: color-mix(in oklab, var(--color-surface) 60%, transparent); }
+    .bg-surface\/70 { --miku-native-fill: color-mix(in oklab, var(--color-surface) 70%, transparent); }
+    .bg-surface\/80 { --miku-native-fill: color-mix(in oklab, var(--color-surface) 80%, transparent); }
+    .bg-surface\/95 { --miku-native-fill: color-mix(in oklab, var(--color-surface) 95%, transparent); }
+    .bg-text { --miku-native-fill: var(--color-text); }
+    .bg-text-danger\/4 { --miku-native-fill: color-mix(in oklab, var(--color-text-danger) 4%, transparent); }
+    .bg-text-danger\/10 { --miku-native-fill: color-mix(in oklab, var(--color-text-danger) 10%, transparent); }
+    .bg-text-danger\/15 { --miku-native-fill: color-mix(in oklab, var(--color-text-danger) 15%, transparent); }
+    .bg-text-emphasis\/25 { --miku-native-fill: color-mix(in oklab, var(--color-text-emphasis) 25%, transparent); }
+    .bg-text-info\/10 { --miku-native-fill: color-mix(in oklab, var(--color-text-info) 10%, transparent); }
+    .bg-text-info\/15 { --miku-native-fill: color-mix(in oklab, var(--color-text-info) 15%, transparent); }
+    .bg-text-info\/20 { --miku-native-fill: color-mix(in oklab, var(--color-text-info) 20%, transparent); }
+    .bg-text-secondary { --miku-native-fill: var(--color-text-secondary); }
+    .bg-text-tertiary\/15 { --miku-native-fill: color-mix(in oklab, var(--color-text-tertiary) 15%, transparent); }
+    .bg-text-tertiary\/30 { --miku-native-fill: color-mix(in oklab, var(--color-text-tertiary) 30%, transparent); }
+    .bg-text-tertiary\/55 { --miku-native-fill: color-mix(in oklab, var(--color-text-tertiary) 55%, transparent); }
+    .bg-text-tertiary\/80 { --miku-native-fill: color-mix(in oklab, var(--color-text-tertiary) 80%, transparent); }
+    .bg-text-warning\/15 { --miku-native-fill: color-mix(in oklab, var(--color-text-warning) 15%, transparent); }
+    .bg-text\/2 { --miku-native-fill: color-mix(in oklab, var(--color-text) 2%, transparent); }
+    .bg-text\/3 { --miku-native-fill: color-mix(in oklab, var(--color-text) 3%, transparent); }
+    .bg-text\/4 { --miku-native-fill: color-mix(in oklab, var(--color-text) 4%, transparent); }
+    .bg-text\/5 { --miku-native-fill: color-mix(in oklab, var(--color-text) 5%, transparent); }
+    .bg-text\/10 { --miku-native-fill: color-mix(in oklab, var(--color-text) 10%, transparent); }
+    .bg-text\/15 { --miku-native-fill: color-mix(in oklab, var(--color-text) 15%, transparent); }
+    .bg-text\/20 { --miku-native-fill: color-mix(in oklab, var(--color-text) 20%, transparent); }
+    .bg-text\/25 { --miku-native-fill: color-mix(in oklab, var(--color-text) 25%, transparent); }
+    .bg-text\/30 { --miku-native-fill: color-mix(in oklab, var(--color-text) 30%, transparent); }
+    .bg-text\/70 { --miku-native-fill: color-mix(in oklab, var(--color-text) 70%, transparent); }
+    .bg-tip-soft { --miku-native-fill: var(--color-background-tip-soft); }
+    .bg-token-bg-primary { --miku-native-fill: var(--color-token-bg-primary); }
+    .bg-token-bg-primary\/35 { --miku-native-fill: color-mix(in oklab, var(--color-token-bg-primary) 35%, transparent); }
+    .bg-token-bg-primary\/95 { --miku-native-fill: color-mix(in oklab, var(--color-token-bg-primary) 95%, transparent); }
+    .bg-token-bg-secondary { --miku-native-fill: var(--color-token-bg-secondary); }
+    .bg-token-bg-secondary\/55 { --miku-native-fill: color-mix(in oklab, var(--color-token-bg-secondary) 55%, transparent); }
+    .bg-token-bg-tertiary { --miku-native-fill: var(--color-token-bg-tertiary); }
+    .bg-token-border-default { --miku-native-fill: var(--color-token-border-default); }
+    .bg-token-border-heavy { --miku-native-fill: var(--color-token-border-heavy); }
+    .bg-token-border-light { --miku-native-fill: var(--color-token-border-light); }
+    .bg-token-dropdown-background { --miku-native-fill: var(--color-token-dropdown-background); }
+    .bg-token-editor-find-match-background { --miku-native-fill: var(--color-token-editor-find-match-background); }
+    .bg-token-main-surface-primary\/90 { --miku-native-fill: color-mix(in oklab, var(--color-token-main-surface-primary) 90%, transparent); }
+    .bg-token-scrollbar-slider-background { --miku-native-fill: var(--color-token-scrollbar-slider-background); }
+    .bg-token-text-code-block-background { --miku-native-fill: var(--color-token-text-code-block-background); }
+    .bg-token-text-primary\/10 { --miku-native-fill: color-mix(in oklab, var(--color-token-text-primary) 10%, transparent); }
+    .bg-token-text-secondary { --miku-native-fill: var(--color-token-text-secondary); }
+    .bg-token-text-tertiary { --miku-native-fill: var(--color-token-text-tertiary); }
+    .bg-token-text-tertiary\/40 { --miku-native-fill: color-mix(in oklab, var(--color-token-text-tertiary) 40%, transparent); }
+    .bg-token-text-tertiary\/60 { --miku-native-fill: color-mix(in oklab, var(--color-token-text-tertiary) 60%, transparent); }
+    .bg-user-message { --miku-native-fill: var(--color-background-user-message); }
+    .bg-warning-soft { --miku-native-fill: var(--color-background-warning-soft); }
+    .bg-warning-solid { --miku-native-fill: var(--color-background-warning-solid); }
+    .bg-warning-surface { --miku-native-fill: var(--color-background-warning-surface); }
+    .bg-white { --miku-native-fill: var(--color-white); }
+    .bg-white\/10 { --miku-native-fill: color-mix(in oklab, var(--color-white) 10%, transparent); }
+    .bg-white\/20 { --miku-native-fill: color-mix(in oklab, var(--color-white) 20%, transparent); }
+    .bg-white\/35 { --miku-native-fill: color-mix(in oklab, var(--color-white) 35%, transparent); }
+    .bg-white\/60 { --miku-native-fill: color-mix(in oklab, var(--color-white) 60%, transparent); }
+    .bg-white\/70 { --miku-native-fill: color-mix(in oklab, var(--color-white) 70%, transparent); }
+    .bg-white\/75 { --miku-native-fill: color-mix(in oklab, var(--color-white) 75%, transparent); }
+    .bg-white\/90 { --miku-native-fill: color-mix(in oklab, var(--color-white) 90%, transparent); }
+    .bg-yellow\/10 { --miku-native-fill: color-mix(in oklab, var(--color-yellow) 10%, transparent); }
+    .bg-yellow\/15 { --miku-native-fill: color-mix(in oklab, var(--color-yellow) 15%, transparent); }
+    .bg-primary-soft-alpha { --miku-native-fill: var(--color-background-primary-soft-alpha); }
+    .bg-primary-surface { --miku-native-fill: var(--color-background-primary-surface); }
+    .bg-primary-ghost-hover { --miku-native-fill: var(--color-background-primary-ghost-hover); }
+    .bg-primary-ghost-active { --miku-native-fill: var(--color-background-primary-ghost-active); }
+    .bg-secondary-solid { --miku-native-fill: var(--color-background-secondary-solid); }
+    .bg-secondary-soft-alpha { --miku-native-fill: var(--color-background-secondary-soft-alpha); }
+    .bg-secondary-surface { --miku-native-fill: var(--color-background-secondary-surface); }
+    .bg-secondary-ghost-hover { --miku-native-fill: var(--color-background-secondary-ghost-hover); }
+    .bg-secondary-ghost-active { --miku-native-fill: var(--color-background-secondary-ghost-active); }
+    .bg-danger-soft-alpha { --miku-native-fill: var(--color-background-danger-soft-alpha); }
+    .bg-danger-ghost-hover { --miku-native-fill: var(--color-background-danger-ghost-hover); }
+    .bg-danger-ghost-active { --miku-native-fill: var(--color-background-danger-ghost-active); }
+    .bg-success-soft-alpha { --miku-native-fill: var(--color-background-success-soft-alpha); }
+    .bg-success-surface { --miku-native-fill: var(--color-background-success-surface); }
+    .bg-success-ghost-hover { --miku-native-fill: var(--color-background-success-ghost-hover); }
+    .bg-success-ghost-active { --miku-native-fill: var(--color-background-success-ghost-active); }
+    .bg-warning-soft-alpha { --miku-native-fill: var(--color-background-warning-soft-alpha); }
+    .bg-warning-ghost-hover { --miku-native-fill: var(--color-background-warning-ghost-hover); }
+    .bg-warning-ghost-active { --miku-native-fill: var(--color-background-warning-ghost-active); }
+    .bg-caution-solid { --miku-native-fill: var(--color-background-caution-solid); }
+    .bg-caution-soft { --miku-native-fill: var(--color-background-caution-soft); }
+    .bg-caution-soft-alpha { --miku-native-fill: var(--color-background-caution-soft-alpha); }
+    .bg-caution-surface { --miku-native-fill: var(--color-background-caution-surface); }
+    .bg-caution-ghost-hover { --miku-native-fill: var(--color-background-caution-ghost-hover); }
+    .bg-caution-ghost-active { --miku-native-fill: var(--color-background-caution-ghost-active); }
+    .bg-info-soft-alpha { --miku-native-fill: var(--color-background-info-soft-alpha); }
+    .bg-info-ghost-hover { --miku-native-fill: var(--color-background-info-ghost-hover); }
+    .bg-info-ghost-active { --miku-native-fill: var(--color-background-info-ghost-active); }
+    .bg-discovery-solid { --miku-native-fill: var(--color-background-discovery-solid); }
+    .bg-discovery-soft-alpha { --miku-native-fill: var(--color-background-discovery-soft-alpha); }
+    .bg-discovery-surface { --miku-native-fill: var(--color-background-discovery-surface); }
+    .bg-discovery-ghost-hover { --miku-native-fill: var(--color-background-discovery-ghost-hover); }
+    .bg-discovery-ghost-active { --miku-native-fill: var(--color-background-discovery-ghost-active); }
+    .bg-chart-red { --miku-native-fill: var(--color-chart-red); }
+    .bg-chart-blue { --miku-native-fill: var(--color-chart-blue); }
+    .bg-chart-green { --miku-native-fill: var(--color-chart-green); }
+    .bg-chart-yellow { --miku-native-fill: var(--color-chart-yellow); }
+    .bg-chart-purple { --miku-native-fill: var(--color-chart-purple); }
+    .bg-current { --miku-native-fill: currentColor; }
+    .bg-transparent { --miku-native-fill: transparent; }
+    .bg-chart-red\/15 { --miku-native-fill: color-mix(in srgb, var(--color-chart-red) 15%, transparent); }
+    .bg-chart-red\/20 { --miku-native-fill: color-mix(in srgb, var(--color-chart-red) 20%, transparent); }
+    .bg-chart-red\/25 { --miku-native-fill: color-mix(in srgb, var(--color-chart-red) 25%, transparent); }
+    .bg-chart-red\/30 { --miku-native-fill: color-mix(in srgb, var(--color-chart-red) 30%, transparent); }
+    .bg-chart-red\/40 { --miku-native-fill: color-mix(in srgb, var(--color-chart-red) 40%, transparent); }
+    .bg-chart-red\/50 { --miku-native-fill: color-mix(in srgb, var(--color-chart-red) 50%, transparent); }
+    .bg-chart-red\/60 { --miku-native-fill: color-mix(in srgb, var(--color-chart-red) 60%, transparent); }
+    .bg-chart-red\/75 { --miku-native-fill: color-mix(in srgb, var(--color-chart-red) 75%, transparent); }
+    .bg-chart-red\/80 { --miku-native-fill: color-mix(in srgb, var(--color-chart-red) 80%, transparent); }
+    .bg-chart-red\/90 { --miku-native-fill: color-mix(in srgb, var(--color-chart-red) 90%, transparent); }
+    .bg-chart-red\/95 { --miku-native-fill: color-mix(in srgb, var(--color-chart-red) 95%, transparent); }
+    .bg-text\/40 { --miku-native-fill: color-mix(in srgb, var(--color-text) 40%, transparent); }
+    .bg-text\/50 { --miku-native-fill: color-mix(in srgb, var(--color-text) 50%, transparent); }
+    .bg-text\/60 { --miku-native-fill: color-mix(in srgb, var(--color-text) 60%, transparent); }
+    .bg-text\/75 { --miku-native-fill: color-mix(in srgb, var(--color-text) 75%, transparent); }
+    .bg-text\/80 { --miku-native-fill: color-mix(in srgb, var(--color-text) 80%, transparent); }
+    .bg-text\/90 { --miku-native-fill: color-mix(in srgb, var(--color-text) 90%, transparent); }
+    .bg-text\/95 { --miku-native-fill: color-mix(in srgb, var(--color-text) 95%, transparent); }
+    .bg-primary-solid\/5 { --miku-native-fill: color-mix(in srgb, var(--color-background-primary-solid) 5%, transparent); }
+    .bg-primary-solid\/10 { --miku-native-fill: color-mix(in srgb, var(--color-background-primary-solid) 10%, transparent); }
+    .bg-primary-solid\/15 { --miku-native-fill: color-mix(in srgb, var(--color-background-primary-solid) 15%, transparent); }
+    .bg-primary-solid\/20 { --miku-native-fill: color-mix(in srgb, var(--color-background-primary-solid) 20%, transparent); }
+    .bg-primary-solid\/25 { --miku-native-fill: color-mix(in srgb, var(--color-background-primary-solid) 25%, transparent); }
+    .bg-primary-solid\/30 { --miku-native-fill: color-mix(in srgb, var(--color-background-primary-solid) 30%, transparent); }
+    .bg-primary-solid\/40 { --miku-native-fill: color-mix(in srgb, var(--color-background-primary-solid) 40%, transparent); }
+    .bg-primary-solid\/50 { --miku-native-fill: color-mix(in srgb, var(--color-background-primary-solid) 50%, transparent); }
+    .bg-primary-solid\/60 { --miku-native-fill: color-mix(in srgb, var(--color-background-primary-solid) 60%, transparent); }
+    .bg-primary-solid\/70 { --miku-native-fill: color-mix(in srgb, var(--color-background-primary-solid) 70%, transparent); }
+    .bg-primary-solid\/75 { --miku-native-fill: color-mix(in srgb, var(--color-background-primary-solid) 75%, transparent); }
+    .bg-primary-solid\/80 { --miku-native-fill: color-mix(in srgb, var(--color-background-primary-solid) 80%, transparent); }
+    .bg-primary-solid\/90 { --miku-native-fill: color-mix(in srgb, var(--color-background-primary-solid) 90%, transparent); }
+    .bg-primary-solid\/95 { --miku-native-fill: color-mix(in srgb, var(--color-background-primary-solid) 95%, transparent); }
+    :is([class~="hover:bg-background-primary-ghost-hover/50"], [class~="not-disabled:not-aria-disabled:hover:bg-background-primary-ghost-hover/50"]) { --miku-native-hover-fill: color-mix(in oklab, var(--color-background-primary-ghost-hover) 50%, transparent); }
+    :is([class~="hover:bg-background-primary-ghost-hover/60"], [class~="not-disabled:not-aria-disabled:hover:bg-background-primary-ghost-hover/60"]) { --miku-native-hover-fill: color-mix(in oklab, var(--color-background-primary-ghost-hover) 60%, transparent); }
+    :is([class~="hover:bg-background-secondary-soft-alpha"], [class~="not-disabled:not-aria-disabled:hover:bg-background-secondary-soft-alpha"]) { --miku-native-hover-fill: var(--color-background-secondary-soft-alpha); }
+    :is([class~="hover:bg-black"], [class~="not-disabled:not-aria-disabled:hover:bg-black"]) { --miku-native-hover-fill: var(--color-black); }
+    :is([class~="hover:bg-black/20"], [class~="not-disabled:not-aria-disabled:hover:bg-black/20"]) { --miku-native-hover-fill: color-mix(in oklab, var(--color-black) 20%, transparent); }
+    :is([class~="hover:bg-black/5"], [class~="not-disabled:not-aria-disabled:hover:bg-black/5"]) { --miku-native-hover-fill: color-mix(in oklab, var(--color-black) 5%, transparent); }
+    :is([class~="hover:bg-black/7"], [class~="not-disabled:not-aria-disabled:hover:bg-black/7"]) { --miku-native-hover-fill: color-mix(in oklab, var(--color-black) 7%, transparent); }
+    :is([class~="hover:bg-chart-red/10"], [class~="not-disabled:not-aria-disabled:hover:bg-chart-red/10"]) { --miku-native-hover-fill: color-mix(in oklab, var(--color-chart-red) 10%, transparent); }
+    :is([class~="hover:bg-chart-red/20"], [class~="not-disabled:not-aria-disabled:hover:bg-chart-red/20"]) { --miku-native-hover-fill: color-mix(in srgb, var(--color-chart-red) 20%, transparent); }
+    :is([class~="hover:bg-current"], [class~="not-disabled:not-aria-disabled:hover:bg-current"]) { --miku-native-hover-fill: currentColor; }
+    :is([class~="hover:bg-current/15"], [class~="not-disabled:not-aria-disabled:hover:bg-current/15"]) { --miku-native-hover-fill: currentColor; }
+    :is([class~="hover:bg-danger-soft-alpha"], [class~="not-disabled:not-aria-disabled:hover:bg-danger-soft-alpha"]) { --miku-native-hover-fill: var(--color-background-danger-soft-alpha); }
+    :is([class~="hover:bg-primary-ghost-hover"], [class~="not-disabled:not-aria-disabled:hover:bg-primary-ghost-hover"]) { --miku-native-hover-fill: var(--color-background-primary-ghost-hover); }
+    :is([class~="hover:bg-primary-soft-alpha"], [class~="not-disabled:not-aria-disabled:hover:bg-primary-soft-alpha"]) { --miku-native-hover-fill: var(--color-background-primary-soft-alpha); }
+    :is([class~="hover:bg-primary-solid"], [class~="not-disabled:not-aria-disabled:hover:bg-primary-solid"]) { --miku-native-hover-fill: var(--color-background-primary-solid); }
+    :is([class~="hover:bg-secondary-soft"], [class~="not-disabled:not-aria-disabled:hover:bg-secondary-soft"]) { --miku-native-hover-fill: var(--color-background-secondary-soft); }
+    :is([class~="hover:bg-surface"], [class~="not-disabled:not-aria-disabled:hover:bg-surface"]) { --miku-native-hover-fill: var(--color-surface); }
+    :is([class~="hover:bg-surface-elevated"], [class~="not-disabled:not-aria-disabled:hover:bg-surface-elevated"]) { --miku-native-hover-fill: var(--color-surface-elevated); }
+    :is([class~="hover:bg-surface-elevated/60"], [class~="not-disabled:not-aria-disabled:hover:bg-surface-elevated/60"]) { --miku-native-hover-fill: color-mix(in oklab, var(--color-surface-elevated) 60%, transparent); }
+    :is([class~="hover:bg-surface-secondary/92"], [class~="not-disabled:not-aria-disabled:hover:bg-surface-secondary/92"]) { --miku-native-hover-fill: color-mix(in oklab, var(--color-surface-secondary) 92%, transparent); }
+    :is([class~="hover:bg-text"], [class~="not-disabled:not-aria-disabled:hover:bg-text"]) { --miku-native-hover-fill: var(--color-text); }
+    :is([class~="hover:bg-text-info/15"], [class~="not-disabled:not-aria-disabled:hover:bg-text-info/15"]) { --miku-native-hover-fill: color-mix(in oklab, var(--color-text-info) 15%, transparent); }
+    :is([class~="hover:bg-text/10"], [class~="not-disabled:not-aria-disabled:hover:bg-text/10"]) { --miku-native-hover-fill: color-mix(in oklab, var(--color-text) 10%, transparent); }
+    :is([class~="hover:bg-text/15"], [class~="not-disabled:not-aria-disabled:hover:bg-text/15"]) { --miku-native-hover-fill: color-mix(in oklab, var(--color-text) 15%, transparent); }
+    :is([class~="hover:bg-text/20"], [class~="not-disabled:not-aria-disabled:hover:bg-text/20"]) { --miku-native-hover-fill: color-mix(in oklab, var(--color-text) 20%, transparent); }
+    :is([class~="hover:bg-text/25"], [class~="not-disabled:not-aria-disabled:hover:bg-text/25"]) { --miku-native-hover-fill: color-mix(in oklab, var(--color-text) 25%, transparent); }
+    :is([class~="hover:bg-text/3"], [class~="not-disabled:not-aria-disabled:hover:bg-text/3"]) { --miku-native-hover-fill: color-mix(in oklab, var(--color-text) 3%, transparent); }
+    :is([class~="hover:bg-text/5"], [class~="not-disabled:not-aria-disabled:hover:bg-text/5"]) { --miku-native-hover-fill: color-mix(in oklab, var(--color-text) 5%, transparent); }
+    :is([class~="hover:bg-text/80"], [class~="not-disabled:not-aria-disabled:hover:bg-text/80"]) { --miku-native-hover-fill: color-mix(in srgb, var(--color-text) 80%, transparent); }
+    :is([class~="hover:bg-token-bg-primary"], [class~="not-disabled:not-aria-disabled:hover:bg-token-bg-primary"]) { --miku-native-hover-fill: var(--color-token-bg-primary); }
+    :is([class~="hover:bg-token-bg-secondary"], [class~="not-disabled:not-aria-disabled:hover:bg-token-bg-secondary"]) { --miku-native-hover-fill: var(--color-token-bg-secondary); }
+    :is([class~="hover:bg-token-bg-tertiary"], [class~="not-disabled:not-aria-disabled:hover:bg-token-bg-tertiary"]) { --miku-native-hover-fill: var(--color-token-bg-tertiary); }
+    :is([class~="hover:bg-transparent"], [class~="not-disabled:not-aria-disabled:hover:bg-transparent"]) { --miku-native-hover-fill: transparent; }
+    :is([class~="hover:bg-white"], [class~="not-disabled:not-aria-disabled:hover:bg-white"]) { --miku-native-hover-fill: var(--color-white); }
+    :is([class~="hover:bg-white/10"], [class~="not-disabled:not-aria-disabled:hover:bg-white/10"]) { --miku-native-hover-fill: color-mix(in oklab, var(--color-white) 10%, transparent); }
+    :is([class~="hover:bg-white/70"], [class~="not-disabled:not-aria-disabled:hover:bg-white/70"]) { --miku-native-hover-fill: color-mix(in oklab, var(--color-white) 70%, transparent); }
+
+    /* Transparency fallback: includes wrappers, sticky headers, fades, loading
+       placeholders, library/viewer/editor interiors and future unnamed surfaces.
+       Use longhands: do not disturb background clipping of text or layout.
+       Do not set opacity on parents (it would fade text and children too).
+       SVG fills, masks and replaced media remain untouched. */
+    :where(html, body, body *):not(svg, svg *) {
+        background-color: transparent !important;
+        box-shadow: none !important;
+    }
+    /* Exclude inline URL images from the reset itself. revert-layer cannot
+       reliably recover an inline sprite after an important layered reset. */
+    :where(html, body, body *):where(:not(svg, svg *, [data-codex-pet-asset-ref],
+        [style*="background-image:"][style*="url("], [style*="background-image :"][style*="url("])) {
+        background-image: none !important;
+    }
+    :where(body, body *):not(svg, svg *)::before,
+    :where(body, body *):not(svg, svg *)::after {
+        background-color: transparent !important;
+        background-image: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Color-bearing badges, tips and status fills retain their native hue.
+       Neutral shell wrappers stay transparent; actual controls read the same
+       paint variables in their role-specific rules. */
+    :is(.bg-accent-action,
+        .bg-avatar-blue,
+        .bg-avatar-gray,
+        .bg-avatar-green,
+        .bg-avatar-purple,
+        .bg-avatar-red,
+        .bg-avatar-yellow,
+        .bg-blue,
+        .bg-blue-50,
+        .bg-blue-100,
+        .bg-blue-500\/10,
+        .bg-blue\/10,
+        .bg-blue\/15,
+        .bg-chart-blue\/10,
+        .bg-chart-blue\/15,
+        .bg-chart-blue\/25,
+        .bg-chart-blue\/70,
+        .bg-chart-green\/10,
+        .bg-chart-green\/15,
+        .bg-chart-green\/20,
+        .bg-chart-orange,
+        .bg-chart-purple\/10,
+        .bg-chart-red\/5,
+        .bg-chart-red\/10,
+        .bg-chart-red\/70,
+        .bg-chart-yellow\/15,
+        .bg-danger-soft,
+        .bg-danger-solid,
+        .bg-danger-surface,
+        .bg-discovery-soft,
+        .bg-green,
+        .bg-green-500\/20,
+        .bg-green-500\/30,
+        .bg-green-600,
+        .bg-green\/10,
+        .bg-green\/20,
+        .bg-info-soft,
+        .bg-info-solid,
+        .bg-info-surface,
+        .bg-orange,
+        .bg-orange-300,
+        .bg-purple\/20,
+        .bg-red,
+        .bg-red-500\/10,
+        .bg-success-soft,
+        .bg-success-solid,
+        .bg-tip-soft,
+        .bg-warning-soft,
+        .bg-warning-solid,
+        .bg-warning-surface,
+        .bg-yellow\/10,
+        .bg-yellow\/15,
+        .bg-danger-soft-alpha,
+        .bg-danger-ghost-hover,
+        .bg-danger-ghost-active,
+        .bg-success-soft-alpha,
+        .bg-success-surface,
+        .bg-success-ghost-hover,
+        .bg-success-ghost-active,
+        .bg-warning-soft-alpha,
+        .bg-warning-ghost-hover,
+        .bg-warning-ghost-active,
+        .bg-caution-solid,
+        .bg-caution-soft,
+        .bg-caution-soft-alpha,
+        .bg-caution-surface,
+        .bg-caution-ghost-hover,
+        .bg-caution-ghost-active,
+        .bg-info-soft-alpha,
+        .bg-info-ghost-hover,
+        .bg-info-ghost-active,
+        .bg-discovery-solid,
+        .bg-discovery-soft-alpha,
+        .bg-discovery-surface,
+        .bg-discovery-ghost-hover,
+        .bg-discovery-ghost-active,
+        .bg-chart-red,
+        .bg-chart-blue,
+        .bg-chart-green,
+        .bg-chart-yellow,
+        .bg-chart-purple,
+        .bg-chart-red\/15,
+        .bg-chart-red\/20,
+        .bg-chart-red\/25,
+        .bg-chart-red\/30,
+        .bg-chart-red\/40,
+        .bg-chart-red\/50,
+        .bg-chart-red\/60,
+        .bg-chart-red\/75,
+        .bg-chart-red\/80,
+        .bg-chart-red\/90,
+        .bg-chart-red\/95) {
+        background-color: color-mix(in srgb, var(--miku-native-fill) 85%, transparent) !important;
+    }
+
+    /* Main wallpaper — original image and dark tint, no opaque fallback fill. */
+    html { background-color: transparent !important; }
     body {
-        background: linear-gradient(var(--miku-wallpaper-tint, transparent), var(--miku-wallpaper-tint, transparent)),
-        url(https://i.ibb.co/C3RYb8XY/wallhaven-yxp85l.png) 0px fixed !important;
-        image-rendering: -webkit-optimize-contrast;
+
+        background-image: linear-gradient(var(--miku-wallpaper-tint), var(--miku-wallpaper-tint)),
+            url("https://i.ibb.co/C3RYb8XY/wallhaven-yxp85l.png") !important;
+        background-position: center !important;
         background-size: cover !important;
         background-repeat: no-repeat !important;
+        background-attachment: fixed !important;
     }
 
-
-    @layer utilities {
-
-        /*settings background*/
-        div[data-state="open"][class*="before:bg-"]::before {
-            background: rgb(var(--miku-overlay-rgb, 0 0 0) / .06) !important;
-        }
-        /*create project panel background*/
-        dialog[class*="bg-gray-200"] {
-            background-color: transparent !important;
-            background-image: none !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-        }
+    /* Masked icons use a background color as foreground ink. Clearing that
+       color erases Rename/Pin/Share/Archive/Delete icons. Restrict the exception
+       to URL masks: text-fade gradient masks must keep transparent backgrounds. */
+    [aria-hidden="true"][style*="mask-image:"][style*="url("] {
+        background-color: currentColor !important;
     }
 
-
-    @layer utilities {
-        /* Settings search results dropdown */
-        .popover:has([role="listbox"][aria-label="Settings search results"]) {
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-        }
-
-        div[role="listbox"][aria-label="Settings search results"].bg-token-bg-primary {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-            background-image: none !important;
-            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
-            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-            backdrop-filter: blur(10px) saturate(1.2) !important;
-            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
-        }
-
-        th[class*="bg-token-main-surface-primary"] {
-            background: rgb(var(--miku-overlay-rgb, 0 0 0) / .06) !important;
-            background-image: none !important;
-        }
+    /* Profile token activity is a CSS-painted heatmap, not a panel background.
+       Retain the original five-level scale and geometry with translucent ink. */
+    [role="img"] [class*="--profile-usage-level-0"] {
+        background-color: rgb(var(--miku-overlay-rgb) / .12) !important;
+    }
+    [role="img"] [class*="--profile-usage-level-1"] {
+        background-color: color-mix(in srgb, var(--profile-usage-level-1) 85%, transparent) !important;
+    }
+    [role="img"] [class*="--profile-usage-level-2"] {
+        background-color: color-mix(in srgb, var(--profile-usage-level-2) 85%, transparent) !important;
+    }
+    [role="img"] [class*="--profile-usage-level-3"] {
+        background-color: color-mix(in srgb, var(--profile-usage-level-3) 85%, transparent) !important;
+    }
+    [role="img"] [class*="--profile-usage-level-4"] {
+        background-color: color-mix(in srgb, var(--profile-usage-level-4) 85%, transparent) !important;
     }
 
-
-    /*settings search bar*/
-    @layer utilities {
-        input[aria-label="Search settings"] {
-            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
-            background-image: none !important;
-
-            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-
-            transition: background-color 150ms ease,
-            box-shadow 150ms ease,
-            transform 150ms ease;
-        }
-
-        input[aria-label="Search settings"]:hover {
-            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
-            backdrop-filter: blur(4px) saturate(1.15) !important;
-            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
-            transform: translateY(-1px);
-        }
-
-        input[aria-label="Search settings"]:active {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-            transform: translateY(0) scale(0.98);
-        }
-
-        input[aria-label="Search settings"]:focus-visible {
-            outline: none !important;
-            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
-            0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-        }
+    /* Left sidebar (new app shell + older rollout), top/bottom sidebar bars. */
+    :is([data-app-shell-left-panel-appearance], #stage-slideover-sidebar) {
+        background-color: var(--miku-glass-soft) !important;
+        backdrop-filter: blur(2px) saturate(1.1) !important;
+        -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
     }
 
-
-    /* left sidebar background*/
-    #stage-slideover-sidebar {
-        background: transparent !important;
+    /* Composer / edit prompt: current body hook avoids nested double glass.
+       No padding/height overrides: single-line, multiline and mobile stay native. */
+    :is([data-composer-body], [class~="group/user-message"] form:has([data-composer-markdown]), [data-conversation-screenshot-content]:has(textarea)) {
+        background-color: var(--miku-glass-soft) !important;
+        border-radius: var(--composer-border-radius, 26px) !important;
+        box-shadow: 0 10px 26px rgba(0,0,0,.20), inset 0 1px 0 var(--miku-rim) !important;
+        transition: background-color 250ms ease, box-shadow 200ms ease;
     }
-    #stage-slideover-sidebar .bg-token-sidebar-surface-primary {
-        background: transparent !important;
-        backdrop-filter: blur(2px) saturate(1.1);
-        -webkit-backdrop-filter: blur(2px) saturate(1.1);
+    :is([data-composer-body], [class~="group/user-message"] form:has([data-composer-markdown]), [data-conversation-screenshot-content]:has(textarea)):is(:hover, :focus-within) {
+        background-color: var(--miku-glass-panel) !important;
+        backdrop-filter: blur(2px) !important;
+        -webkit-backdrop-filter: blur(2px) !important;
     }
+    [class~="group/user-message"] form:has([data-composer-markdown]) {
+        background-color: var(--miku-glass-selected) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+    }
+    :is([data-composer-markdown], :where(#prompt-textarea), [contenteditable="true"], input, textarea) {
+        caret-color: var(--miku-accent) !important;
 
-
-    /*search panel*/
-    @layer utilities {
-        [data-testid="modal-global-search"] [role="search"] {
-            background-color: transparent !important;
-            background-image: none !important;
-        }
-
-        [data-testid="modal-global-search"] [class*="filterBarSticky"] {
-            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .07) !important;
-            background-image: none !important;
-            border-color: transparent !important;
-        }
-
-        /*clear / close search buttons*/
-        [data-testid="modal-global-search"] .interactive-button-secondary {
-            background-color: transparent !important;
-            background-image: none !important;
-            box-shadow: none !important;
-            border-color: transparent !important;
-        }
-
-        [data-testid="modal-global-search"] .interactive-button-secondary:hover,
-        [data-testid="modal-global-search"] .interactive-button-secondary:focus,
-        [data-testid="modal-global-search"] .interactive-button-secondary:focus-visible,
-        [data-testid="modal-global-search"] .interactive-button-secondary:active {
-            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .05) !important;
-            background-image: none !important;
-            box-shadow: none !important;
-            border-color: transparent !important;
-        }
-
-        /*search chat preview*/
-        [data-testid="global-search-chat-hover-preview"] {
-            background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-        }
-        [data-testid="global-search-chat-hover-preview"] [class*="chatHoverPreviewUserBubble"],
-        [data-testid="global-search-chat-hover-preview"] [class*="chatHoverPreviewAssistantText"] {
-            background-color: transparent !important;
-            background-image: none !important;
-            border-color: transparent !important;
-            box-shadow: none !important;
-        }
-
-        /*loading icons*/
-        .skeleton [class*="skeleton-"],
-        .skeleton-child {
-            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .05) !important;
-            background-image: none !important;
-            box-shadow: none !important;
-            border-color: transparent !important;
-        }
-
-        [data-testid="modal-global-search"] [class*="loadingIcon"],
-        [data-testid="modal-global-search"] [class*="loadingTitle"],
-        [data-testid="modal-global-search"] [class*="loadingSubtitle"],
-        [data-testid="modal-global-search"] [class*="loadingImageTile"] {
-            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .05) !important;
-            background-image: none !important;
-            box-shadow: none !important;
-            border-color: transparent !important;
-        }
-
-        [data-testid="modal-global-search"] [class*="Skeleton"] {
-            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .05) !important;
-            background-image: none !important;
-            box-shadow: none !important;
-            border-color: transparent !important;
-        }
     }
 
-
-    /*search -> mactched images bg*/
-    @layer utilities {
-        [data-testid="modal-global-search"] [class*="imageResultGridTile"] {
-            background-color: var(--miku-glass-faint, rgba(255, 255, 255, 0.05)) !important;
-            background-image: none !important;
-            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            transition: background-color 180ms ease,
-            box-shadow 180ms ease,
-            transform 180ms ease;
-        }
-    }
-
-
-    /*image placeholder*/
-    @layer utilities {
-        [data-testid^="artifact-card-tile-libfile_"] [class*="imagePlaceholder"] {
-            background-color: transparent !important;
-            background-image: none !important;
-        }
-        [data-testid="image-gen-card-shimmer"] {
-            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .05) !important;
-            background-image: none !important;
-            box-shadow: none !important;
-            border-color: transparent !important;
-        }
-
-        [class*="imagegen-image"] {
-            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .05) !important;
-            background-image: none !important;
-            box-shadow: none !important;
-            border-color: transparent !important;
-        }
-    }
-
-
-    /*claim offer button*/
-    @layer utilities {
-        #stage-slideover-sidebar button.btn.bg-token-bg-primary {
-            background: transparent !important;
-            border-color: transparent !important;
-            color: var(--miku-accent, rgba(0, 204, 255)) !important;
-
-            transition: background 0.25s ease,
-            box-shadow 0.2s ease;
-        }
-        #stage-slideover-sidebar button.btn.bg-token-bg-primary:hover {
-            background: rgba(99, 151, 255, 0.2) !important;
-            border-color: rgba(99, 198, 255, .6) !important;
-            backdrop-filter: saturate(1);
-            -webkit-backdrop-filter: saturate(1);
-
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.2 * var(--miku-rim-strength, 1)));
-        }
-        #stage-slideover-sidebar button.btn.bg-token-bg-primary:active {
-            transform: scale(0.99);
-            background: rgba(99 198 255 / .5);
-
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25),
-            inset 0 2px 6px rgba(0, 0, 0, 0.12);
-        }
-    }
-
-
-    /* bottom & top menu bar within left sidebar*/
-    .stage-sidebar-pure-surface .bg-\(--sidebar-surface-primary\) {
-        background: transparent !important;
-    }
-
-
-    /*temporary chat & free offer background disable*/
-    #page-header .translucent-surface {
-        background: transparent !important;
-        backdrop-filter: none !important;
-    }
-
-
-    /*free offer button*/
-    .button-glimmer-cta {
-        background: transparent !important;
-        border-color: transparent !important;
-        color: var(--miku-accent, rgba(0, 204, 255)) !important;
-
-        transition: background 0.25s ease,
-        box-shadow 0.2s ease;
-    }
-    .button-glimmer-cta:hover {
-        background: rgba(99, 151, 255, 0.2) !important;
-        border-color: rgba(99, 198, 255, .6) !important;
-        backdrop-filter: saturate(1);
-        -webkit-backdrop-filter: saturate(1);
-
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, calc(0.2 * var(--miku-rim-strength, 1)));
-    }
-    .button-glimmer-cta:active {
-        transform: scale(0.99);
-        background: rgba(99 198 255 / .5);
-
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25),
-        inset 0 2px 6px rgba(0, 0, 0, 0.12);
-    }
-
-
-    /*chat / work switch pill*/
-    @layer utilities {
-        #page-header [role="radiogroup"] [class*="bg-token-bg-primary"][class*="absolute"] {
-            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
-            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-        }
-    }
-    /*chat / work switch background*/
-    #page-header [role="radiogroup"] {
-        background: none !important;
-    }
-
-
-    /*message textbox */
-    [data-type="unified-composer"] .shadow-short-composer {
-        background: transparent !important;
-
-        border-radius: 12px;
-        padding: 14px 18px;
-
-        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, calc(0.08 * var(--miku-rim-strength, 1)));
-
-        transition: background 0.25s ease,
-        box-shadow 0.2s ease,
-        transform 0.25s ease;
-    }
-    [data-type="unified-composer"] .shadow-short-composer:focus-within {
-        background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
-        border-color: rgba(233, 233, 233, calc(0.35 * var(--miku-rim-strength, 1)));
-        backdrop-filter: blur(2px);
-        -webkit-backdrop-filter: blur(2px);
-    }
-    [data-type="unified-composer"] .shadow-short-composer:hover {
-        background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
-        backdrop-filter: blur(2px);
-        -webkit-backdrop-filter: blur(2px);
-        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, calc(0.08 * var(--miku-rim-strength, 1)))
-    }
-    [data-type="unified-composer"] .shadow-short-composer:active {
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, calc(0.1 * var(--miku-rim-strength, 1)));
-    }
-    [data-composer-body] {
-        background-color: transparent !important;
-    }
-
-
-    /* Composer tool popup */
-    @layer utilities {
-        div[role="toolbar"] {
-            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
-            background-image: none !important;
-
-            border: 1px solid rgba(255, 255, 255, calc(0.3 * var(--miku-rim-strength, 1))) !important;
-
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.4 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(10px) saturate(1.2) !important;
-            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
-        }
-        /*link input bg*/
-        div[role="toolbar"] input[class*="bg-token-bg-primary"] {
-            background-color: transparent !important;
-            background-image: none !important;
-            border-color: transparent !important;
-            box-shadow: none !important;
-        }
-    }
-
-    /*send prompt/start voice button*/
-    [data-composer-surface="true"] .composer-submit-button-color {
-        background: transparent;
-        transition: background 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.15s ease;
-    }
-    [data-composer-surface="true"] .composer-submit-button-color:hover {
-        background: rgb(110 205 255 / .5);
-
-        backdrop-filter: saturate(1);
-        -webkit-backdrop-filter: saturate(1);
-
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, calc(0.2 * var(--miku-rim-strength, 1)));
-    }
-    [data-composer-surface="true"] .composer-submit-button-color:active {
-        transform: scale(0.99);
-        background: rgba(110 205 255 / .5);
-
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25),
-        inset 0 2px 6px rgba(0, 0, 0, 0.12);
-    }
-
-
-    /*plugins, files, folders & skills popover background ("+"button popover)*/
-    .popover {
-        background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
-        backdrop-filter: blur(5px) saturate(1.1);
-        -webkit-backdrop-filter: blur(5px) saturate(1.1);
-    }
-
-    /*disclaimer background & shadow*/
-    [data-testid="thread-disclaimer"],
-    [data-testid="thread-disclaimer"] * {
-        background: transparent !important;
-        background-color: transparent !important;
-        background-image: none !important;
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        box-shadow: none !important;
-        border-color: transparent !important;
-        color: var(--miku-text, #000) !important;
-        /*disclaimer text color*/
-    }
-
-
-    /* write or edit / search the web dropdown background under composer*/
-    @layer utilities {
-        div.absolute.start-0.z-\[-1\].top-full .bg-surface-primary,
-        div.absolute.start-0.z-\[-1\].top-full.bg-surface-primary {
-            background-color: transparent !important;
-            background-image: none !important;
-        }
-    }
-
-
-    /*edit message textbox*/
-    [data-conversation-screenshot-content] > .bg-token-main-surface-tertiary {
-        background: transparent !important;
-
-        border-radius: 12px;
-        padding: 14px 18px;
-
-        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, calc(0.08 * var(--miku-rim-strength, 1)));
-
-        transition: background 0.25s ease,
-        box-shadow 0.25s ease,
-        transform 0.25s ease;
-    }
-    [data-conversation-screenshot-content] > .bg-token-main-surface-tertiary:focus-within {
-        background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
-        border-color: rgba(233, 233, 233, calc(0.35 * var(--miku-rim-strength, 1)));
-        backdrop-filter: blur(2px);
-        -webkit-backdrop-filter: blur(2px);
-    }
-    [data-conversation-screenshot-content] > .bg-token-main-surface-tertiary:hover {
-        background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
-        backdrop-filter: blur(2px);
-        -webkit-backdrop-filter: blur(2px);
-        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, calc(0.08 * var(--miku-rim-strength, 1)))
-    }
-    [data-conversation-screenshot-content] > .bg-token-main-surface-tertiary:active {
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, calc(0.1 * var(--miku-rim-strength, 1)));
-    }
-
-
-    /*source flyout*/
-    @layer utilities {
-        [data-testid="stage-thread-flyout"] [class*="bg-token-"],
-        [data-testid="stage-thread-flyout"] [class*="bg-surface-"],
-        [data-testid="stage-thread-flyout"] [class*="bg-(--"],
-        [data-testid="bar-search-sources-header"] {
-            background-color: transparent !important;
-            background-image: none !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-        }
-        [data-testid="stage-thread-flyout"] {
-            background-color: transparent !important;
-            background-image: none !important;
-            box-shadow: none !important;
-            border-color: transparent !important;
-        }
-    }
-
-
-    @layer utilities {
-        /*menu dropdowns background*/
-        [data-radix-menu-content] {
-            background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-        }
-
-        /*create project menu panel bg*/
-        [data-testid="modal-new-project-enhanced"][class*="bg-token-bg-primary"] {
-            background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-        }
-
-        /*create project tips*/
-        [data-testid="create-new-project-form"] aside[class*="bg-token-bg-tertiary"] {
-            background-color: transparent !important;
-            background-image: none !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-        }
-        /*project setting background*/
-        [data-testid="modal-new-project-enhanced"][class*="absolute"][class*="inset-0"] {
-            background-color: transparent !important;
-            background-image: none !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-        }
-
-        /*share project tip*/
-        [data-testid="modal-share-project"] div[class*="bg-token-bg-tertiary"] {
-            background-color: transparent !important;
-            background-image: none !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-        }
-
-        /*shortcut settings bg*/
-        [data-testid="keyboard-shortcuts-dialog"] {
-            background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
-            backdrop-filter: blur(6px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(6px) saturate(1.1) !important;
-        }
-        [data-testid="keyboard-shortcuts-dialog"] [class*="bg-token-bg-primary"] {
-            background-color: transparent !important;
-            background-image: none !important;
-        }
-        [data-testid="keyboard-shortcuts-dialog"] [class*="bg-inherit"] {
-            background-color: transparent !important;
-            background-image: none !important;
-        }
-    }
-
-
-    /*linear gradient background over chats under a project*/
-    .content-fade-top::after {
-        background-image: none !important;
-        backdrop-filter: blur(2px) saturate(1.1);
-        -webkit-backdrop-filter: blur(2px) saturate(1.1);
-    }
-
-
-    /*menu items*/
-    .__menu-item {
-        transition: background 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.2s ease;
-        --menu-item-highlighted: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-        --menu-item-active: var(--miku-glass-pressed, rgba(255, 255, 255, 0.65)) !important;
-        --menu-item-open: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
-    }
-    .__menu-item:hover {
-        background: var(--menu-item-highlighted) !important;
-        transform: translateY(-1px);
-        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, calc(0.85 * var(--miku-rim-strength, 1)));
-    }
-    .__menu-item:active {
-        background: var(--menu-item-active) !important;
-        transform: translateY(0);
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14),
-        inset 0 2px 6px rgba(0, 0, 0, 0.08);
-    }
-    .__menu-item[aria-expanded="true"],
-    .__menu-item.open {
-        background: var(--menu-item-open) !important;
-        box-shadow: inset 0 0 0 1px rgba(232, 232, 232, calc(0.25 * var(--miku-rim-strength, 1))),
-        0 8px 22px rgba(0, 0, 0, 0.16);
-    }
-
-
-    /*prompt text color*/
-    #prompt-textarea {
-        color: var(--miku-text, #000) !important;
-    }
-    /*text selection color*/
-    ::selection {
-        background: rgba(99, 236, 255, .35) !important;
-        color: var(--miku-text, black) !important;
-    }
-    /*caret color*/
-    .ProseMirror {
-        caret-color: var(--miku-accent, rgb(99, 151, 255)) !important;
-    }
-
-
-    /*bottom gradient in conversation*/
-    #thread-bottom-container::after {
-        background-color: transparent !important;
-        opacity: 0 !important;
-    }
-
-
-    /* code block surface*/
-    [class*="bg-(--code-block-surface)"] {
-        background-color: transparent !important;
-    }
-
-
-    /* ChatGPT message bubble */
-    .markdown {
-        --bg-alpha: calc(var(--miku-assistant-rest-alpha, 0.55) - (var(--GPTmarkdownHover) * var(--miku-assistant-hover-delta, 0.47)));
-        --blur-val: calc(5px - (var(--GPTmarkdownHover) * 3px));
-        --shd-y: calc(12px - (var(--GPTmarkdownHover) * 4px));
-        --shd-blur: calc(28px - (var(--GPTmarkdownHover) * 6px));
-        --shd-alpha: calc(0.45 - (var(--GPTmarkdownHover) * 0.13));
-        --inset-alpha: calc(0.08 - (var(--GPTmarkdownHover) * 0.02));
-
-        background: rgba(var(--miku-assistant-rgb, 255, 255, 255), var(--bg-alpha)) !important;
-
-        backdrop-filter: blur(var(--blur-val));
-        -webkit-backdrop-filter: blur(var(--blur-val));
-
-        box-shadow: 0 var(--shd-y) var(--shd-blur) rgba(0, 0, 0, var(--shd-alpha)),
-        inset 0 1px 0 rgba(255, 255, 255, var(--inset-alpha));
-
-        max-width: unset;
-        overflow-x: hidden;
-        min-width: 0 !important;
-
+    /* ChatGPT message bubble — scope to responses, not every markdown document. */
+    :is([data-markdown-text-style="assistant-message"], [data-message-author-role="assistant"] .markdown) {
+        background-color: rgba(var(--miku-assistant-rgb), calc(var(--miku-assistant-rest-alpha) - var(--GPTmarkdownHover, 1) * var(--miku-assistant-hover-delta))) !important;
+        backdrop-filter: blur(calc(5px - var(--GPTmarkdownHover, 1) * 3px)) !important;
+        -webkit-backdrop-filter: blur(calc(5px - var(--GPTmarkdownHover, 1) * 3px)) !important;
+        box-shadow: 0 calc(12px - var(--GPTmarkdownHover, 1) * 4px)
+            calc(28px - var(--GPTmarkdownHover, 1) * 6px)
+            rgba(0,0,0,calc(.45 - var(--GPTmarkdownHover, 1) * .13)),
+            inset 0 1px 0 rgba(255,255,255,calc(.08 - var(--GPTmarkdownHover, 1) * .02)) !important;
+        min-width: 0;
         border-radius: 18px;
         padding: 14px 18px;
-        margin: 8px 0;
-
-        transition: background 0.25s ease,
-        box-shadow 0.25s ease,
-        backdrop-filter 0.25s ease,
-        transform 0.25s ease;
+        margin-block: 8px;
+        /* Let tables/code scroll horizontally; never clip interactive content. */
+        overflow-wrap: anywhere;
+        transition: background-color 250ms ease, box-shadow 250ms ease, backdrop-filter 250ms ease;
+    }
+    :is([data-markdown-text-style="assistant-message"], [data-message-author-role="assistant"] .markdown):is(:hover, :focus-within) {
+        background-color: var(--miku-glass-active) !important;
+        box-shadow: 0 12px 28px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,calc(.08 * var(--miku-rim-strength))) !important;
+        backdrop-filter: blur(5px) !important;
+        -webkit-backdrop-filter: blur(5px) !important;
     }
 
-    .markdown:hover,
-    .markdown:focus-visible {
-        background: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45),
-        inset 0 1px 0 rgba(255, 255, 255, calc(0.08 * var(--miku-rim-strength, 1)));
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
+    /* User bubble — same hook in normal and temporary chats. */
+    :is([data-user-message-bubble], .user-message-bubble-color) {
+        background-color: rgba(var(--miku-user-rgb), calc(var(--miku-user-rest-alpha) - var(--userMarkdownHover, 1) * var(--miku-user-hover-delta))) !important;
+        backdrop-filter: blur(calc(5px - var(--userMarkdownHover, 1) * 3px)) !important;
+        -webkit-backdrop-filter: blur(calc(5px - var(--userMarkdownHover, 1) * 3px)) !important;
+        box-shadow: 0 calc(10px - var(--userMarkdownHover, 1) * 4px)
+            calc(26px - var(--userMarkdownHover, 1) * 8px)
+            rgba(0,0,0,calc(.25 - var(--userMarkdownHover, 1) * .07)),
+            inset 0 1px 0 rgba(255,255,255,calc((.45 - var(--userMarkdownHover, 1) * .10) * var(--miku-rim-strength))) !important;
+
+        transition: background-color 250ms ease, box-shadow 250ms ease, backdrop-filter 250ms ease;
+    }
+    :is([data-user-message-bubble], .user-message-bubble-color):is(:hover, :focus-within) {
+        background-color: var(--miku-glass-selected) !important;
+        box-shadow: 0 10px 26px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,calc(.45 * var(--miku-rim-strength))) !important;
+        backdrop-filter: blur(5px) !important;
+        -webkit-backdrop-filter: blur(5px) !important;
     }
 
-    [data-message-author-role="assistant"] table {
-        padding-right: 182px;
-        /* extra scroll room */
-        box-sizing: content-box;
+    /* Thread-only header underlap. Extend the existing scroll viewport rather
+       than making it overflow:visible (which would break scrolling/virtualization).
+       The top inset remains INSIDE the scrollport, so it scrolls away naturally.
+       Header actions keep their native stacking order and hit targets. */
+    [data-app-shell-main-surface]:has([data-thread-user-message-navigation-content])
+        > :has(> [data-app-shell-main-content-layout]) {
+        padding-block-start: 0 !important;
+    }
+    /* The shell's clip-path creates a backdrop root: message blur otherwise
+       samples an empty transparent shell instead of the wallpaper. This also
+       affects settings and other reading panes. Native
+       overflow clipping remains in place; only the redundant clip-path goes. */
+    [data-app-shell-main-surface] {
+        clip-path: none !important;
+    }
+    [data-app-shell-main-content-layout] > :has([data-thread-user-message-navigation-content]) {
+        --app-shell-main-content-frame-top-offset: 0px !important;
+        --thread-content-top-inset: calc(var(--app-shell-header-height, var(--height-toolbar, 52px)) + 32px) !important;
+        margin-block-start: 0 !important;
+    }
+    [data-app-shell-main-content-top-fade] > [aria-hidden="true"] {
+        display: none !important;
+    }
+    [data-app-shell-main-surface]:has([data-thread-user-message-navigation-content]) > header,
+    [data-app-shell-main-surface]:has([data-thread-user-message-navigation-content]) [data-app-shell-main-titlebar] {
+        background-color: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
     }
 
-    /*user message bubble in normal chats*/
-    .user-message-bubble-color {
-        --user-bg-alpha: calc(var(--miku-user-rest-alpha, 0.6) - (var(--userMarkdownHover) * var(--miku-user-hover-delta, 0.52)));
-        --user-blur: calc(5px - (var(--userMarkdownHover) * 3px));
-        --user-shd-y: calc(10px - (var(--userMarkdownHover) * 4px));
-        --user-shd-blur: calc(26px - (var(--userMarkdownHover) * 8px));
-        --user-shd-alpha: calc(0.25 - (var(--userMarkdownHover) * 0.07));
-        --user-inset-alpha: calc(0.45 - (var(--userMarkdownHover) * 0.10));
+    /* Reading surfaces: settings (including archived chats), inline directory
+       pages, plugin/skill detail sections, and the profile activity chart.
+       One stronger glass pane behind the content; no opaque page blanket. */
+    :is([class~="group/settings"],
+        [data-app-shell-inline-page-header]:not(:has([data-thread-user-message-navigation-content])),
+        main div:has(> header [data-asset-placement]),
+        section:has(> [role="img"][style*="--profile-usage-level-"])) {
+        background-color: var(--miku-glass-strong) !important;
+        border-radius: 20px !important;
+        box-shadow: var(--miku-shadow-panel) !important;
+        backdrop-filter: blur(12px) saturate(1.1) !important;
+        -webkit-backdrop-filter: blur(12px) saturate(1.1) !important;
 
-        background: rgba(var(--miku-user-rgb, 233, 233, 233), var(--user-bg-alpha)) !important;
-
-        backdrop-filter: blur(var(--user-blur));
-        -webkit-backdrop-filter: blur(var(--user-blur));
-
-        box-shadow: 0 var(--user-shd-y) var(--user-shd-blur) rgba(0, 0, 0, var(--user-shd-alpha)),
-        inset 0 1px 0 rgba(255, 255, 255, var(--user-inset-alpha));
-
-        transition: background 0.25s ease,
-        box-shadow 0.25s ease,
-        backdrop-filter 0.25s ease,
-        transform 0.25s ease;
+    }
+    :is([class~="group/settings"], main div:has(> header [data-asset-placement]),
+        section:has(> [role="img"][style*="--profile-usage-level-"])) {
+        box-sizing: border-box;
+        padding: clamp(16px, 2vw, 28px);
+    }
+    [data-app-shell-inline-page-header] [class~="group/settings"] {
+        background-color: transparent !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
     }
 
-    .user-message-bubble-color:hover,
-    .user-message-bubble-color:focus-visible {
-        background: var(--miku-glass-selected, rgba(233, 233, 233, 0.6)) !important;
+    /* Menus, profile, project creation/sharing, settings search, library picker,
+       file viewer, image editor, writing editor and future semantic popovers.
+       :has(> ...) is a direct-child hook for the new role-free attachment menu. */
+    :is([role="dialog"], dialog, [role="alertdialog"], [role="menu"],
+        [role="listbox"], [data-radix-menu-content], [popover], .popover,
+        :has(> [data-mention-list-scroll-area]),
+        [data-testid="global-search-chat-hover-preview"]) {
+        background-color: var(--miku-glass-panel) !important;
+        border-color: var(--miku-rim) !important;
+        box-shadow: var(--miku-shadow-panel) !important;
+        backdrop-filter: blur(10px) saturate(1.2) !important;
+        -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
 
-        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, calc(0.45 * var(--miku-rim-strength, 1)));
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
     }
-
-
-    /*user message bubble in temporary chats (sep 13, 2026)*/
-    div.bg-token-bg-tertiary:has( > svg[aria-hidden="true"] rect[stroke-dasharray]) {
-        --user-bg-alpha: calc(var(--miku-user-rest-alpha, 0.6) - (var(--userMarkdownHover) * var(--miku-user-hover-delta, 0.52)));
-        --user-blur: calc(5px - (var(--userMarkdownHover) * 3px));
-        --user-shd-y: calc(10px - (var(--userMarkdownHover) * 4px));
-        --user-shd-blur: calc(26px - (var(--userMarkdownHover) * 8px));
-        --user-shd-alpha: calc(0.25 - (var(--userMarkdownHover) * 0.07));
-        --user-inset-alpha: calc(0.45 - (var(--userMarkdownHover) * 0.10));
-
-        background: rgba(var(--miku-user-rgb, 233, 233, 233), var(--user-bg-alpha)) !important;
-
-        backdrop-filter: blur(var(--user-blur));
-        -webkit-backdrop-filter: blur(var(--user-blur));
-
-        box-shadow: 0 var(--user-shd-y) var(--user-shd-blur) rgba(0, 0, 0, var(--user-shd-alpha)),
-        inset 0 1px 0 rgba(255, 255, 255, var(--user-inset-alpha));
-
-        transition: background 0.25s ease,
-        box-shadow 0.25s ease,
-        backdrop-filter 0.25s ease,
-        transform 0.25s ease;
+    /* A listbox inside a dialog already has a glass host; avoid milky stacking. */
+    :is([role="dialog"], dialog, .popover) [role="listbox"] {
+        background-color: transparent !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
     }
-
-    div.bg-token-bg-tertiary:has( > svg[aria-hidden="true"] rect[stroke-dasharray]):hover,
-    div.bg-token-bg-tertiary:has( > svg[aria-hidden="true"] rect[stroke-dasharray]):focus-within {
-        background: var(--miku-glass-selected, rgba(233, 233, 233, 0.6)) !important;
-
-        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, calc(0.45 * var(--miku-rim-strength, 1)));
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
+    :is([role="dialog"], dialog, [role="menu"]):has(p, dl, table, [role="tabpanel"]) {
+        background-color: var(--miku-glass-strong) !important;
     }
-
-
-    /*share, more buttons*/
-    @layer utilities {
-        .btn-secondary {
-            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
-            background-image: none !important;
-
-            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-
-            transition: background-color 150ms ease,
-            box-shadow 150ms ease,
-            transform 150ms ease;
-        }
-
-        /* ---- Hover: slightly brighter, lifted ---- */
-        .btn-secondary:hover {
-            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
-
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(4px) saturate(1.15) !important;
-            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
-
-            transform: translateY(-1px);
-        }
-
-        .btn-secondary:active {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1),
-            inset 0 2px 6px rgba(0, 0, 0, 0.1) !important;
-
-            transform: translateY(0) scale(0.98);
-        }
-
-        .btn-secondary:focus-visible {
-            outline: none !important;
-            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
-            0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-        }
-    }
-
-
-    /*some other buttons: expand/hide sideview, search, close, temporary chat, copy message...*/
-    @layer utilities {
-        button[class*="hover:bg-token-surface-hover"],
-        button[class*="group\/footnote"] {
-            background-color: transparent !important;
-            background-image: none !important;
-
-            transition: background-color 150ms ease,
-            box-shadow 150ms ease,
-            transform 150ms ease,
-            backdrop-filter 150ms ease;
-        }
-
-        button[class*="hover:bg-token-surface-hover"]:hover,
-        button[class*="group\/footnote"]:hover {
-            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-        }
-
-        button[class*="hover:bg-token-surface-hover"]:active,
-        button[class*="group\/footnote"]:active {
-            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
-            transform: scale(0.97);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1),
-            inset 0 2px 6px rgba(0, 0, 0, 0.1) !important;
-        }
-
-        button[class*="hover:bg-token-surface-hover"]:focus-visible,
-        button[class*="group\/footnote"]:focus-visible {
-            outline: none !important;
-            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
-            0 4px 12px rgba(0, 0, 0, 0.1) !important;
-        }
-    }
-
-
-    /*think button shimmer effect*/
-    @layer utilities {
-        .__composer-pill {
-            position: relative;
-
-            background-image: linear-gradient( 115deg,
-            transparent 35%,
-            rgba(255, 255, 255, 0.7) 48%,
-            rgba(255, 255, 255, 0.95) 52%,
-            transparent 65%);
-            background-size: 250% 100%;
-            background-position: 200% 0;
-            background-repeat: no-repeat;
-
-            transition: background-position 900ms cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        .__composer-pill:hover {
-            background-position: -100% 0;
-        }
-    }
-
-
-    /*tooltips*/
-    @layer utilities {
-        .bg-token-bg-tooltip {
-            background-color: rgba(20, 20, 22, 0.72) !important;
-            backdrop-filter: blur(10px) saturate(1.2) !important;
-            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
-            border-color: rgba(255, 255, 255, calc(0.08 * var(--miku-rim-strength, 1))) !important;
-        }
-    }
-
-
-    /*delete chat button*/
-    @layer utilities {
-        .btn-danger {
-            background-color: rgba(239, 68, 68, 0.18) !important;
-            color: var(--miku-danger-text, #7f1d1d) !important;
-            border-color: rgba(239, 68, 68, 0.4) !important;
-
-            backdrop-filter: blur(6px) saturate(1.2) !important;
-            -webkit-backdrop-filter: blur(6px) saturate(1.2) !important;
-
-            transition: background-color 180ms ease, transform 180ms ease;
-        }
-
-        .btn-danger:hover {
-            background-color: rgba(239, 68, 68, 0.3) !important;
-            transform: translateY(-1px);
-        }
-
-        .btn-danger:active {
-            background-color: rgba(239, 68, 68, 0.4) !important;
-            transform: scale(0.97);
-        }
-    }
-
-
-    /*send button after editing message*/
-    @layer utilities {
-        .btn-primary {
-            background-color: rgba(20, 20, 22, 0.72) !important;
-            backdrop-filter: blur(10px) saturate(1.2) !important;
-            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
-            border-color: rgba(255, 255, 255, calc(0.08 * var(--miku-rim-strength, 1))) !important;
-
-            transition: background-color 180ms ease, transform 180ms ease;
-        }
-
-        .btn-primary:hover {
-            background-color: rgba(20, 20, 22, 0.85) !important;
-            transform: translateY(-1px);
-        }
-
-        .btn-primary:active {
-            background-color: rgba(20, 20, 22, 0.95) !important;
-            transform: scale(0.97);
-        }
-    }
-
-
-    /*file attachment blocks*/
-    @layer utilities {
-        .group\/file-tile button.interactive-bg-secondary {
-            background-color: rgba(20, 20, 22, 0.12) !important;
-            border-color: rgba(255, 255, 255, calc(0.08 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(10px) saturate(1.2) !important;
-            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
-        }
-
-        .group\/file-tile button.interactive-bg-secondary:hover,
-        .group\/file-tile button.interactive-bg-secondary:active,
-        .group\/file-tile button.interactive-bg-secondary:focus,
-        .group\/file-tile button.interactive-bg-secondary:focus-visible {
-            background-color: rgba(20, 20, 22, 0.12) !important;
-            border-color: rgba(255, 255, 255, calc(0.08 * var(--miku-rim-strength, 1))) !important;
-            transform: none !important;
-            box-shadow: none !important;
-        }
-    }
-
-
-    /*library sticky toolbar top*/
-    @layer utilities {
-        [data-testid="artifacts-surface-top-controls"] {
-            background-color: transparent !important;
-            background-image: none !important;
-        }
-
-        [data-testid="page-table-toolbar-shell"] {
-            background-color: transparent !important;
-            background-image: none !important;
-
-            backdrop-filter: blur(2px) saturate(1.2) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.2) !important;
-        }
-    }
-
-
-    /*library tip bg*/
-    @layer utilities {
-        .pointer-events-none.absolute.inset-x-0.top-4 [class*="bg-token-bg-primary"] {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-            background-image: none !important;
-
-            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(10px) saturate(1.2) !important;
-            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
-        }
-    }
-
-
-    /*library upload file popup*/
-    @layer utilities {
-        section.fixed.bottom-4 [class*="bg-token-bg-primary"] {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-            background-image: none !important;
-
-            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(10px) saturate(1.2) !important;
-            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
-        }
-    }
-
-
-    /*library search bar*/
-    @layer utilities {
-        input[aria-label="Search library"] {
-            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
-            background-image: none !important;
-
-            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-
-            transition: background-color 150ms ease,
-            box-shadow 150ms ease,
-            transform 150ms ease;
-        }
-
-        input[aria-label="Search library"]:hover {
-            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
-
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(4px) saturate(1.15) !important;
-            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
-
-            transform: translateY(-1px);
-        }
-
-        input[aria-label="Search library"]:active {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1),
-            inset 0 2px 6px rgba(0, 0, 0, 0.1) !important;
-
-            transform: translateY(0) scale(0.98);
-        }
-
-        input[aria-label="Search library"]:focus-visible {
-            outline: none !important;
-            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
-            0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-        }
-
-        /*file icons in add from library*/
-        [class*="selectableRow"] div[class*="bg-token-bg-primary"][class*="rounded-lg"] {
-            background-color: transparent !important;
-            background-image: none !important;
-            box-shadow: none !important;
-            border-color: transparent !important;
-        }
-
-        /*file icons in library*/
-        [data-library-list-row-icon="true"] {
-            background-color: transparent !important;
-            background-image: none !important;
-            box-shadow: none !important;
-            border-color: transparent !important;
-        }
-    }
-
-
-    @layer utilities {
-        /* More actions button on library file tiles */
-        button[data-page-table-row-actions-focus-target="true"] {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-            background-image: none !important;
-
-            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
-            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.9)) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(6px) saturate(1.15) !important;
-            -webkit-backdrop-filter: blur(6px) saturate(1.15) !important;
-
-            transition: background-color 150ms ease,
-            box-shadow 150ms ease,
-            border-color 150ms ease,
-            transform 150ms ease;
-        }
-
-        button[data-page-table-row-actions-focus-target="true"]:hover {
-            background-color: var(--miku-glass-strong, rgba(255, 255, 255, 0.7)) !important;
-            border-color: rgba(255, 255, 255, calc(0.65 * var(--miku-rim-strength, 1))) !important;
-            color: var(--miku-accent, #0c4a6e) !important;
-
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.8 * var(--miku-rim-strength, 1))) !important;
-
-            transform: translateY(-1px);
-        }
-
-        button[data-page-table-row-actions-focus-target="true"][data-state="open"],
-        button[data-page-table-row-actions-focus-target="true"][aria-expanded="true"] {
-            background-color: var(--miku-glass-solid, rgba(255, 255, 255, 0.75)) !important;
-            color: var(--miku-accent, #0c4a6e) !important;
-        }
-
-        /* Keyboard focus */
-        button[data-page-table-row-actions-focus-target="true"]:focus-visible {
-            outline: none !important;
-            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
-            0 4px 12px rgba(0, 0, 0, 0.1) !important;
-        }
-    }
-
-
-    /*library gear button*/
-    @layer utilities {
-        button[aria-label="Settings"] svg.icon {
-            color: var(--miku-text, #000) !important;
-        }
-    }
-
-    /*library file blocks*/
-    @layer utilities {
-        [data-testid^="artifact-card-tile-libfile_"],
-        [role="button"][aria-label^="Open folder "] > [class*="bg-token-bg-primary"] {
-            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
-            background-image: none !important;
-
-            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(10px) saturate(1.2) !important;
-            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
-
-            transition: background-color 200ms cubic-bezier(0.22, 1, 0.36, 1),
-            box-shadow 200ms cubic-bezier(0.22, 1, 0.36, 1),
-            transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        [data-testid^="artifact-card-tile-libfile_"]:hover,
-        [role="button"][aria-label^="Open folder "] > [class*="bg-token-bg-primary"]:hover {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-
-            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
-
-            transform: translateY(-2px);
-        }
-
-        [data-testid^="artifact-card-tile-libfile_"]:focus-within,
-        [role="button"][aria-label^="Open folder "] > [class*="bg-token-bg-primary"]:focus-within {
-            outline: none !important;
-            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
-            0 10px 26px rgba(0, 0, 0, 0.12) !important;
-        }
-    }
-
-
-    /*library view toggle*/
-    @layer utilities {
-        [class*="refreshedHeaderViewToggle"] button,
-        [class*="popover"] button.btn-ghost[aria-pressed] {
-            background-color: transparent !important;
-            background-image: none !important;
-            border-color: transparent !important;
-            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.85)) !important;
-
-            transition: background-color 150ms ease,
-            box-shadow 150ms ease,
-            transform 150ms ease,
-            backdrop-filter 150ms ease;
-        }
-
-        [class*="refreshedHeaderViewToggle"] button:hover,
-        [class*="popover"] button.btn-ghost[aria-pressed]:hover {
-            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-            color: var(--miku-accent, #0c4a6e) !important;
-        }
-
-        [class*="refreshedHeaderViewToggle"] button:active,
-        [class*="popover"] button.btn-ghost[aria-pressed]:active {
-            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
-            transform: scale(0.97);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1),
-            inset 0 2px 6px rgba(0, 0, 0, 0.1) !important;
-        }
-
-        [class*="refreshedHeaderViewToggle"] button:focus-visible,
-        [class*="popover"] button.btn-ghost[aria-pressed]:focus-visible {
-            outline: none !important;
-            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
-            0 4px 12px rgba(0, 0, 0, 0.1) !important;
-        }
-
-        [class*="refreshedHeaderViewToggle"] button[aria-pressed="true"],
-        [class*="popover"] button.btn-ghost[aria-pressed="true"] {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-            background-image: none !important;
-            color: var(--miku-accent, #0c4a6e) !important;
-            border-color: rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(4px) saturate(1.15) !important;
-            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
-        }
-
-        [class*="refreshedHeaderViewToggle"] button[aria-pressed="true"]:hover,
-        [class*="popover"] button.btn-ghost[aria-pressed="true"]:hover {
-            background-color: var(--miku-glass-selected, rgba(255, 255, 255, 0.6)) !important;
-        }
-    }
-
-
-    /*library file filter*/
-    @layer utilities {
-        button[aria-label="Open filters"] {
-            background-color: transparent !important;
-            background-image: none !important;
-            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.85)) !important;
-
-            transition: background-color 150ms ease,
-            box-shadow 150ms ease,
-            transform 150ms ease,
-            color 150ms ease;
-        }
-
-        button[aria-label="Open filters"]:hover {
-            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
-            color: var(--miku-accent, #0c4a6e) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-        }
-
-        button[aria-label="Open filters"]:focus-visible {
-            outline: none !important;
-            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
-            0 4px 12px rgba(0, 0, 0, 0.1) !important;
-        }
-
-        button[aria-label="Open filters"][data-state="open"] {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-            color: var(--miku-accent, #0c4a6e) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(4px) saturate(1.15) !important;
-            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
-        }
-    }
-
-
-    @layer utilities {
-        /* Empty trash button */
-        [class*="bg-token-bg-secondary/60"] > button {
-            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
-            background-image: none !important;
-
-            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
-            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.9)) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-
-            transition: background-color 150ms ease,
-            box-shadow 150ms ease,
-            border-color 150ms ease,
-            transform 150ms ease;
-        }
-
-        [class*="bg-token-bg-secondary/60"] > button:hover {
-            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
-            border-color: rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-            color: var(--miku-accent, #0c4a6e) !important;
-
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
-
-            transform: translateY(-1px);
-        }
-
-        [class*="bg-token-bg-secondary/60"] > button:active {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-            transform: scale(0.98);
-        }
-    }
-
-
-    /*add from library -> search file -> items rows*/
-    @layer utilities {
-        [class*="popover"] [class*="selectableRow"]::before,
-        [class*="popover"] [class*="selectableRow"]::after {
-            background-color: transparent !important;
-            background-image: none !important;
-            transition: none !important;
-            animation: none !important;
-        }
-
-        [class*="popover"] [class*="selectableRow"]:hover {
-            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .06) !important;
-            background-image: none !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            transition: none !important;
-        }
-
-        [class*="popover"] [class*="selectableRow"]:hover::before {
-            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .06) !important;
-        }
-        [class*="popover"] [class*="selectableRow"]:hover {
-            background-color: transparent !important;
-            box-shadow: none !important;
-            backdrop-filter: none !important;
-        }
-    }
-
-    /*plugin search bar*/
-    @layer utilities {
-        input[aria-label="Search library"],
-        input[aria-label="Search plugins"] {
-            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
-            background-image: none !important;
-
-            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-
-            transition: background-color 150ms ease,
-            box-shadow 150ms ease,
-            transform 150ms ease;
-        }
-
-        input[aria-label="Search library"]:hover,
-        input[aria-label="Search plugins"]:hover {
-            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
-
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(4px) saturate(1.15) !important;
-            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
-
-            transform: translateY(-1px);
-        }
-
-        input[aria-label="Search library"]:active,
-        input[aria-label="Search plugins"]:active {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1),
-            inset 0 2px 6px rgba(0, 0, 0, 0.1) !important;
-
-            transform: translateY(0) scale(0.98);
-        }
-
-        input[aria-label="Search library"]:focus-visible,
-        input[aria-label="Search plugins"]:focus-visible {
-            outline: none !important;
-            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
-            0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-        }
-    }
-
-
-    @layer utilities {
-        /* Add plugin button inside a plugin row */
-        article[class*="hover:bg-token-interactive-bg-secondary-hover"] > button[class*="hover:bg-token-bg-primary"] {
-            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
-            background-image: none !important;
-            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.9)) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-
-            transition: background-color 150ms ease,
-            box-shadow 150ms ease,
-            transform 150ms ease;
-        }
-
-        article[class*="hover:bg-token-interactive-bg-secondary-hover"] > button[class*="hover:bg-token-bg-primary"]:hover {
-            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
-            color: var(--miku-accent, #0c4a6e) !important;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
-            transform: translateY(-1px);
-        }
-
-        article[class*="hover:bg-token-interactive-bg-secondary-hover"] > button[class*="hover:bg-token-bg-primary"]:active {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-            transform: scale(0.97);
-        }
-    }
-
-    @layer utilities {
-        /* Plugin page header title bar */
-        header.h-header-height[class*="bg-surface-primary"] {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-            background-image: none !important;
-
-            backdrop-filter: blur(10px) saturate(1.2) !important;
-            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
-        }
-    }
-
-    @layer utilities {
-        /*Plugin details page */
-        main#main:has([class*="bg-primary"][class*="flex-1"][class*="min-w-0"])::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            pointer-events: none;
-
-            background-color: var(--miku-glass-panel, rgba(255, 255, 255, 0.45));
-            backdrop-filter: blur(10px) saturate(1.2);
-            -webkit-backdrop-filter: blur(10px) saturate(1.2);
-        }
-    }
-
-
-    /*scheduled -> status filter*/
-    @layer utilities {
-        button[aria-label="Filter tasks"] {
-            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
-            background-image: none !important;
-            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
-            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.9)) !important;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-            transition: background-color 150ms ease, box-shadow 150ms ease,
-            border-color 150ms ease, transform 150ms ease;
-        }
-
-        button[aria-label="Filter tasks"]:hover {
-            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
-            border-color: rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-            color: var(--miku-accent, #0c4a6e) !important;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
-            transform: translateY(-1px);
-        }
-
-        button[aria-label="Filter tasks"]:active {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-            transform: scale(0.98);
-        }
-
-        button[aria-label="Filter tasks"][data-state="open"],
-        button[aria-label="Filter tasks"][aria-expanded="true"] {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-            border-color: rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-            color: var(--miku-accent, #0c4a6e) !important;
-        }
-
-        button[aria-label="Filter tasks"]:focus-visible {
-            outline: none !important;
-            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
-            0 4px 12px rgba(0, 0, 0, 0.1) !important;
-        }
-    }
-
-    /*profile bg*/
-    @layer utilities {
-        header.bg-token-main-surface-primary {
-            background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-        }
-        main#main > .bg-token-main-surface-primary {
-            background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-        }
-    }
-
-
-    /*library -> new note bg*/
-    @layer utilities {
-        [role="dialog"][aria-label="Writing block editor"] {
-            background: var(--miku-glass-soft, rgba(255, 255, 255, 0.1)) !important;
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-        }
-
-        [role="dialog"][aria-label="Writing block editor"] [class*="bg-token-bg-"],
-        [role="dialog"][aria-label="Writing block editor"] [class*="bg-token-main-surface-"],
-        [role="dialog"][aria-label="Writing block editor"] [class*="bg-(--main-surface"] {
-            background: var(--miku-glass-soft, rgba(255, 255, 255, 0.1)) !important;
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-        }
-    }
-
-
-    /*library -> open file bg*/
-    @layer utilities {
-        [role="dialog"][class*="bg-(--main-surface-primary)"] {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-            background-image: none !important;
-
-            backdrop-filter: blur(10px) saturate(1.2) !important;
-            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
-        }
-        [role="dialog"][class*="bg-(--main-surface-primary)"] [class*="bg-token-bg-"],
-        [role="dialog"][class*="bg-(--main-surface-primary)"] [class*="bg-token-main-surface-"],
-        [role="dialog"][class*="bg-(--main-surface-primary)"] [class*="bg-(--main-surface"] {
-            background-color: transparent !important;
-            background-image: none !important;
-        }
-    }
-
-    .viewer,
-    .shell {
-        background-color: var(--miku-glass-muted, rgba(255, 255, 255, 0.25)) !important;
+    dialog::backdrop {
+        background-color: var(--miku-scrim) !important;
         background-image: none !important;
+    }
 
+    /* Native solid/soft buttons retain their own background hue and text.
+       Unknown buttons still receive the established neutral glass material. */
+    :is(button, [role="button"], input[type="button"], input[type="submit"]) {
+        background-color: color-mix(in srgb, var(--miku-native-fill, var(--button-background-color, var(--miku-glass-control))) 85%, transparent) !important;
+        box-shadow: var(--miku-shadow-control) !important;
+        transition: background-color 150ms ease, box-shadow 150ms ease;
+    }
+    /* Fallback for simple actions without an explicit native radius; leave
+       native rounded-full pills and data-variant controls at their own radius. */
+    button:not([class*="rounded-"]):not([data-variant]),
+    [role="button"]:not([class*="rounded-"]):not([data-variant]) {
+        border-radius: 10px !important;
+    }
+    button[class~="rounded-[inherit]"] { border-radius: 12px !important; }
+    /* Ghost/icon buttons, sidebar rows, message actions and menu rows retain
+       the original transparent-at-rest treatment. No English aria-labels. */
+    :is(button[data-variant="ghost"], button[data-variant="transparent"],
+        :where(#app-shell-sidebar) button, :where(#app-shell-sidebar) [role="button"],
+        :where(#app-shell-sidebar) [data-sidebar-cycle-item],
+        [role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"],
+        [role="option"], [role="tab"], [role="toolbar"] button) {
+        background-color: transparent !important;
+        box-shadow: none !important;
+
+        transition: background-color 150ms ease, box-shadow 150ms ease;
+    }
+    /* Chat / Work and other pressed-button groups: one selected glass pill. */
+    [role="group"] > button[aria-pressed="false"] {
+        background-color: transparent !important;
+        box-shadow: none !important;
+    }
+    /* Shared hover and keyboard-navigation highlight. */
+    :is(button, [role="button"], [role="menuitem"], [role="menuitemradio"],
+        [role="menuitemcheckbox"], [role="option"], [role="tab"],
+        :where(#app-shell-sidebar) [data-sidebar-cycle-item]):not(:disabled):not([aria-disabled="true"]):is(:hover, [data-highlighted]) {
+        background-color: color-mix(in srgb, var(--miku-native-hover-fill, var(--button-background-color-hover, var(--miku-native-fill, var(--miku-glass-hover)))) 90%, transparent) !important;
+        box-shadow: var(--miku-shadow-hover) !important;
+    }
+    /* Selected tabs, Chat/Work pressed buttons, open menus and checked options.
+       Never use a bare [data-state=active]: many non-control elements use it. */
+    :is(button, [role="button"], [role="tab"], [role="option"],
+        [role="menuitemradio"], [role="menuitemcheckbox"]):is(
+        [aria-pressed="true"], [aria-selected="true"], [aria-checked="true"],
+        [data-state="active"], [data-state="checked"], [data-selected="true"], [data-selected=""]),
+    :is(button, [role="button"])[aria-haspopup][aria-expanded="true"],
+    :where(#app-shell-sidebar) [data-app-action-sidebar-thread-selected="true"] {
+        background-color: var(--miku-glass-selected) !important;
+        box-shadow: var(--miku-shadow-control) !important;
+    }
+    :is(button, [role="button"], [role="tab"], [role="menuitem"]):not(:disabled):not([aria-disabled="true"]):active {
+        background-color: color-mix(in srgb, var(--button-background-color-active, var(--miku-native-hover-fill, var(--miku-native-fill, var(--miku-glass-pressed)))) 95%, transparent) !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,.1), inset 0 2px 6px rgba(0,0,0,.1) !important;
+    }
+    /* Do not move hit targets on hover or disable native disabled semantics. */
+    :is(button, [role="button"], input, textarea, select, a, [tabindex]):focus-visible {
+        outline: 2px solid var(--miku-focus) !important;
+        outline-offset: 2px !important;
+    }
+
+    /* Search settings / library / plugins / global search, link input, and
+       new fields. Exclude checkboxes, sliders, file inputs and hidden inputs. */
+    :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="hidden"], [type="button"], [type="submit"]), textarea, select) {
+        background-color: var(--miku-glass-control) !important;
+        border-color: var(--miku-rim) !important;
+        box-shadow: var(--miku-shadow-control) !important;
+        backdrop-filter: blur(2px) saturate(1.1) !important;
+        -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+    }
+    :is(input, textarea, select):is(:hover, :focus-visible) {
+        background-color: var(--miku-glass-hover) !important;
+    }
+    [data-composer-body] :is(input, textarea) {
+        background-color: transparent !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    /* Search field: only its existing rounded wrapper gets glass. The nested
+       native bg-transparent input must stay clear, including hover/focus. */
+    :is(input.bg-transparent, input[type="search"], input[role="searchbox"]) {
+        background-color: transparent !important;
+        background-image: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+    .rounded-full:has(> input) {
+        background-color: var(--miku-glass-control) !important;
+        box-shadow: var(--miku-shadow-control) !important;
+        backdrop-filter: blur(2px) saturate(1.1) !important;
+        -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
+    }
+    .rounded-full:has(> input):focus-within {
+        background-color: var(--miku-glass-hover) !important;
+    }
+    /* Project name is a text heading that opens a rename dialog, not a pill. */
+    main h1 > button[aria-haspopup="dialog"],
+    main h1 > button[aria-haspopup="dialog"]:not(:disabled):not([aria-disabled="true"]):is(:hover, :active, :focus-within, [aria-expanded]) {
+        background-color: transparent !important;
+        box-shadow: none !important;
+    }
+
+    /* Toggles, checkbox/radio selection and model/image-editor sliders.
+       Keep native checkmarks, slider geometry and disabled states. */
+    :is([role="checkbox"], [role="radio"], [role="slider"], input[type="range"]) {
+        background-color: var(--miku-glass-control) !important;
+        box-shadow: inset 0 0 0 1px var(--miku-rim) !important;
+        accent-color: var(--miku-accent);
+    }
+    :is([role="checkbox"], [role="radio"])[aria-checked="true"] {
+        background-color: color-mix(in srgb, var(--color-chart-blue, var(--miku-accent)) 30%, transparent) !important;
+        outline: 1px solid var(--miku-accent) !important;
+    }
+    [role="slider"] > span {
+        background-color: var(--miku-glass-solid) !important;
+    }
+    /* Switch outer button is only a hit target. Track and nested thumb carry
+       state; their existing data-state translations (including RTL) stay native. */
+    button[role="switch"][aria-checked],
+    button[role="switch"][aria-checked]:not(:disabled):not([aria-disabled="true"]):is(:hover, :active, :focus-within) {
+        background-color: transparent !important;
+        box-shadow: none !important;
+        border-radius: 999px !important;
+    }
+    [role="switch"][aria-checked] > span[data-state] {
+        background-color: color-mix(in srgb, var(--miku-text) 22%, transparent) !important;
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--miku-text) 30%, transparent) !important;
+    }
+    [role="switch"][aria-checked="true"] > span[data-state] {
+        background-color: color-mix(in srgb, var(--switch-track-color-checked, var(--color-chart-blue, #287b9f)) 85%, transparent) !important;
+    }
+    [role="switch"][aria-checked] > span[data-state] > span[data-state] {
+        background-color: color-mix(in srgb, var(--color-control-thumb-on-accent, white) 95%, transparent) !important;
+        box-shadow: 0 1px 3px rgb(0 0 0 / .3) !important;
+    }
+
+    /* Visible native inputs used in follow-up questions. Hidden peer inputs
+       (pet lists, tabs) keep their own SVG indicators and original layout. */
+    input:is([type="radio"], [type="checkbox"]):not(.sr-only, [hidden]) {
+        appearance: none !important;
+        position: relative;
+        min-inline-size: 1em;
+        min-block-size: 1em;
+        border: 1.5px solid var(--miku-text-secondary) !important;
+        background-color: var(--miku-glass-control) !important;
+        box-shadow: none !important;
+
+    }
+    input[type="radio"]:not(.sr-only, [hidden]) { border-radius: 50% !important; }
+    input[type="checkbox"]:not(.sr-only, [hidden]) { border-radius: 4px !important; }
+    input[type="radio"]:not(.sr-only, [hidden]):checked {
+        background-image: radial-gradient(circle, var(--color-chart-blue, #3b82f6) 0 32%, transparent 38%) !important;
+        border-color: currentColor !important;
+    }
+    input[type="checkbox"]:not(.sr-only, [hidden]):is(:checked, :indeterminate)::after {
+        content: "";
+        position: absolute;
+        inset: 22% 18% 34%;
+        border-left: 2px solid currentColor;
+        border-bottom: 2px solid currentColor;
+        transform: rotate(-45deg);
+    }
+    input[type="checkbox"]:not(.sr-only, [hidden]):indeterminate::after {
+        inset: 45% 20%;
+        border-left: 0;
+        transform: none;
+    }
+    /* Radio indicators must remain circular, including the full-size Radix
+       child whose native dot is often drawn by a pseudo-element. */
+    button[role="radio"][aria-checked], [role="radio"][aria-checked] {
+        border-radius: 50% !important;
+    }
+    [role="radio"][aria-checked="true"] {
+        background-color: var(--miku-glass-control) !important;
+        background-image: radial-gradient(circle, var(--color-chart-blue, #3b82f6) 0 38%, transparent 42%) !important;
+        border-color: var(--color-chart-blue, #3b82f6) !important;
+    }
+    [role="radio"]:focus-visible {
+        outline: 2px solid var(--color-ring, var(--miku-focus)) !important;
+        outline-offset: 2px !important;
+    }
+    [role="radio"] > [data-state] {
+        background-color: transparent !important;
+        background-image: none !important;
+        border-radius: 50% !important;
+    }
+    [role="radio"] > [data-state]::before,
+    [role="radio"] > [data-state]::after {
+        background-color: transparent !important;
+        background-image: none !important;
+    }
+    [role="checkbox"][aria-checked="true"] > [data-state="checked"]:empty {
+        background-color: color-mix(in srgb, var(--color-chart-blue, #3b82f6) 90%, transparent) !important;
+        border-radius: inherit;
+    }
+    [role="checkbox"][aria-checked="true"]:empty::after { content: "✓"; }
+
+    /* Preserve native progress hues while keeping the primary fill translucent. */
+
+    progress::-webkit-progress-bar {
+        background-color: color-mix(in srgb, var(--color-text) 14%, transparent) !important;
+        border-radius: inherit;
+    }
+    progress::-webkit-progress-value { border-radius: inherit; }
+    progress[class*="bg-primary-solid"]::-webkit-progress-value {
+        background-color: color-mix(in srgb, var(--color-background-primary-solid) 85%, transparent) !important;
+    }
+    progress[class*="bg-primary-solid"]::-moz-progress-bar {
+        background-color: color-mix(in srgb, var(--color-background-primary-solid) 85%, transparent) !important;
+    }
+    /* The power slider has a separate visual track and an aria-hidden visual
+       thumb. Its actual role=slider is an invisible keyboard/input target. */
+    [data-model-picker-power-slider] > [data-orientation] > [data-orientation] {
+        background-color: var(--miku-glass-muted) !important;
+        box-shadow: inset 0 0 0 1px var(--miku-rim) !important;
+    }
+    [data-model-picker-power-slider] > [data-orientation] > [data-orientation] > [aria-hidden="true"] {
+        background-color: var(--miku-glass-selected) !important;
+    }
+    [data-model-picker-power-slider] [aria-hidden="true"] span:empty {
+        background-color: var(--miku-glass-solid) !important;
+        box-shadow: var(--miku-shadow-control) !important;
+    }
+    [data-model-picker-power-slider] [data-selected] {
+        border-color: var(--miku-accent) !important;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+        background-color: var(--miku-glass-solid) !important;
+        border-color: var(--miku-accent) !important;
+    }
+    input[type="range"]::-moz-range-thumb {
+        background-color: var(--miku-glass-solid) !important;
+        border-color: var(--miku-accent) !important;
+    }
+
+    /* Tooltips retain the original smoky glass; notices/toasts reuse panels. */
+    [role="tooltip"] {
+        background-color: var(--miku-tooltip) !important;
+
+        box-shadow: var(--miku-shadow-panel) !important;
         backdrop-filter: blur(10px) saturate(1.2) !important;
         -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
     }
-
-
-
-
-    /*search category tabs*/
-    @layer utilities {
-        [role="tablist"][aria-label="Search result type filters"] [role="tab"] {
-            background-color: transparent !important;
-            background-image: none !important;
-
-            border-color: transparent !important;
-
-            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.85)) !important;
-
-            transition: background-color 150ms ease,
-            box-shadow 150ms ease,
-            color 150ms ease,
-            transform 150ms ease;
-        }
-
-        [role="tablist"][aria-label="Search result type filters"] [role="tab"]:hover {
-            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-            color: var(--miku-accent, #0c4a6e) !important;
-        }
-
-        [role="tablist"][aria-label="Search result type filters"] [role="tab"][aria-selected="true"],
-        [role="tablist"][aria-label="Search result type filters"] [class*="filterTabSelected"] {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-            color: var(--miku-accent, #0c4a6e) !important;
-            border-color: rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(4px) saturate(1.15) !important;
-            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
-        }
-
-        [role="tablist"][aria-label="Search result type filters"] [role="tab"]:focus-visible {
-            outline: none !important;
-            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
-            0 4px 12px rgba(0, 0, 0, 0.1) !important;
-        }
+    :is([role="alert"], [data-sonner-toast], [data-toast]) {
+        background-color: color-mix(in srgb, var(--miku-native-fill, var(--miku-glass-panel)) 85%, transparent) !important;
+        border-radius: 16px !important;
+        box-shadow: var(--miku-shadow-panel) !important;
+        backdrop-filter: blur(10px) saturate(1.2) !important;
+        -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
+    }
+    /* Destructive menu rows keep their native red foreground and are clear
+       at rest. Pointer hover and keyboard highlight receive the same tint. */
+    [role="menuitem"]:is(.text-danger, .text-chart-red, [data-color="danger"]) {
+        background-color: transparent !important;
+        box-shadow: none !important;
+    }
+    [role="menuitem"]:is(.text-danger, .text-chart-red, [data-color="danger"]):not([aria-disabled="true"]):is(:hover, [data-highlighted], :focus-visible) {
+        background-color: color-mix(in srgb, currentColor 18%, transparent) !important;
     }
 
-
-    /*no search results bg*/
-    [data-testid="artifacts-surface-library-search-empty-state"] [class*="bg-token-bg-primary"] {
-        background: transparent !important;
-        background-image: none !important;
+    /* Library file cards, attachment blocks, source flyouts and editor toolbar.
+       Retained named test hooks are fallbacks; new cards also get button styles. */
+    :is([data-testid^="artifact-card-tile-"], [data-testid="stage-thread-flyout"],
+        [data-testid="page-table-toolbar-shell"], [role="toolbar"]) {
+        background-color: var(--miku-glass-control) !important;
+        border-radius: 16px !important;
+        border-color: var(--miku-rim) !important;
+        box-shadow: var(--miku-shadow-control) !important;
+        backdrop-filter: blur(2px) saturate(1.1) !important;
+        -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
     }
 
+    /* Code, tables, keyboard shortcuts and semantic callouts remain readable
+       without introducing solid surfaces or the old 182px table padding hack. */
+    :is(pre, kbd, th, blockquote, [data-d-component="code-block"]) {
+        background-color: var(--miku-glass-muted) !important;
+        border-color: var(--miku-rim) !important;
+    }
+    pre { max-width: 100%; overflow-x: auto; }
+    :is([data-markdown-text-style="assistant-message"], .markdown) :not(pre) > code {
+        background-color: var(--miku-glass-muted) !important;
+    }
+    ::selection {
+        background-color: rgba(99,236,255,.35) !important;
 
-    /* Library category tabs */
-    @layer utilities {
-        [data-testid="artifacts-surface-top-controls"] .btn-primary-inverse,
-        [data-testid="artifacts-surface-top-controls"] .btn-ghost {
-            background-color: transparent !important;
-            background-image: none !important;
-            border-color: transparent !important;
-            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.85)) !important;
+    }
+    ::-webkit-scrollbar, ::-webkit-scrollbar-track { background: transparent !important; }
+    ::-webkit-scrollbar-thumb { background: rgb(var(--miku-overlay-rgb) / .25) !important; }
+    * { scrollbar-color: rgb(var(--miku-overlay-rgb) / .25) transparent; }
 
-            transition: background-color 150ms ease,
-            box-shadow 150ms ease,
-            color 150ms ease;
-        }
-
-        [data-testid="artifacts-surface-top-controls"] .btn-primary-inverse:hover,
-        [data-testid="artifacts-surface-top-controls"] .btn-ghost:hover {
-            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
-            color: var(--miku-accent, #0c4a6e) !important;
-            border-color: rgba(255, 255, 255, calc(0.55 * var(--miku-rim-strength, 1))) !important;
-
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(4px) saturate(1.15) !important;
-            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
-        }
-
-        [data-testid="artifacts-surface-top-controls"] .btn-primary-inverse[aria-current="page"],
-        [data-testid="artifacts-surface-top-controls"] .btn-ghost[aria-current="page"] {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-            background-image: none !important;
-            color: var(--miku-accent, #0c4a6e) !important;
-            border-color: rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(4px) saturate(1.15) !important;
-            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
-        }
-
-        [data-testid="artifacts-surface-top-controls"] .btn-primary-inverse[aria-current="page"]:hover,
-        [data-testid="artifacts-surface-top-controls"] .btn-ghost[aria-current="page"]:hover {
-            background-color: var(--miku-glass-selected, rgba(255, 255, 255, 0.6)) !important;
-        }
-
-        [data-testid="artifacts-surface-top-controls"] .btn-primary-inverse:focus-visible,
-        [data-testid="artifacts-surface-top-controls"] .btn-ghost:focus-visible {
-            outline: none !important;
-            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
-            0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    /* Respect reduced motion without disabling loading/progress indicators. */
+    @media (prefers-reduced-motion: reduce) {
+        :is(button, [role="button"], [role="tab"], [role="menuitem"],
+            input, textarea, [data-composer-body], [data-user-message-bubble],
+            [data-markdown-text-style="assistant-message"], .markdown) {
+            transition: none !important;
         }
     }
-
-
-    /*upload new image bg (unstable)*/
-    @layer utilities {
-        button[class*="group\/button"] > div[class*="bg-token-interactive-bg-tertiary-hover"] {
-            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
-            background-image: none !important;
-
-            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(10px) saturate(1.2) !important;
-            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
-
-            transition: background-color 200ms cubic-bezier(0.22, 1, 0.36, 1),
-            box-shadow 200ms cubic-bezier(0.22, 1, 0.36, 1),
-            transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        button[class*="group\/button"] > div[class*="bg-token-interactive-bg-tertiary-hover"]:hover {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-
-            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
-
-            transform: translateY(-2px);
-        }
-
-        button[class*="group\/button"] > div[class*="bg-token-interactive-bg-tertiary-hover"]:focus-within {
-            outline: none !important;
-            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
-            0 10px 26px rgba(0, 0, 0, 0.12) !important;
-        }
-    }
-
-
-    /*image category tab*/
-    @layer utilities {
-        [role="tablist"][aria-label="Image prompt categories"] .btn-primary-inverse,
-        [role="tablist"][aria-label="Image prompt categories"] .btn-ghost {
-            background-color: transparent !important;
-            background-image: none !important;
-            border-color: transparent !important;
-            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.85)) !important;
-
-            transition: background-color 150ms ease,
-            box-shadow 150ms ease,
-            color 150ms ease;
-        }
-
-        [role="tablist"][aria-label="Image prompt categories"] .btn-primary-inverse:hover,
-        [role="tablist"][aria-label="Image prompt categories"] .btn-ghost:hover {
-            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
-            color: var(--miku-accent, #0c4a6e) !important;
-            border-color: rgba(255, 255, 255, calc(0.55 * var(--miku-rim-strength, 1))) !important;
-
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(4px) saturate(1.15) !important;
-            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
-        }
-
-        [role="tablist"][aria-label="Image prompt categories"] [data-state="active"],
-        [role="tablist"][aria-label="Image prompt categories"] [aria-selected="true"] {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-            background-image: none !important;
-            color: var(--miku-accent, #0c4a6e) !important;
-            border-color: rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(4px) saturate(1.15) !important;
-            -webkit-backdrop-filter: blur(4px) saturate(1.15) !important;
-        }
-
-        [role="tablist"][aria-label="Image prompt categories"] [data-state="active"]:hover,
-        [role="tablist"][aria-label="Image prompt categories"] [aria-selected="true"]:hover {
-            background-color: var(--miku-glass-selected, rgba(255, 255, 255, 0.6)) !important;
-        }
-
-        [role="tablist"][aria-label="Image prompt categories"] [role="tab"]:focus-visible {
-            outline: none !important;
-            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
-            0 4px 12px rgba(0, 0, 0, 0.1) !important;
-        }
-    }
-
-
-    /*share chat bg*/
-    @layer utilities {
-        div.fixed.inset-0.z-50[data-state="open"] {
-            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .08) !important;
-        }
-
-        /* Chat preview inside the share popup */
-        [data-testid="sharing-post-unfurl-view"] [class*="bg-token-main-surface-primary"] {
-            background-color: transparent !important;
-            background-image: none !important;
-        }
-    }
-
-
-    /*tip popout bg*/
-    @layer utilities {
-        aside[class*="shadow-xxs"]:not(:has(textarea)) {
-            background: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-        }
-    }
-
-
-    @layer utilities {
-        /*image editor bg*/
-        [role="dialog"][data-state="open"][class*="bg-token-main-surface-primary"]:not([class*="bg-token-bg-primary"]):not([class*="overflow-hidden"]) {
-            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
-            background-image: none !important;
-            backdrop-filter: blur(10px) saturate(1.2) !important;
-            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
-        }
-
-        /* Inner editor surfaces*/
-        [data-testid="lightbox-new-body-surface"],
-        [data-testid="fullscreen-shell-body"],
-        [role="dialog"][data-state="open"][class*="bg-token-main-surface-primary"]:not([class*="bg-token-bg-primary"]):not([class*="overflow-hidden"]) [class*="bg-token-bg-primary"],
-        [role="dialog"][data-state="open"][class*="bg-token-main-surface-primary"]:not([class*="bg-token-bg-primary"]):not([class*="overflow-hidden"]) [class*="bg-token-main-surface-"],
-        [data-testid="lightbox-new-body-surface"] [class*="bg-(--main-surface-primary)"] {
-            background-color: transparent !important;
-            background-image: none !important;
-        }
-
-
-        /*image tools bg*/
-        [aria-label="Image tools"] {
-            background-color: transparent !important;
-            background-image: none !important;
-        }
-
-
-
-        /* Image editor zoom button */
-        button[aria-label^="Zoom level"] {
-            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
-            background-image: none !important;
-
-            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
-            color: var(--miku-text-secondary, rgba(12, 74, 110, 0.9)) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-
-            transition: background-color 150ms ease,
-            box-shadow 150ms ease,
-            border-color 150ms ease,
-            transform 150ms ease;
-        }
-
-        button[aria-label^="Zoom level"]:hover {
-            background-color: var(--miku-glass-hover, rgba(255, 255, 255, 0.5)) !important;
-            border-color: rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-            color: var(--miku-accent, #0c4a6e) !important;
-
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
-
-            transform: translateY(-1px);
-        }
-
-        button[aria-label^="Zoom level"]:active {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-            transform: scale(0.98);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1),
-            inset 0 2px 6px rgba(0, 0, 0, 0.1) !important;
-        }
-
-        button[aria-label^="Zoom level"][data-state="open"],
-        button[aria-label^="Zoom level"][aria-expanded="true"] {
-            background-color: var(--miku-glass-active, rgba(255, 255, 255, 0.55)) !important;
-            border-color: rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-            color: var(--miku-accent, #0c4a6e) !important;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.75 * var(--miku-rim-strength, 1))) !important;
-        }
-
-        button[aria-label^="Zoom level"]:focus-visible {
-            outline: none !important;
-            box-shadow: 0 0 0 2px var(--miku-focus, rgba(99, 151, 255, 0.55)),
-            0 4px 12px rgba(0, 0, 0, 0.1) !important;
-        }
-
-        /*stroke width slide bg*/
-        .pointer-events-none.absolute.start-4.top-1\/2.z-40.h-44 [class*="bg-token-bg-elevated-primary"] {
-            background-color: var(--miku-glass-control, rgba(255, 255, 255, 0.35)) !important;
-            background-image: none !important;
-            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-            backdrop-filter: blur(2px) saturate(1.1) !important;
-            -webkit-backdrop-filter: blur(2px) saturate(1.1) !important;
-        }
-
-        /* Image editor tool dropdowns (Shapes, Markup style, etc.) */
-        .popover[role="dialog"][data-state="open"][class*="bg-token-bg-elevated-primary"] {
-            background-color: var(--miku-glass-panel, rgba(255, 255, 255, 0.45)) !important;
-            background-image: none !important;
-
-            border-color: rgba(255, 255, 255, calc(0.5 * var(--miku-rim-strength, 1))) !important;
-
-            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.6 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(10px) saturate(1.2) !important;
-            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
-        }
-
-        /* the drag knob */
-        [role="slider"] > span[class*="rounded-full"][class*="bg-white"] {
-            background-color: var(--miku-glass-solid, rgba(255, 255, 255, 0.75)) !important;
-            border-color: rgba(255, 255, 255, calc(0.9 * var(--miku-rim-strength, 1))) !important;
-
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15),
-            inset 0 1px 0 rgba(255, 255, 255, calc(1 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(4px) saturate(1.2) !important;
-            -webkit-backdrop-filter: blur(4px) saturate(1.2) !important;
-        }
-
-
-        /* Inline feedback tip */
-        [data-testid="modal-inline-feedback"] [class*="bg-token-main-surface-secondary"] {
-            background-color: transparent !important;
-            background-image: none !important;
-        }
-
-
-        /* Feedback reason options */
-        [data-testid="modal-inline-feedback"] .flex.flex-wrap.gap-3 > button {
-            background-color: transparent !important;
-            background-image: none !important;
-        }
-
-        [data-testid="modal-inline-feedback"] .flex.flex-wrap.gap-3 > button:hover {
-            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .06) !important;
-        }
-
-        [data-testid="modal-inline-feedback"] .flex.flex-wrap.gap-3 > button[class*="bg-token-text-primary"] {
-            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .1) !important;
-            color: var(--miku-text, black) !important;
-        }
-
-        [data-testid="modal-inline-feedback"] .flex.flex-wrap.gap-3 > button[class*="bg-token-text-primary"]:hover {
-            background-color: rgb(var(--miku-overlay-rgb, 0 0 0) / .12) !important;
-        }
-    }
-
-    /* Error notification bg */
-    @layer utilities {
-        [role="alert"][class*="bg-red-500"] {
-            background-color: rgba(239, 68, 68, 0.35) !important;
-            background-image: none !important;
-
-            border-color: rgba(255, 255, 255, calc(0.25 * var(--miku-rim-strength, 1))) !important;
-            color: #ffffff !important;
-
-            box-shadow: 0 8px 22px rgba(239, 68, 68, 0.25),
-            inset 0 1px 0 rgba(255, 255, 255, calc(0.2 * var(--miku-rim-strength, 1))) !important;
-
-            backdrop-filter: blur(10px) saturate(1.2) !important;
-            -webkit-backdrop-filter: blur(10px) saturate(1.2) !important;
-        }
-    }
-
-    /* Dark-only exceptions for transparent inputs and native inverse controls.
-       Keep these in utilities to match the existing !important layer priority. */
-    @layer utilities {
-        :root:is(.dark, [data-theme="dark"]) body {
-            color: var(--miku-text);
-            background-color: #081116 !important;
-        }
-
-        :root:is(.dark, [data-theme="dark"]) :is(
-            [data-type="unified-composer"] .shadow-short-composer,
-            [data-conversation-screenshot-content] > .bg-token-main-surface-tertiary
-        ) {
-            background: var(--miku-glass-control) !important;
-            color: var(--miku-text);
-            backdrop-filter: blur(10px) saturate(1.1);
-            -webkit-backdrop-filter: blur(10px) saturate(1.1);
-        }
-
-        :root:is(.dark, [data-theme="dark"]) :is(
-            [data-type="unified-composer"] .shadow-short-composer,
-            [data-conversation-screenshot-content] > .bg-token-main-surface-tertiary
-        ):is(:hover, :focus-within) {
-            background: var(--miku-glass-hover) !important;
-        }
-
-        :root:is(.dark, [data-theme="dark"]) :is(input, textarea, [contenteditable="true"]) {
-            color: var(--miku-text);
-            caret-color: var(--miku-accent);
-        }
-
-        :root:is(.dark, [data-theme="dark"]) :is(input, textarea)::placeholder {
-            color: var(--miku-text-secondary);
-            opacity: 1;
-        }
-
-        :root:is(.dark, [data-theme="dark"]) .ProseMirror [data-placeholder]::before {
-            color: var(--miku-text-secondary);
-            opacity: 1;
-        }
-
-        :root:is(.dark, [data-theme="dark"]) :is(.btn-primary, .bg-token-bg-tooltip) {
-            color: var(--miku-text) !important;
-        }
-
-        :root:is(.dark, [data-theme="dark"]) [data-composer-surface="true"] .composer-submit-button-color {
-            background: var(--miku-glass-selected);
-            color: var(--miku-text);
-        }
-
-        :root:is(.dark, [data-theme="dark"]) [data-composer-surface="true"] .composer-submit-button-color:hover {
-            background: var(--miku-glass-pressed);
-        }
-
-        :root:is(.dark, [data-theme="dark"]) .markdown {
-            color: var(--miku-text);
-            --tw-prose-body: var(--miku-text);
-            --tw-prose-headings: var(--miku-text);
-            --tw-prose-bold: var(--miku-text);
-            --tw-prose-links: var(--miku-accent);
-            --tw-prose-code: var(--miku-text);
-            --tw-prose-quotes: var(--miku-text-secondary);
-            --tw-prose-counters: var(--miku-text-secondary);
-            --tw-prose-bullets: var(--miku-text-secondary);
-        }
-
-        :root:is(.dark, [data-theme="dark"]) .markdown a {
-            color: var(--miku-accent);
-            text-decoration: underline;
-            text-underline-offset: 0.15em;
-        }
-
-        :root:is(.dark, [data-theme="dark"]) ::selection {
-            background: #276b70 !important;
-            color: #f3ffff !important;
-        }
-
-        :root:is(.dark, [data-theme="dark"]) .__composer-pill {
-            background-image: linear-gradient(115deg, transparent 35%,
-                rgba(145, 238, 226, 0.10) 48%, rgba(145, 238, 226, 0.18) 52%, transparent 65%);
-        }
-
-        :root:is(.dark, [data-theme="dark"]) [role="slider"] > span[class*="rounded-full"][class*="bg-white"] {
-            background-color: var(--miku-accent) !important;
-        }
-
-        /* Modal scrims stay dark; row hover overlays use the pale overlay token. */
-        :root:is(.dark, [data-theme="dark"]) div.fixed.inset-0.z-50[data-state="open"],
-        :root:is(.dark, [data-theme="dark"]) div[data-state="open"][class*="before:bg-"]::before {
-            background-color: rgba(0, 8, 12, 0.48) !important;
-        }
-    }
+  }
 }
