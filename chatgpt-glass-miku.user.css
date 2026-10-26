@@ -1,9 +1,12 @@
 /* ==UserStyle==
 @name           Hastune Miku Glassmorphism Style for ChatGPT
 @namespace      github.com/Morikana39/MikuGlassForGPT
-@version        3.0.1
+@version        3.0.2
 @description    Miku glass for the October 2026 ChatGPT UI. Semantic selectors, transparent surfaces, automatic light/dark colors.
 @author         Morikana
+@homepageURL https://github.com/Morikana39/MikuGlassForGPT
+@supportURL  https://github.com/Morikana39/MikuGlassForGPT/issues
+@updateURL   https://raw.githubusercontent.com/Morikana39/MikuGlassForGPT/main/chatgpt-glass-miku.user.css
 
 @var checkbox GPTmarkdownHover "Enable ChatGPT message hover animation" 1
 @var checkbox userMarkdownHover "Enable User Message Bubble Animations" 1
