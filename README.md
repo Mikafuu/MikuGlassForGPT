@@ -30,7 +30,7 @@ Background artwork by **WusubaMineko** (twitter). Link: https://x.com/WusubaMine
 
 2. Install the theme  
    Open this link and Stylus will prompt installation:
-   https://github.com/Mikafuu/MikuGlassForGPT/raw/main/chatgpt-glass-miku.user.css
+   https://github.com/Morikana39/MikuGlassForGPT/raw/main/chatgpt-glass-miku.user.css
 
 3. Visit **https://chatgpt.com/**
 
